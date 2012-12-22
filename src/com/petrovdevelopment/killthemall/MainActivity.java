@@ -5,6 +5,11 @@ import android.app.Activity;
 import android.view.Menu;
 import android.view.Window;
 
+/**
+ * Add scoring, begin and end activities
+ * @author andrey
+ *
+ */
 public class MainActivity extends Activity {
 
 	@Override
