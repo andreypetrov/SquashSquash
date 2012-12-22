@@ -26,6 +26,13 @@ public class GameLoopThread extends Thread {
 			Canvas canvas = null;
 			startTime = System.currentTimeMillis();
 			
+			//TODO create method render, wrapper of the onDraw
+			//Update and onDraw should be synchronized to happen after each other!!!
+			
+			//First update
+			gameView.update();
+			
+			//Then draw
 			try {
 				canvas = gameView.getHolder().lockCanvas();
 				synchronized (gameView.getHolder()) {

@@ -21,8 +21,9 @@ public class GameView extends SurfaceView {
 	private List<Sprite> mAllSprites;
 
 	private long mLastClick = 0;
-	//if user is currently touching the surface
+	// if user is currently touching the surface
 	private boolean isTouched = false;
+	private Bitmap mBitmapBlood;
 
 	public GameView(Context context) {
 		super(context);
@@ -47,6 +48,7 @@ public class GameView extends SurfaceView {
 			}
 		});
 
+		mBitmapBlood = BitmapFactory.decodeResource(getResources(), R.drawable.blood1);
 	}
 
 	private void initializeSpites() {
@@ -70,13 +72,21 @@ public class GameView extends SurfaceView {
 		return new Sprite(this, bitmap);
 	}
 
+	public void update() {
+		synchronized (getHolder()) {
+			TempSprite.updateTempSprites();
+			// TODO: pull this in a separate update method
+			for (Sprite sprite : mAllSprites) {
+				sprite.update();
+			}
+		}
+	}
+
 	@Override
 	protected void onDraw(Canvas canvas) {
-		// TODO: pull this in a separate update method
-		for (Sprite sprite : mAllSprites) {
-			sprite.update();
-		}
 		canvas.drawColor(Color.BLACK);
+
+		TempSprite.onDrawTempSprites(canvas);	
 		for (Sprite sprite : mAllSprites) {
 			sprite.onDraw(canvas);
 		}
@@ -98,11 +108,17 @@ public class GameView extends SurfaceView {
 			// in the GameLoopThread we have another synchronized (gameView.getHolder()) on the same object
 			// this allows us to avoid ConcurrentModificationException! between this method and onDraw
 			synchronized (getHolder()) {
+				float touchX = event.getX();
+				float touchY = event.getY();
+
 				// TODO: rework this with using Iterator for safe removal
 				for (int i = mAllSprites.size() - 1; i >= 0; i--) {
 					Sprite sprite = mAllSprites.get(i);
-					if (sprite.isTouched(event.getX(), event.getY())) {
+					if (sprite.isTouched(touchX, touchY)) {
 						mAllSprites.remove(i);
+						TempSprite tempSprite = new TempSprite(this, touchX, touchY, mBitmapBlood);
+						tempSprite.register();
+
 						break;// kill only the last sprite, i.e. only the last one
 					}
 				}
@@ -110,4 +126,5 @@ public class GameView extends SurfaceView {
 		}
 		return true; // it is more efficient to pass true here to stop handling the event
 	}
+
 }
