@@ -7,7 +7,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.Shader;
+import android.graphics.drawable.BitmapDrawable;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
@@ -25,6 +27,10 @@ public class GameView extends SurfaceView {
 	private boolean isTouched = false;
 	private Bitmap mBitmapBlood;
 
+	private Bitmap mBackground;
+	private BitmapDrawable mBackgroundDrawable;
+	private Matrix mBackgroundMatrix;
+
 	public GameView(Context context) {
 		super(context);
 		gameLoopThread = new GameLoopThread(this);
@@ -33,12 +39,11 @@ public class GameView extends SurfaceView {
 		mHolder.addCallback(new Callback() {
 
 			@Override
-			public void surfaceDestroyed(SurfaceHolder holder) {
-			}
-
-			@Override
 			public void surfaceCreated(SurfaceHolder holder) {
 				initializeSpites();
+				// MainActivity mainActivity = (MainActivity) getContext();
+				// mainActivity.startGameLoop();
+
 				gameLoopThread.setRunning(true);
 				gameLoopThread.start();
 			}
@@ -46,7 +51,33 @@ public class GameView extends SurfaceView {
 			@Override
 			public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 			}
+
+			/**
+			 * Make sure to close the thread before the view is destroyed
+			 */
+			@Override
+			public void surfaceDestroyed(SurfaceHolder holder) {
+				System.out.println("Surface destroyed start");
+				boolean retry = true;
+				gameLoopThread.setRunning(false);
+				while (retry) {
+					try {
+						gameLoopThread.join();
+						retry = false;
+					} catch (InterruptedException e) {
+					}
+				}
+				System.out.println("Surface destroyed end");
+			}
 		});
+
+		mBackgroundMatrix = new Matrix();
+		mBackgroundMatrix.reset();
+
+		mBackground = BitmapFactory.decodeResource(getResources(), R.drawable.blue_bg);
+		mBackgroundDrawable = new BitmapDrawable(getResources(), mBackground);
+		mBackgroundDrawable.setTileModeX(Shader.TileMode.REPEAT);
+		mBackgroundDrawable.setTileModeY(Shader.TileMode.REPEAT);
 
 		mBitmapBlood = BitmapFactory.decodeResource(getResources(), R.drawable.blood1);
 	}
@@ -84,9 +115,14 @@ public class GameView extends SurfaceView {
 
 	@Override
 	protected void onDraw(Canvas canvas) {
-		canvas.drawColor(Color.BLACK);
+		// canvas.drawColor(Color.BLACK);
 
-		TempSprite.onDrawTempSprites(canvas);	
+		// create background texture, which wipes out previous drawing
+		// mBackgroundDrawable.draw(canvas);
+
+		canvas.drawBitmap(mBackground, mBackgroundMatrix, null);
+
+		TempSprite.onDrawTempSprites(canvas);
 		for (Sprite sprite : mAllSprites) {
 			sprite.onDraw(canvas);
 		}
@@ -102,6 +138,7 @@ public class GameView extends SurfaceView {
 		}
 		// do not allow a touch event more often than half a second
 		// do not allow a touch event if a user has his finger on the screen still
+		// TODO: maybe remove the half a second limitation
 		if (event.getAction() == MotionEvent.ACTION_DOWN && System.currentTimeMillis() - mLastClick > 500 && !isTouched) {
 			mLastClick = System.currentTimeMillis();
 			isTouched = true;
