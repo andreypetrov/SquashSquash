@@ -3,12 +3,12 @@ package com.petrovdevelopment.killthemall;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
-import android.view.Window;
 
 /**
- * Add scoring, begin and end activities
- * TODO: put the gameLoopThread to be started by the activity not by the gameView
- * Pause it onPause and stop it onStop! etc.
+ * TODO: add overflow icon to the ActionBar
+ * TODO: In this branch build the Activities and menus and all extra things around the maing game
+ * TODO: Add scoring, begin and end activities
+ * TODO: Pause it onPause and stop it onStop! etc. Use LunarLander to get the ideas from
  * @author andrey
  *
  */
@@ -21,24 +21,14 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//remove title bar
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		//requestWindowFeature(Window.FEATURE_NO_TITLE);
+		
 		//load GameView
 		mGameView = new GameView(this);
 		setContentView(mGameView);
 		//mGameLoopThread = new GameLoopThread(mGameView);
 	
 	}
-	
-//	public void startGameLoop() {
-//		System.out.println("Game loop started");
-//		mGameLoopThread.setRunning(true);
-//		mGameLoopThread.start();	
-//	}
-	
-	//gameLoopThread.setRunning(true);
-	//gameLoopThread.start();
-	
-	
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

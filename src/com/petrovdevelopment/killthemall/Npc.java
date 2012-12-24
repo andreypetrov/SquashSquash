@@ -6,7 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 
-public class Sprite {
+public class Npc implements GameElement, Touchable {
 	private static final int BMP_COLUMNS = 3;
 	private static final int BMP_ROWS = 4;
 
@@ -28,13 +28,13 @@ public class Sprite {
 	private int mCurrentFrame = 0;
 
 	// Better direct call for better performance than event handling on X/Y speed change
-	// Recalculate the current ROW of the BMP only when the sprite changes direction.
+	// Recalculate the current ROW of the BMP only when the NPC changes direction.
 	private int mCurrentAnimationRow;
 
 	private Rect mSrc; // rectangle, part of the sprite bitmap
 	private Rect mDst; // rectangle, part of the canvas
 
-	public Sprite(GameView mGameView, Bitmap mBitmap) {
+	public Npc(GameView mGameView, Bitmap mBitmap) {
 		this.mGameView = mGameView;
 		this.mBitmap = mBitmap;
 
@@ -51,22 +51,35 @@ public class Sprite {
 
 	}
 
-	public void update() {
-		// TODO: should we subtract the mXSpeed as well?
-		// if reached the edge of the screen turn around
+
+	/**
+	 * Change direction of the npc, which affects also the sprite used
+	 */
+	private void changeDirection() {
+		// if reached the right or left edge of the screen turn around
 		if (mX > (mGameView.getWidth() - mWidth - mXSpeed) || mX + mXSpeed < 0) {
 			mXSpeed = -mXSpeed;
 			mCurrentAnimationRow = getAnimationRow();
 		}
-
+		// if reached the bottom or top edge of the screen turn around
 		if (mY > (mGameView.getHeight() - mHeight - mYSpeed) || mY + mYSpeed < 0) {
 			mYSpeed = -mYSpeed;
 			mCurrentAnimationRow = getAnimationRow();
 		}
-
+	}
+	
+	/**
+	 * Advance the Npc with the speed it is moving
+	 */
+	private void move() {
 		mY = mY + mYSpeed;
 		mX = mX + mXSpeed;
-
+	}
+	
+	/**
+	 * Prepare for rendering, so that not to perform expensive operations during rendering
+	 */
+	private void preRender() {
 		// advance the animation, creating illusion of walking
 		// increment should be first so that in the onDraw() we have mCurrentFrame = 0/1/2
 		// Starting from the second frame.
@@ -79,22 +92,41 @@ public class Sprite {
 		mSrc = new Rect(srcX, srcY, srcX + mWidth, srcY + mHeight);
 		mDst = new Rect(mX, mY, mX + mWidth, mY + mHeight);
 	}
+	
+	
+	@Override
+	public void update() {
+		changeDirection();
+		move();
+		preRender();
+	}
 
-	public void onDraw(Canvas canvas) {
+	@Override
+	public void render(Canvas canvas) {
 		canvas.drawBitmap(mBitmap, mSrc, mDst, null);
 	}
 
+	/**
+	 * Calculate which row of the sprite bitmap should be rendered based on the closest axis of movement
+	 * @return
+	 */
 	private int getAnimationRow() {
 		double dirDouble = (Math.atan2(mXSpeed, mYSpeed) / (Math.PI / 2) + 2);
 		int direction = (int) Math.round(dirDouble) % BMP_ROWS; // convert long to int
 		return DIRECTION_TO_ANIMATION_MAP[direction];
 	}
 
+	@Override
 	public boolean isTouched(float touchX, float touchY) {
 		if ((touchX >= mX && touchX <= mX + mWidth) && (touchY >= mY && touchY <= mY + mHeight)) {
 			return true;
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	public void touch() {
+		//do nothing
 	}
 }

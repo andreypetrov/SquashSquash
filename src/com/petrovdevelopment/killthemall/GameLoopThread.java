@@ -36,15 +36,15 @@ public class GameLoopThread extends Thread {
 			// TODO create method render, wrapper of the onDraw
 			// Update and onDraw should be synchronized to happen after each other!!!
 
-			// First update
-			gameView.update();
+			
 
-			// Then draw
+			
 			try {
 				canvas = gameView.getHolder().lockCanvas();
 				//lockCanvas will return null in the last run, when we are destroying the view
 				if (canvas != null) { 
-					synchronized (gameView.getHolder()) {
+					synchronized (gameView.getHolder()) {				
+						gameView.update();					
 						gameView.onDraw(canvas);
 					}
 				}
