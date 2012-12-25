@@ -2,13 +2,43 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity" >
+    tools:context=".GameActivity" >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="@string/hello_world" />
-
+    <!-- The actual game view -->
+	<com.petrovdevelopment.killthemall.GameView
+		android:id="@+id/game_view"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center" 
+	/>
+	    
+    <!-- The bar with the score track and the pause button  -->
+    <!-- android:background="#40808080" -->
+    <LinearLayout
+			android:id="@+id/top_panel"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal" 
+			android:visibility="visible"
+			android:layout_alignParentTop="true"
+		>
+			<TextView android:id="@+id/score"
+				android:layout_width="0px"
+				android:layout_weight="1"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center"
+				android:padding="5dip"
+				android:completionThreshold="1"
+				android:text="@string/score"
+			/>
+			<ImageButton android:id="@+id/pause"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:enabled="true"
+				android:src="@drawable/pause"
+				android:contentDescription="@string/pause"
+				android:background="@null"
+				android:padding="5dip"
+			/>
+	</LinearLayout>
 </RelativeLayout>

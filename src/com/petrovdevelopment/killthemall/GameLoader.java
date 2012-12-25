@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 /**
  * Class responsible for loading of all resources.
  * Bitmaps, sounds, etc.
+ * TODO: add progress bar while loading?
  * @author andrey
  *
  */

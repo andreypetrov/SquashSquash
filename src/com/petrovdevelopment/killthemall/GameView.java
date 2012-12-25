@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
@@ -18,8 +19,17 @@ public class GameView extends SurfaceView {
 	private Background mBackground;
 	private List<Npc> mNpcs;
 
+	public GameView(Context context, AttributeSet attrs) {
+		super(context, attrs);
+		initializeViewAndStartGameLoop();
+	}
+	
 	public GameView(Context context) {
 		super(context);
+		initializeViewAndStartGameLoop();
+	}
+	
+	private void initializeViewAndStartGameLoop() {
 		gameLoopThread = new GameLoopThread(this);
 
 		mHolder = getHolder();
@@ -58,7 +68,6 @@ public class GameView extends SurfaceView {
 				System.out.println("Surface destroyed");
 			}
 		});
-
 	}
 
 	public void update() {
