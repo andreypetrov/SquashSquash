@@ -12,8 +12,8 @@ import android.graphics.Canvas;
 public class World implements GameElement {
 	public static World mInstance;
 
-	private GameState mGameState;	
-	private Difficulty mDifficulty; //Ignore for now
+	private GameState mGameState = GameState.PAUSE;	
+	private Difficulty mDifficulty = Difficulty.MEDIUM; //Ignore for now
 
 	public enum GameState {
 		RUNNING, PAUSE, READY, WIN, LOSS
@@ -36,16 +36,16 @@ public class World implements GameElement {
 		return mInstance;
 	}
 
-	public void initialize(GameLoader gameLoader) {
+	public void initialize(GameView gameView) {
+		GameLoader gameLoader = new GameLoader(gameView);
 		mBackground = gameLoader.loadBackground();
 		mNpcs = gameLoader.loadNpcs();
 		gameLoader.loadDeathEffect();
-		setGameState(GameState.PAUSE);
-		setDifficulty(Difficulty.MEDIUM);
 	}
 
 	/**
-	 * Update all game elements. Consider update dependencies. Currently there are none.
+	 * Update all game elements. 
+	 * Consider update methods execution dependencies. Currently there are none.
 	 */
 	@Override
 	public void update() {

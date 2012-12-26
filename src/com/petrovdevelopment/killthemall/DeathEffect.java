@@ -9,8 +9,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
 /**
- * A singleton variation, with controlled number of instances, Need to be preloaded with initialize()
- * 
+ * A singleton variation, with controlled number of instances, 
+ * Need to be preloaded with initialize(). Uses only one bmp for every DeathEffect instance
  * @author andrey
  * 
  */

@@ -28,7 +28,11 @@ public class GameActivity extends Activity {
 
 		setContentView(R.layout.activity_main);
 		GameView gameView = (GameView) findViewById(R.id.game_view);
-		mGameLoopThread = gameView.getGameLoopThread();
+		//at this point this is still not safe to use 
+		//because the GameView.mWorld is not initialized, until the gameView surface has finished creating!
+		mGameLoopThread = gameView.getGameLoopThread(); 
+		
+		
 		mPlayButton = (ImageButton) findViewById(R.id.play);
 		mPauseButton = (ImageButton) findViewById(R.id.pause);
 
@@ -41,7 +45,7 @@ public class GameActivity extends Activity {
 			Log.w(this.getClass().getName(), "SIS is nonnull");
 		}
 	}
-
+	
 	/**
 	 * Called when the Play ImageButton is clicked
 	 */

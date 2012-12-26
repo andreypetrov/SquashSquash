@@ -8,40 +8,37 @@ import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
 
 public class GameView extends SurfaceView {
-	private GameLoader mGameLoader;
-	private World mWorld;
-	
 	private SurfaceHolder mHolder;
+
+	private World mWorld;
 	private GameLoopThread mGameLoopThread;
 
 	public GameView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		initialize();
 	}
-	
+
 	public GameView(Context context) {
 		super(context);
 		initialize();
 	}
-	
+
 	private void initialize() {
+		mWorld = World.getInstance();
+		mGameLoopThread = new GameLoopThread(GameView.this, mWorld);
+
 		mHolder = getHolder();
 		mHolder.addCallback(new Callback() {
 
 			@Override
 			public void surfaceCreated(SurfaceHolder holder) {
-				
-				mGameLoader = new GameLoader(GameView.this);
-				mWorld = World.getInstance();
-				mWorld.initialize(mGameLoader);
-				
-				mGameLoopThread = new GameLoopThread(GameView.this, mWorld);
-				//Start the actual game thread
+				mWorld.initialize(GameView.this);
+
+				// Start the actual game thread
 				mGameLoopThread.setRunning(true);
 				mGameLoopThread.start();
 				System.out.println("mGameLooThread started " + mGameLoopThread);
 			}
-			
 
 			@Override
 			public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
@@ -65,15 +62,15 @@ public class GameView extends SurfaceView {
 			}
 		});
 	}
-	
+
 	/**
 	 * Delegate to World.onTouchEvent()
 	 */
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		//Make sure the touch event can happen only on new touch and not on persisting the touch
-		if(event.getAction() == MotionEvent.ACTION_DOWN) {
-			//synchronize to make sure no sprite removal is happening during rendering
+		// Make sure the touch event can happen only on new touch and not on persisting the touch
+		if (event.getAction() == MotionEvent.ACTION_DOWN) {
+			// synchronize to make sure no sprite removal is happening during rendering
 			synchronized (getHolder()) {
 				mWorld.onTouchEvent(event.getX(), event.getY());
 			}
