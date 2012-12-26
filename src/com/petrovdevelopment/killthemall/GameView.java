@@ -14,7 +14,7 @@ public class GameView extends SurfaceView {
 	private GameLoader mGameLoader;
 
 	private SurfaceHolder mHolder;
-	private GameLoopThread gameLoopThread;
+	private GameLoopThread mGameLoopThread;
 
 	private Background mBackground;
 	private List<Npc> mNpcs;
@@ -30,7 +30,7 @@ public class GameView extends SurfaceView {
 	}
 	
 	private void initializeViewAndStartGameLoop() {
-		gameLoopThread = new GameLoopThread(this);
+		mGameLoopThread = new GameLoopThread(this);
 
 		mHolder = getHolder();
 		mHolder.addCallback(new Callback() {
@@ -43,8 +43,8 @@ public class GameView extends SurfaceView {
 				mGameLoader.loadDeathEffect();
 				
 				//Start the actual game thread
-				gameLoopThread.setRunning(true);
-				gameLoopThread.start();
+				mGameLoopThread.setRunning(true);
+				mGameLoopThread.start();
 			}
 
 			@Override
@@ -57,10 +57,10 @@ public class GameView extends SurfaceView {
 			@Override
 			public void surfaceDestroyed(SurfaceHolder holder) {
 				boolean retry = true;
-				gameLoopThread.setRunning(false);
+				mGameLoopThread.setRunning(false);
 				while (retry) {
 					try {
-						gameLoopThread.join();
+						mGameLoopThread.join();
 						retry = false;
 					} catch (InterruptedException e) {
 					}
@@ -114,6 +114,10 @@ public class GameView extends SurfaceView {
 			}
 		}
 		return true; // it is more efficient to pass true here to stop handling the event
+	}
+
+	public GameLoopThread getGameLoopThread() {
+		return mGameLoopThread;
 	}
 
 }

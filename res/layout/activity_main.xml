@@ -5,40 +5,56 @@
     tools:context=".GameActivity" >
 
     <!-- The actual game view -->
-	<com.petrovdevelopment.killthemall.GameView
-		android:id="@+id/game_view"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_gravity="center" 
-	/>
-	    
-    <!-- The bar with the score track and the pause button  -->
+
+    <com.petrovdevelopment.killthemall.GameView
+        android:id="@+id/game_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+    <!-- The bar with the score track and the pause button -->
     <!-- android:background="#40808080" -->
+
     <LinearLayout
-			android:id="@+id/top_panel"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:orientation="horizontal" 
-			android:visibility="visible"
-			android:layout_alignParentTop="true"
-		>
-			<TextView android:id="@+id/score"
-				android:layout_width="0px"
-				android:layout_weight="1"
-				android:layout_height="wrap_content"
-				android:layout_gravity="center"
-				android:padding="5dip"
-				android:completionThreshold="1"
-				android:text="@string/score"
-			/>
-			<ImageButton android:id="@+id/pause"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:enabled="true"
-				android:src="@drawable/pause"
-				android:contentDescription="@string/pause"
-				android:background="@null"
-				android:padding="5dip"
-			/>
-	</LinearLayout>
+        android:id="@+id/top_panel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:orientation="horizontal"
+        android:visibility="visible" >
+
+        <TextView
+            android:id="@+id/score"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:completionThreshold="1"
+            android:padding="5dip"
+            android:text="@string/score" />
+
+        <ImageButton
+            android:id="@+id/pause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:contentDescription="@string/pause"
+            android:enabled="true"
+            android:onClick="onClickPause"
+            android:padding="5dip"
+            android:src="@drawable/pause"
+            android:visibility="gone" />
+
+        <ImageButton
+            android:id="@+id/play"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:contentDescription="@string/play"
+            android:enabled="true"
+            android:onClick="onClickPlay"
+            android:padding="5dip"
+            android:src="@drawable/play" />
+    </LinearLayout>
+
 </RelativeLayout>
