@@ -1,9 +1,6 @@
 package com.petrovdevelopment.killthemall;
 
 import java.util.List;
-
-import com.petrovdevelopment.killthemall.GameLoopThread.Difficulty;
-
 import android.graphics.Canvas;
 
 /**
@@ -73,16 +70,6 @@ public class World implements GameElement {
 		}
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	
