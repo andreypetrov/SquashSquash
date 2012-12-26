@@ -1,9 +1,6 @@
 package com.petrovdevelopment.killthemall;
 
-import java.util.List;
-
 import android.content.Context;
-import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -12,40 +9,39 @@ import android.view.SurfaceView;
 
 public class GameView extends SurfaceView {
 	private GameLoader mGameLoader;
-
+	private World mWorld;
+	
 	private SurfaceHolder mHolder;
 	private GameLoopThread mGameLoopThread;
 
-	private Background mBackground;
-	private List<Npc> mNpcs;
-
 	public GameView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		initializeViewAndStartGameLoop();
+		initialize();
 	}
 	
 	public GameView(Context context) {
 		super(context);
-		initializeViewAndStartGameLoop();
+		initialize();
 	}
 	
-	private void initializeViewAndStartGameLoop() {
-		mGameLoopThread = new GameLoopThread(this);
-
+	private void initialize() {
 		mHolder = getHolder();
 		mHolder.addCallback(new Callback() {
 
 			@Override
 			public void surfaceCreated(SurfaceHolder holder) {
-				mGameLoader = new GameLoader(GameView.this);
-				mBackground = mGameLoader.loadBackground();
-				mNpcs = mGameLoader.loadNpcs();
-				mGameLoader.loadDeathEffect();
 				
+				mGameLoader = new GameLoader(GameView.this);
+				mWorld = World.getInstance();
+				mWorld.initialize(mGameLoader);
+				
+				mGameLoopThread = new GameLoopThread(GameView.this, mWorld);
 				//Start the actual game thread
 				mGameLoopThread.setRunning(true);
 				mGameLoopThread.start();
+				System.out.println("mGameLooThread started " + mGameLoopThread);
 			}
+			
 
 			@Override
 			public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
@@ -69,54 +65,24 @@ public class GameView extends SurfaceView {
 			}
 		});
 	}
-
-	public void update() {
-		mBackground.update();
-		DeathEffect.updateAll();
-		for (Npc npc : mNpcs) {
-			npc.update();
-		}
-	}
-
-	@Override
-	protected void onDraw(Canvas canvas) {
-		mBackground.render(canvas);
-		DeathEffect.renderAll(canvas);
-
-		for (Npc npc : mNpcs) {
-			npc.render(canvas);
-		}
-	}
 	
+	/**
+	 * Delegate to World.onTouchEvent()
+	 */
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		//Make sure the touch event can happen only on new touch and not on persisting the touch
 		if(event.getAction() == MotionEvent.ACTION_DOWN) {
+			//synchronize to make sure no sprite removal is happening during rendering
 			synchronized (getHolder()) {
-				float touchX = event.getX();
-				float touchY = event.getY();
-
-				// TODO: rework this with using Iterator for safe removal
-				for (int i = mNpcs.size() - 1; i >= 0; i--) {
-					Npc npc = mNpcs.get(i);
-					if (npc.isTouched(touchX, touchY)) {
-						npc.touch();
-						mNpcs.remove(i);
-						// no need this class to keep track of the created deathEffects.
-						// the class DeathEffects itself does that
-						DeathEffect.create(touchX, touchY);
-
-						// kill only the last (top most) NPC, i.e. only the last one
-						break;
-					}
-				}
-
+				mWorld.onTouchEvent(event.getX(), event.getY());
 			}
 		}
 		return true; // it is more efficient to pass true here to stop handling the event
 	}
 
 	public GameLoopThread getGameLoopThread() {
+		System.out.println("getting Game loop thread: " + mGameLoopThread);
 		return mGameLoopThread;
 	}
 

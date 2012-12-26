@@ -1,21 +1,19 @@
 package com.petrovdevelopment.killthemall;
 
-import com.petrovdevelopment.killthemall.World.GameState;
-
 import android.graphics.Canvas;
 import android.os.Bundle;
 
+import com.petrovdevelopment.killthemall.World.GameState;
+
 /**
  * Game loop thread. TODO: stop the thread before exiting the application TODO: forbid switching screen orientation to
- * landscape/portrait TODO: transfer all game state tracking in a separate singleton GameWorld, or something like that
- * landscape
+ * landscape/portrait
  * 
  * @author andrey
  * 
  */
 public class GameLoopThread extends Thread {
-	private GameView gameView;
-	private GameLoader mGameLoader;
+	private GameView mGameView;
 	private World mWorld;
 	
 	
@@ -23,15 +21,12 @@ public class GameLoopThread extends Thread {
 	private static final long FPS = 25;
 	private static final long TICKS_PS = 1000 / FPS;
 
-	private GameState mGameState;
+//	public GameLoopThread(GameView gameView) {
+//	}
 
-
-	public GameLoopThread(GameView gameView) {
-		this.gameView = gameView;
-		mGameLoader = new GameLoader(gameView);
-		mWorld = World.getInstance();
-		
-		setGameState(GameState.PAUSE);
+	public GameLoopThread(GameView gameView, World world) {
+		mGameView = gameView;
+		mWorld = world;
 	}
 
 	public void setRunning(boolean running) {
@@ -39,9 +34,8 @@ public class GameLoopThread extends Thread {
 	}
 
 	@Override
-	public void run() {
-		System.out.println(mGameState);
-		
+	public void run() {	
+		System.out.println(mWorld.getGameState().toString());
 		while (running) {
 			long startTime;
 			long sleepTime;
@@ -49,28 +43,25 @@ public class GameLoopThread extends Thread {
 			Canvas canvas = null;
 			startTime = System.currentTimeMillis();
 
-			// TODO create method render, wrapper of the onDraw
-			// Update and onDraw should be synchronized to happen after each other!!!
-
+			// Update and render should be synchronized to happen after each other!
 			try {
-				canvas = gameView.getHolder().lockCanvas();
+				canvas = mGameView.getHolder().lockCanvas();
 				// lockCanvas will return null in the last run, when we are destroying the view
 				if (canvas != null) {
-					synchronized (gameView.getHolder()) {	
+					synchronized (mGameView.getHolder()) {	
 						//TODO: there is some error if i put onDraw in the if statement. Even worse if i put more things in it.
 						//It has something to do with the non-instaneous pause of the animation.
 						//Probably the Npc class is bugged somehow
 						//TODO: maybe add one initial update and draw before the while loop to have a proper starting state
-						if (getGameState() == GameState.RUNNING) {
-							gameView.update();
-							
+						if (mWorld.getGameState() == GameState.RUNNING) {
+							mWorld.update();
 						}	
-						gameView.onDraw(canvas);
+						mWorld.render(canvas);
 					}
 				}
 			} finally {
 				if (canvas != null) {
-					gameView.getHolder().unlockCanvasAndPost(canvas);
+					mGameView.getHolder().unlockCanvasAndPost(canvas);
 				}
 			}
 
@@ -86,24 +77,16 @@ public class GameLoopThread extends Thread {
 	}
 
 	public void doResume() {
-		setGameState(GameState.RUNNING);
+		mWorld.setGameState(GameState.RUNNING);
 	}
 
 	public void doPause() {
-		setGameState(GameState.PAUSE);
+		mWorld.setGameState(GameState.PAUSE);
 	}
 
 	public void saveState(Bundle outState) {
 		// TODO Auto-generated method stub
 
-	}
-
-	public void setGameState(GameState gameState) {
-		mGameState = gameState;
-	}
-
-	public GameState getGameState() {
-		return mGameState;
 	}
 
 	public void restoreState(Bundle savedInstanceState) {

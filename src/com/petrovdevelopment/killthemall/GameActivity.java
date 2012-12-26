@@ -7,8 +7,6 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.ImageButton;
 
-import com.petrovdevelopment.killthemall.World.GameState;
-
 /**
  * TODO: use darker icons for the ActionBar TODO: add overflow icon to the ActionBar TODO: In this branch build the Activities
  * and menus and all extra things around the maing game TODO: Add scoring, begin and end activities TODO: Pause it onPause and
@@ -36,7 +34,6 @@ public class GameActivity extends Activity {
 
 		if (savedInstanceState == null) {
 			// we were just launched: set up a new game
-			mGameLoopThread.setGameState(GameState.READY);
 			Log.w(this.getClass().getName(), "SIS is null");
 		} else {
 			// we are being restored: resume a previous game
