@@ -81,7 +81,7 @@ public class GameLoopThread extends Thread {
 	}
 
 	public void doPause() {
-		mWorld.setGameState(GameState.PAUSE);
+		mWorld.setGameState(GameState.PAUSED);
 	}
 
 	public void saveState(Bundle outState) {

@@ -16,7 +16,9 @@ import android.widget.ImageButton;
  * 
  */
 public class GameActivity extends Activity {
-
+	
+	private GameView mGameView;
+	private World mWorld;
 	private GameLoopThread mGameLoopThread;
 	private ImageButton mPlayButton;
 	private ImageButton mPauseButton;
@@ -27,24 +29,65 @@ public class GameActivity extends Activity {
 		getActionBar().hide();
 
 		setContentView(R.layout.activity_main);
-		GameView gameView = (GameView) findViewById(R.id.game_view);
-		//at this point this is still not safe to use 
-		//because the GameView.mWorld is not initialized, until the gameView surface has finished creating!
-		mGameLoopThread = gameView.getGameLoopThread(); 
+		mGameView = (GameView) findViewById(R.id.game_view);
+
+
+		// at this point this is still not safe to use
+		// because the GameView.mWorld is not initialized, until the gameView surface has finished creating!
 		
-		
+		//mGameLoopThread = gameView.getGameLoopThread();
+
 		mPlayButton = (ImageButton) findViewById(R.id.play);
 		mPauseButton = (ImageButton) findViewById(R.id.pause);
 
 		if (savedInstanceState == null) {
 			// we were just launched: set up a new game
-			Log.w(this.getClass().getName(), "SIS is null");
+			Log.i(this.getClass().getName(), "SIS is null");
+
 		} else {
 			// we are being restored: resume a previous game
 			mGameLoopThread.restoreState(savedInstanceState);
-			Log.w(this.getClass().getName(), "SIS is nonnull");
+			Log.i(this.getClass().getName(), "SIS is nonnull");
 		}
 	}
+	
+	
+	
+	public void onGameViewSurfaceCreated (){
+		System.out.println("GameView dimensions:" + mGameView.getWidth() + " " + mGameView.getHeight());
+		
+		mWorld = World.getInstance();
+		mWorld.initialize(mGameView);
+
+		mGameLoopThread = new GameLoopThread(mGameView, mWorld);	
+		
+		// Start the actual game thread
+		mGameLoopThread.setRunning(true);
+		mGameLoopThread.start();
+		System.out.println("mGameLooThread started " + mGameLoopThread);
+	}
+	
+	public void onGameViewTouchEvent(float touchX, float touchY) {
+		mWorld.onTouchEvent(touchX, touchY);
+	}
+	
+	
+	
+	
+	
+	public void onGameViewSurfaceDestroyed () {
+			boolean retry = true;
+			mGameLoopThread.setRunning(false);
+			while (retry) {
+				try {
+					mGameLoopThread.join();
+					retry = false;
+				} catch (InterruptedException e) {
+				}
+			}
+			System.out.println("Surface destroyed");
+	}
+
 	
 	/**
 	 * Called when the Play ImageButton is clicked
@@ -74,10 +117,10 @@ public class GameActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		//Do not resume immediately the game. Instead only explicitly with the Play button
-		//This guarantees better user experience.
-		
-		//mGameLoopThread.doResume();
+		// Do not resume immediately the game. Instead only explicitly with the Play button
+		// This guarantees better user experience.
+
+		// mGameLoopThread.doResume();
 	}
 
 	@Override
@@ -99,6 +142,6 @@ public class GameActivity extends Activity {
 		// just have the View's thread save its state into our Bundle
 		super.onSaveInstanceState(outState);
 		mGameLoopThread.saveState(outState);
-		Log.w(this.getClass().getName(), "SIS called");
+		Log.i(this.getClass().getName(), "SIS called");
 	}
 }
