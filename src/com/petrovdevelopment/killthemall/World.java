@@ -1,15 +1,25 @@
 package com.petrovdevelopment.killthemall;
 
 import java.util.List;
+
 import android.graphics.Canvas;
+import android.os.Bundle;
+import android.os.Parcelable;
 
 /**
  * Game World, holding all other elements. Singleton.
- * 
  * @author andrey
  * 
  */
 public class World implements GameElement {
+	//Parcelable KEYS used in the bundle in saveState()
+	public static final String NPCS = "npcs";
+	
+	
+	public static final String DEATH_EFFECTS = "deathEffects"; //Ignore for now
+	public static final String BIRTH_EFFECTS = "birthEffects"; //Ignore for now
+	
+	
 	public static World mInstance;
 
 	private GameState mGameState = GameState.PAUSED;
@@ -36,13 +46,18 @@ public class World implements GameElement {
 		return mInstance;
 	}
 
-	public void initialize(GameView gameView) {
-		GameLoader gameLoader = new GameLoader(gameView);
+	public void initialize(GameView gameView, Bundle savedInstanceState) {
+		GameLoader gameLoader;
+		if (savedInstanceState == null)  {
+			gameLoader = new GameLoader(gameView);
+		} else {
+			gameLoader = new GameRecoveryLoader(gameView, savedInstanceState);
+		}
 		mBackground = gameLoader.loadBackground();
 		mNpcs = gameLoader.loadNpcs();
 		gameLoader.loadDeathEffect();
-	}
-
+	}	
+	
 	/**
 	 * Update all game elements. Consider update methods execution dependencies. Currently there are none.
 	 */
@@ -113,6 +128,14 @@ public class World implements GameElement {
 
 	public void setGameState(GameState gameState) {
 		this.mGameState = gameState;
+	}
+
+	public void saveState(Bundle outState) {
+		Parcelable[] npcs = new Parcelable[mNpcs.size()];
+		for (int i = 0; i < mNpcs.size(); i++) {
+			npcs[i] = mNpcs.get(i);
+		}
+		outState.putParcelableArray(NPCS, npcs);
 	}
 
 }

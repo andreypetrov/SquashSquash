@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.View;
 
 /**
@@ -47,10 +48,12 @@ public class Npc implements GameElement, Touchable, Parcelable {
 
 	/**
 	 * Use this constructor when creating npcs for a new game.
+	 * 
 	 * @param parentView
 	 * @param npcType
 	 */
 	public Npc(View parentView, NpcType npcType) {
+		Log.i(this.getClass().getSimpleName(), "Npc(View parentView, NpcType npcType) called");
 		mParentView = parentView;
 		mNpcType = npcType;
 		Random random = new Random();
@@ -68,26 +71,33 @@ public class Npc implements GameElement, Touchable, Parcelable {
 	}
 
 	/**
-	 * Used by the Npc.CREATOR when recovering previous game from a bundle.
-	 * It requires to call after setParentViewAndInitialize, before using the Npc
+	 * Used by the Npc.CREATOR when recovering previous game from a bundle. It requires to call after
+	 * setParentViewAndInitialize, before using the Npc
+	 * 
 	 * @param source
 	 */
 	private Npc(Parcel source) {
-		mNpcType = source.readParcelable(null);
+		//It is mandatory to read in the same order in which values were written in the parcel!
+		Log.i(this.getClass().getSimpleName(), "Npc(Parcep source) called");
+		mNpcType = source.readParcelable(NpcType.class.getClassLoader());
 		mX = source.readInt();
 		mY = source.readInt();
 		mXSpeed = source.readInt();
 		mYSpeed = source.readInt();
 		mWidth = source.readInt();
 		mHeight = source.readInt();
-		mCurrentAnimationRow = source.readInt();
 		mCurrentFrame = source.readInt();
-	}
+		mCurrentAnimationRow = source.readInt();
+		
+		
+		Log.i(this.getClass().getSimpleName(), "Animation Row: " + mCurrentAnimationRow);
+		Log.i(this.getClass().getSimpleName(), "Frame" + mCurrentFrame);
+	}	
 
 	/**
-	 * Sets up the game view the bitmap and some prerender calculations.
-	 * Mandatory call this after using the private constructor. 
-	 * The public constructor makes this call redundant.
+	 * Sets up the game view the bitmap and some prerender calculations. Mandatory call this after using the private
+	 * constructor. The public constructor makes this call redundant.
+	 * 
 	 * @param parentView
 	 */
 	public void setParentViewAndInitialize(View parentView) {
@@ -200,10 +210,14 @@ public class Npc implements GameElement, Touchable, Parcelable {
 		dest.writeInt(mHeight);
 		dest.writeInt(mCurrentFrame);
 		dest.writeInt(mCurrentAnimationRow);
+		Log.i(this.getClass().getSimpleName(), "Animation Row: " + mCurrentAnimationRow);
+		Log.i(this.getClass().getSimpleName(), "Frame" + mCurrentFrame);
 	}
 
-	
-
+	/**
+	 * Creator responsible for the recreating the Npc if the app was killed while in the background
+	 * If this field is not implemented there will be a runtime BadParcelableException
+	 */
 	public static final Creator<Npc> CREATOR = new Creator<Npc>() {
 		@Override
 		public Npc createFromParcel(final Parcel source) {
@@ -217,4 +231,32 @@ public class Npc implements GameElement, Touchable, Parcelable {
 
 	};
 
+	
+	public int getX() {
+		return mX;
+	}
+
+	public void setX(int x) {
+		mX = x;
+	}
+	
+	public int getY() {
+		return mY;
+	}
+
+	public void setY(int y) {
+		mY = y;
+	}
+	
+	public int getWidth() {
+		return mWidth;
+	}
+
+	public int getHeight() {
+		return mHeight;
+	}
+
+	public NpcType getNpcType () {
+		return mNpcType;
+	}
 }

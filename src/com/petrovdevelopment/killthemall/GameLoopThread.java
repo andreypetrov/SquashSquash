@@ -2,6 +2,7 @@ package com.petrovdevelopment.killthemall;
 
 import android.graphics.Canvas;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.petrovdevelopment.killthemall.World.GameState;
 
@@ -33,9 +34,11 @@ public class GameLoopThread extends Thread {
 		this.running = running;
 	}
 
+	//TODO add one rendering before the loop and after the initial setup
 	@Override
 	public void run() {	
-		System.out.println(mWorld.getGameState().toString());
+		Log.i(this.getClass().getSimpleName(), mWorld.getGameState().toString());
+		
 		while (running) {
 			long startTime;
 			long sleepTime;

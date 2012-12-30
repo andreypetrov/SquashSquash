@@ -8,10 +8,11 @@ import android.view.View;
 import android.widget.ImageButton;
 
 /**
+ * TODO: add ETC1 compression to the images
  * TODO: use darker icons for the ActionBar TODO: add overflow icon to the ActionBar TODO: In this branch build the Activities
  * and menus and all extra things around the maing game TODO: Add scoring, begin and end activities TODO: Pause it onPause and
  * stop it onStop! etc. Use LunarLander to get the ideas from
- * 
+ * TODO:try to load the height and width of the SurfaceView before the view has been created
  * @author andrey
  * 
  */
@@ -22,7 +23,8 @@ public class GameActivity extends Activity {
 	private GameLoopThread mGameLoopThread;
 	private ImageButton mPlayButton;
 	private ImageButton mPauseButton;
-
+	private Bundle mSavedInstanceState = null;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -30,49 +32,39 @@ public class GameActivity extends Activity {
 
 		setContentView(R.layout.activity_main);
 		mGameView = (GameView) findViewById(R.id.game_view);
-
-
-		// at this point this is still not safe to use
-		// because the GameView.mWorld is not initialized, until the gameView surface has finished creating!
-		
-		//mGameLoopThread = gameView.getGameLoopThread();
-
 		mPlayButton = (ImageButton) findViewById(R.id.play);
 		mPauseButton = (ImageButton) findViewById(R.id.pause);
 
+		mWorld = World.getInstance();
+		mSavedInstanceState = savedInstanceState;
+		
 		if (savedInstanceState == null) {
 			// we were just launched: set up a new game
-			Log.i(this.getClass().getName(), "SIS is null");
+			Log.i(this.getClass().getSimpleName(), "SIS is null");
 
 		} else {
 			// we are being restored: resume a previous game
-			mGameLoopThread.restoreState(savedInstanceState);
-			Log.i(this.getClass().getName(), "SIS is nonnull");
+			Log.i(this.getClass().getSimpleName(), "SIS is nonnull");
 		}
 	}
 	
-	
-	
+	/**
+	 * Called when mGameView has already been loaded so its size is known
+	 */
 	public void onGameViewSurfaceCreated (){
-		System.out.println("GameView dimensions:" + mGameView.getWidth() + " " + mGameView.getHeight());
+		mWorld.initialize(mGameView, mSavedInstanceState);
 		
-		mWorld = World.getInstance();
-		mWorld.initialize(mGameView);
-
 		mGameLoopThread = new GameLoopThread(mGameView, mWorld);	
 		
 		// Start the actual game thread
 		mGameLoopThread.setRunning(true);
 		mGameLoopThread.start();
-		System.out.println("mGameLooThread started " + mGameLoopThread);
+		Log.i(this.getClass().getSimpleName(), "mGameLooThread started " + mGameLoopThread);
 	}
 	
 	public void onGameViewTouchEvent(float touchX, float touchY) {
 		mWorld.onTouchEvent(touchX, touchY);
 	}
-	
-	
-	
 	
 	
 	public void onGameViewSurfaceDestroyed () {
@@ -85,9 +77,10 @@ public class GameActivity extends Activity {
 				} catch (InterruptedException e) {
 				}
 			}
-			System.out.println("Surface destroyed");
+			Log.i(this.getClass().getSimpleName(), "Surface destroyed");
 	}
 
+	
 	
 	/**
 	 * Called when the Play ImageButton is clicked
@@ -141,7 +134,7 @@ public class GameActivity extends Activity {
 	protected void onSaveInstanceState(Bundle outState) {
 		// just have the View's thread save its state into our Bundle
 		super.onSaveInstanceState(outState);
-		mGameLoopThread.saveState(outState);
-		Log.i(this.getClass().getName(), "SIS called");
+		mWorld.saveState(outState);
+		Log.i(this.getClass().getSimpleName(), "SIS called");
 	}
 }

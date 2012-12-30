@@ -21,12 +21,9 @@ import android.view.SurfaceView;
  */
 public class GameView extends SurfaceView {
 	private GameActivity mGameActivity;
-	
+
 	private SurfaceHolder mHolder;
-
-	//private World mWorld;
-	//private GameLoopThread mGameLoopThread;
-
+	
 	public GameView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		mGameActivity = (GameActivity) context;
@@ -40,22 +37,12 @@ public class GameView extends SurfaceView {
 	}
 
 	private void initialize() {
-		//mWorld = World.getInstance();
-		//mGameLoopThread = new GameLoopThread(GameView.this, mWorld);
-
 		mHolder = getHolder();
 		mHolder.addCallback(new Callback() {
 
 			@Override
 			public void surfaceCreated(SurfaceHolder holder) {
 				mGameActivity.onGameViewSurfaceCreated();
-				
-//				System.out.println("GameView dimensions:" + getWidth() + " " + getHeight());
-//				mWorld.initialize(GameView.this);
-//				// Start the actual game thread
-//				mGameLoopThread.setRunning(true);
-//				mGameLoopThread.start();
-//				System.out.println("mGameLooThread started " + mGameLoopThread);
 			}
 
 			@Override
@@ -68,16 +55,6 @@ public class GameView extends SurfaceView {
 			@Override
 			public void surfaceDestroyed(SurfaceHolder holder) {
 				mGameActivity.onGameViewSurfaceDestroyed();
-//				boolean retry = true;
-//				mGameLoopThread.setRunning(false);
-//				while (retry) {
-//					try {
-//						mGameLoopThread.join();
-//						retry = false;
-//					} catch (InterruptedException e) {
-//					}
-//				}
-//				System.out.println("Surface destroyed");
 			}
 		});
 	}
@@ -91,15 +68,9 @@ public class GameView extends SurfaceView {
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 			// synchronize to make sure no sprite removal is happening during rendering
 			synchronized (getHolder()) {
-				//mWorld.onTouchEvent(event.getX(), event.getY());
 				mGameActivity.onGameViewTouchEvent(event.getX(), event.getY());
 			}
 		}
 		return true; // it is more efficient to pass true here to stop handling the event
 	}
-
-//	public GameLoopThread getGameLoopThread() {
-//		return mGameLoopThread;
-//	}
-
 }

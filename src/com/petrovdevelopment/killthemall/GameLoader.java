@@ -2,7 +2,6 @@ package com.petrovdevelopment.killthemall;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,7 +15,6 @@ import android.graphics.BitmapFactory;
  */
 public class GameLoader {
 	private GameView mGameView;
-	
 	public GameLoader(GameView gameView) {
 		mGameView = gameView;
 	}
