@@ -4,7 +4,10 @@ import java.util.List;
 
 import android.graphics.Canvas;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.Parcelable;
+import android.util.Log;
 
 /**
  * Game World, holding all other elements. Singleton.
@@ -14,8 +17,7 @@ import android.os.Parcelable;
 public class World implements GameElement {
 	//Parcelable KEYS used in the bundle in saveState()
 	public static final String NPCS = "npcs";
-	
-	
+	public static final String SCORE = "score";
 	public static final String DEATH_EFFECTS = "deathEffects"; //Ignore for now
 	public static final String BIRTH_EFFECTS = "birthEffects"; //Ignore for now
 	
@@ -24,7 +26,7 @@ public class World implements GameElement {
 
 	private GameState mGameState = GameState.PAUSED;
 	private Difficulty mDifficulty = Difficulty.MEDIUM; // Ignore for now
-
+	
 	public enum GameState {
 		RUNNING, PAUSED, READY, WIN, LOSS
 	}
@@ -33,6 +35,9 @@ public class World implements GameElement {
 		EASY, MEDIUM, HARD
 	}
 
+	private Handler mScoreHandler;
+	
+	private int mScore;
 	private Background mBackground;
 	private List<Npc> mNpcs;
 
@@ -46,11 +51,14 @@ public class World implements GameElement {
 		return mInstance;
 	}
 
-	public void initialize(GameView gameView, Bundle savedInstanceState) {
+	public void initialize(GameView gameView, Bundle savedInstanceState, Handler scoreHandler) {
+		mScoreHandler = scoreHandler;
 		GameLoader gameLoader;
 		if (savedInstanceState == null)  {
+			mScore = 0;
 			gameLoader = new GameLoader(gameView);
 		} else {
+			mScore = savedInstanceState.getInt(SCORE);
 			gameLoader = new GameRecoveryLoader(gameView, savedInstanceState);
 		}
 		mBackground = gameLoader.loadBackground();
@@ -97,29 +105,75 @@ public class World implements GameElement {
 			for (int i = mNpcs.size() - 1; i >= 0; i--) {
 				Npc npc = mNpcs.get(i);
 				if (npc.isTouched(touchX, touchY)) {
-					npc.touch();
-					mNpcs.remove(i);
+					npc.touch(); //does nothing currently
+					
 					// no need this class to keep track of the created deathEffects.
 					// the class DeathEffects itself does that
-					DeathEffect.create(touchX, touchY);
-
-					// kill only the last (top most) NPC, i.e. only the last one
+					boolean isAlien = npc.getNpcType().isAlien();	
+					
+					updateScoreView(isAlien);
+					
+					//TODO: send score update to the UI thread.
+					Log.i(this.getClass().getSimpleName(), "Score: " + mScore);
+					DeathEffect.create(touchX, touchY, isAlien);
+					//remove the Npc from the list (kill it)
+					mNpcs.remove(i);
+					
+					// kill only the top most NPC, i.e. only the last one by not checking the rest of the list
 					break;
 				}
 			}
 		}
 	}
 
+	/**
+	 * update the score on the main UI (not sure if this is not anyways true)
+	 * TODO: remove initialization from here because it is expensive to create everytime a new bundle.
+	 * Better update the existing one
+	 * @param isAlien
+	 */
+	private void updateScoreView(boolean isAlien) {
+		if (isAlien) {
+			mScore+=10; //10 points for killing an alien
+		} else {
+			mScore-=5; //-5 points for killing a human
+		}
+		Message message = mScoreHandler.obtainMessage();
+		Bundle bundle = new Bundle();
+		bundle.putInt(SCORE, mScore);
+		message.setData(bundle);
+		mScoreHandler.sendMessage(message);
+	}
+	
+
+	/**
+	 * Save state of Score and NPCs. Ignore the death effects since they are too short to matter 
+	 * @param outState
+	 */
+	public void saveState(Bundle outState) {
+		
+		Parcelable[] npcs = new Parcelable[mNpcs.size()];
+		for (int i = 0; i < mNpcs.size(); i++) {
+			npcs[i] = mNpcs.get(i);
+		}
+		outState.putParcelableArray(NPCS, npcs);
+		outState.putInt(SCORE, mScore);
+	}
+	
+	
+	
 	//
 	// GETTERS AND SETTERS
 	//
+
+
 
 	public Difficulty getDifficulty() {
 		return mDifficulty;
 	}
 
 	public void setDifficulty(Difficulty difficulty) {
-		this.mDifficulty = difficulty;
+		mDifficulty = difficulty;
 	}
 
 	public GameState getGameState() {
@@ -127,15 +181,12 @@ public class World implements GameElement {
 	}
 
 	public void setGameState(GameState gameState) {
-		this.mGameState = gameState;
+		mGameState = gameState;
+	}
+	
+	public int getScore() {
+		return mScore;
 	}
 
-	public void saveState(Bundle outState) {
-		Parcelable[] npcs = new Parcelable[mNpcs.size()];
-		for (int i = 0; i < mNpcs.size(); i++) {
-			npcs[i] = mNpcs.get(i);
-		}
-		outState.putParcelableArray(NPCS, npcs);
-	}
 
 }

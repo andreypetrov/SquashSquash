@@ -52,7 +52,8 @@ public class GameLoader {
 	}
 
 	public void loadDeathEffect() {
-		Bitmap bitmapBlood = BitmapFactory.decodeResource(mGameView.getResources(), R.drawable.blood1);
-		DeathEffect.initialize(mGameView, bitmapBlood);
+		Bitmap bitmapBloodAlien = BitmapFactory.decodeResource(mGameView.getResources(), R.drawable.blood_alien);
+		Bitmap bitmapBloodHuman = BitmapFactory.decodeResource(mGameView.getResources(), R.drawable.blood_human);
+		DeathEffect.initialize(mGameView, bitmapBloodAlien, bitmapBloodHuman);
 	}
 }

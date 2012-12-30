@@ -2,10 +2,14 @@ package com.petrovdevelopment.killthemall;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 /**
  * TODO: add ETC1 compression to the images
@@ -24,14 +28,18 @@ public class GameActivity extends Activity {
 	private ImageButton mPlayButton;
 	private ImageButton mPauseButton;
 	private Bundle mSavedInstanceState = null;
+	private Handler mScoreHandler;
+	private TextView mScoreTextView;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		getActionBar().hide();
 
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_game);
 		mGameView = (GameView) findViewById(R.id.game_view);
+		mScoreTextView = (TextView) findViewById(R.id.score); 
+				
 		mPlayButton = (ImageButton) findViewById(R.id.play);
 		mPauseButton = (ImageButton) findViewById(R.id.pause);
 
@@ -52,7 +60,9 @@ public class GameActivity extends Activity {
 	 * Called when mGameView has already been loaded so its size is known
 	 */
 	public void onGameViewSurfaceCreated (){
-		mWorld.initialize(mGameView, mSavedInstanceState);
+		initializeHandler();
+		//TODO: try passing the handler directly to the mWorld
+		mWorld.initialize(mGameView, mSavedInstanceState, mScoreHandler);
 		
 		mGameLoopThread = new GameLoopThread(mGameView, mWorld);	
 		
@@ -60,8 +70,24 @@ public class GameActivity extends Activity {
 		mGameLoopThread.setRunning(true);
 		mGameLoopThread.start();
 		Log.i(this.getClass().getSimpleName(), "mGameLooThread started " + mGameLoopThread);
+		
+		
 	}
 	
+	/**
+	 * Create a handler that will be working on the application's main thread (the UI thread)
+	 * and update the score
+	 */
+	private void initializeHandler() {
+		mScoreHandler = new Handler(Looper.getMainLooper()) {
+			@Override
+			public void handleMessage(Message msg) {
+				mScoreTextView.setText("Score: " + Integer.toString(msg.getData().getInt(World.SCORE)));
+			}
+		};
+		
+	}
+
 	public void onGameViewTouchEvent(float touchX, float touchY) {
 		mWorld.onTouchEvent(touchX, touchY);
 	}

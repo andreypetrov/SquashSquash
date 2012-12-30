@@ -186,7 +186,7 @@ public class Npc implements GameElement, Touchable, Parcelable {
 
 	@Override
 	public void touch() {
-		// do nothing
+
 	}
 
 	@Override

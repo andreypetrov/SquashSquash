@@ -9,8 +9,9 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
 /**
- * A singleton variation, with controlled number of instances, 
- * Need to be preloaded with initialize(). Uses only one bmp for every DeathEffect instance
+ * A singleton variation, with controlled number of instances, Need to be preloaded with initialize(). Uses only one bmp for
+ * every DeathEffect instance
+ * 
  * @author andrey
  * 
  */
@@ -22,7 +23,9 @@ public class DeathEffect implements GameElement {
 	private static int INITIAL_LIFE = 15; // number of game ticks
 	private static GameView mGameView;
 
-	private static Bitmap mBitmap;
+	private static Bitmap mBitmapAlien;
+	private static Bitmap mBitmapHuman;
+
 	private static int mBitmapWidth;
 	private static int mBitmapHeight;
 	// Keep static synchronized count of all the variables of this class
@@ -34,17 +37,21 @@ public class DeathEffect implements GameElement {
 	private final int mX;
 	private final int mY;
 	private int mLife = INITIAL_LIFE;
+	private final boolean mIsAlien;
 
 	/**
-	 * Initialize the class variables
+	 * Initialize the class variables Images of human and alien should have the same size
+	 * 
 	 * @param gameView
 	 * @param bitmap
 	 */
-	public static void initialize(GameView gameView, Bitmap bitmap) {
+	public static void initialize(GameView gameView, Bitmap bitmapAlien, Bitmap bitmapHuman) {
 		mGameView = gameView;
-		mBitmap = bitmap;
-		mBitmapWidth = bitmap.getWidth();
-		mBitmapHeight = bitmap.getHeight();
+		mBitmapAlien = bitmapAlien;
+		mBitmapHuman = bitmapHuman;
+
+		mBitmapWidth = bitmapAlien.getWidth();
+		mBitmapHeight = bitmapAlien.getHeight();
 	}
 
 	/**
@@ -56,21 +63,23 @@ public class DeathEffect implements GameElement {
 	 *            - the y coordinate
 	 * @return
 	 */
-	public static DeathEffect create(float x, float y) {
-		if (mBitmap == null || mGameView == null) {
+	public static DeathEffect create(float x, float y, boolean isAlien) {
+		if (mBitmapAlien == null || mBitmapHuman == null || mGameView == null) {
 			throw new NullPointerException(
 					"mBitmap == null or mGameView == null, probably DeathEffect.initialize() method has not been called");
 		}
-		return new DeathEffect(x, y, mBitmap);
+		return new DeathEffect(x, y, isAlien);
 	}
 
-	private DeathEffect(float x, float y, Bitmap bitmap) {
+	private DeathEffect(float x, float y, boolean isAlien) {
 		// Lazy initialize the static synchronized list with all objects of this class
 		if (deathEffects == null) {
 			deathEffects = Collections.synchronizedList(new ArrayList<DeathEffect>());
 		}
-		this.mX = Math.round(Math.min(Math.max(x - mBitmapWidth / 2, 0), mGameView.getWidth() - mBitmapWidth));
-		this.mY = Math.round(Math.min(Math.max(y - mBitmapHeight / 2, 0), mGameView.getHeight() - mBitmapHeight));
+
+		mIsAlien = isAlien;
+		mX = Math.round(Math.min(Math.max(x - mBitmapWidth / 2, 0), mGameView.getWidth() - mBitmapWidth));
+		mY = Math.round(Math.min(Math.max(y - mBitmapHeight / 2, 0), mGameView.getHeight() - mBitmapHeight));
 
 		// Add the newly created object to the controlled static list
 		synchronized (deathEffects) {
@@ -122,7 +131,11 @@ public class DeathEffect implements GameElement {
 
 	@Override
 	public void render(Canvas canvas) {
-		canvas.drawBitmap(mBitmap, mX, mY, null);
+		if (mIsAlien) {
+			canvas.drawBitmap(mBitmapAlien, mX, mY, null);
+		} else {
+			canvas.drawBitmap(mBitmapHuman, mX, mY, null);
+		}
 	}
 
 }
