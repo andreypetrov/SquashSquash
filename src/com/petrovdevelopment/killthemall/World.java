@@ -38,6 +38,9 @@ public class World implements GameElement {
 	private Handler mScoreHandler;
 	
 	private int mScore;
+	private int mAlienCount = 0;
+	private int mHumanCount = 0;
+	
 	private Background mBackground;
 	private List<Npc> mNpcs;
 
@@ -63,9 +66,23 @@ public class World implements GameElement {
 		}
 		mBackground = gameLoader.loadBackground();
 		mNpcs = gameLoader.loadNpcs();
+		setAlienAndHumanCount();
+		
 		gameLoader.loadDeathEffect();
+		
+		
 	}	
 	
+	private void setAlienAndHumanCount() {
+		for (Npc npc : mNpcs) {
+			if (npc.getNpcType().isAlien()) {
+				mAlienCount++;
+			} else {
+				mHumanCount++;
+			}
+		}
+	}
+
 	/**
 	 * Update all game elements. Consider update methods execution dependencies. Currently there are none.
 	 */
@@ -110,34 +127,37 @@ public class World implements GameElement {
 					// no need this class to keep track of the created deathEffects.
 					// the class DeathEffects itself does that
 					boolean isAlien = npc.getNpcType().isAlien();	
-					
-					updateScoreView(isAlien);
-					
-					//TODO: send score update to the UI thread.
-					Log.i(this.getClass().getSimpleName(), "Score: " + mScore);
+					updateScore(isAlien);
 					DeathEffect.create(touchX, touchY, isAlien);
 					//remove the Npc from the list (kill it)
 					mNpcs.remove(i);
-					
 					// kill only the top most NPC, i.e. only the last one by not checking the rest of the list
 					break;
 				}
+			}
+			if(mAlienCount == 0) {
+				//TODO end the game by starting a game end activity via new intent
 			}
 		}
 	}
 
 	/**
-	 * update the score on the main UI (not sure if this is not anyways true)
-	 * TODO: remove initialization from here because it is expensive to create everytime a new bundle.
+	 * Calculates the game score and updates the score view on the UI thread.
+	 * TODO: remove initialization from here. It is expensive to create every time a new bundle.
 	 * Better update the existing one
 	 * @param isAlien
 	 */
-	private void updateScoreView(boolean isAlien) {
+	private void updateScore(boolean isAlien) {
+		//Update the score
 		if (isAlien) {
-			mScore+=10; //10 points for killing an alien
+			mScore+=10; //plus 10 points for killing an alien
+			mAlienCount--;
 		} else {
-			mScore-=5; //-5 points for killing a human
+			mScore-=5; //minus 5 points for killing a human
+			mHumanCount--;
 		}
+		
+		//Send a message to the UI thread to update the Score View
 		Message message = mScoreHandler.obtainMessage();
 		Bundle bundle = new Bundle();
 		bundle.putInt(SCORE, mScore);

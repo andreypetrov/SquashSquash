@@ -13,8 +13,8 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        <activity
-            android:name="com.petrovdevelopment.killthemall.GameActivity"
+         <activity
+            android:name="com.petrovdevelopment.killthemall.MainMenuActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,10 +22,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
         <activity
-            android:name="com.petrovdevelopment.killthemall.MainMenuActivity"
-            android:label="@string/title_activity_main_menu" >
+            android:name="com.petrovdevelopment.killthemall.GameActivity"
+            android:label="@string/app_name" >
         </activity>
+       
     </application>
 
 </manifest>

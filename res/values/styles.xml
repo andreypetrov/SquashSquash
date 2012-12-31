@@ -5,7 +5,7 @@
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
     <!-- <style name="AppBaseTheme" parent="android:Theme.Light"> -->
-    <style name="AppBaseTheme" parent="android:Theme.Holo">
+    <style name="AppBaseTheme" parent="android:Theme.Holo.NoActionBar">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
@@ -14,10 +14,12 @@
     </style>
 
     <!-- Application theme. -->
-    <style name="AppTheme" parent="AppBaseTheme">
+    <style name="AppTheme" parent="AppBaseTheme">      
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
-        <!-- Added by Andrey 24.Dec.2012-->
-        <item name="android:windowActionBarOverlay">true</item>
+        <!-- Added by Andrey Petrov 30.Dec.2012-->
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <!-- <item name="android:windowActionBarOverlay">true</item> -->
         <!-- <item name="android:actionBarItemBackground">@drawable/ab_item_background</item> -->       
         <!--  <item name="android:background">@drawable/action_bar_background</item> -->
     </style>

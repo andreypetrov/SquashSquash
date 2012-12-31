@@ -12,11 +12,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 /**
- * TODO: add ETC1 compression to the images
- * TODO: use darker icons for the ActionBar TODO: add overflow icon to the ActionBar TODO: In this branch build the Activities
- * and menus and all extra things around the maing game TODO: Add scoring, begin and end activities TODO: Pause it onPause and
- * stop it onStop! etc. Use LunarLander to get the ideas from
- * TODO:try to load the height and width of the SurfaceView before the view has been created
+ * TODO: add ETC1 compression to the images if using OpenGl
+ * TODO: In this branch build the Activities and menus and all extra things around the maing game 
+ * TODO: Add scoring, begin and end activities 
  * @author andrey
  * 
  */
@@ -34,7 +32,6 @@ public class GameActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		getActionBar().hide();
 
 		setContentView(R.layout.activity_game);
 		mGameView = (GameView) findViewById(R.id.game_view);
@@ -79,6 +76,7 @@ public class GameActivity extends Activity {
 	 * and update the score
 	 */
 	private void initializeHandler() {
+		//TODO how to make this handler static and does it matter?
 		mScoreHandler = new Handler(Looper.getMainLooper()) {
 			@Override
 			public void handleMessage(Message msg) {
@@ -88,6 +86,11 @@ public class GameActivity extends Activity {
 		
 	}
 
+	/**
+	 * Method called by the underlying GameView
+	 * @param touchX
+	 * @param touchY
+	 */
 	public void onGameViewTouchEvent(float touchX, float touchY) {
 		mWorld.onTouchEvent(touchX, touchY);
 	}
@@ -152,7 +155,7 @@ public class GameActivity extends Activity {
 
 	/**
 	 * Notification that something is about to happen, to give the Activity a chance to save state.
-	 * 
+	 * TODO: persist score on storage?
 	 * @param outState
 	 *            a Bundle into which this Activity should save its state
 	 */

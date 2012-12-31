@@ -39,7 +39,6 @@ public class GameLoader {
 		npcs.add(createNpc(NpcType.GOOD6));
 		return npcs;
 	}
-
 	
 	/**
 	 * Helper method to create a single Npc
@@ -56,4 +55,5 @@ public class GameLoader {
 		Bitmap bitmapBloodHuman = BitmapFactory.decodeResource(mGameView.getResources(), R.drawable.blood_human);
 		DeathEffect.initialize(mGameView, bitmapBloodAlien, bitmapBloodHuman);
 	}
+
 }
