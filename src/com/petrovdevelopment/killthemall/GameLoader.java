@@ -50,10 +50,22 @@ public class GameLoader {
 		return npc;
 	}
 
-	public void loadDeathEffect() {
+	public DeathEffectContainer loadDeathEffectContainer() {
 		Bitmap bitmapBloodAlien = BitmapFactory.decodeResource(mGameView.getResources(), R.drawable.blood_alien);
 		Bitmap bitmapBloodHuman = BitmapFactory.decodeResource(mGameView.getResources(), R.drawable.blood_human);
-		DeathEffect.initialize(mGameView, bitmapBloodAlien, bitmapBloodHuman);
+		DeathEffectContainer deathEffectContainer = DeathEffectContainer.getInstance();
+		deathEffectContainer.initialize(mGameView, bitmapBloodAlien, bitmapBloodHuman);	
+		return deathEffectContainer;
+	}
+
+	public int loadScore() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public long loadTimeLeft() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

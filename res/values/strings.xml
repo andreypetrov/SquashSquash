@@ -8,8 +8,13 @@
     <string name="pause">Pause</string>
     <string name="play">Play</string>
     <string name="stop">Stop</string>
-    <string name="score">Score: 0</string>
-    <string name="time">Time: 30:00</string>
+    <string name="score_title">Score:</string>
+    <string name="score_value">0</string>
+    <string name="time_title">Time:</string>
+    <string name="time_value">15:00</string>
     <string name="title_activity_main_menu">MainMenuActivity</string>
-
+    <string name="title_activity_end_game">EndGameActivity</string>
+	<string name="end_game">Congratulations! Your game is over</string>
+    
+    
 </resources>

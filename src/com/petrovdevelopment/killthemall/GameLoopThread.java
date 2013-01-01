@@ -14,6 +14,7 @@ import com.petrovdevelopment.killthemall.World.GameState;
  * 
  */
 public class GameLoopThread extends Thread {
+	private GameActivity mGameActivity;
 	private GameView mGameView;
 	private World mWorld;
 	
@@ -25,9 +26,10 @@ public class GameLoopThread extends Thread {
 //	public GameLoopThread(GameView gameView) {
 //	}
 
-	public GameLoopThread(GameView gameView, World world) {
+	public GameLoopThread(GameView gameView, World world, GameActivity gameActivity) {
 		mGameView = gameView;
 		mWorld = world;
+		mGameActivity = gameActivity;
 	}
 
 	public void setRunning(boolean running) {
@@ -43,6 +45,7 @@ public class GameLoopThread extends Thread {
 			long startTime;
 			long sleepTime;
 
+			
 			Canvas canvas = null;
 			startTime = System.currentTimeMillis();
 
@@ -52,16 +55,12 @@ public class GameLoopThread extends Thread {
 				// lockCanvas will return null in the last run, when we are destroying the view
 				if (canvas != null) {
 					synchronized (mGameView.getHolder()) {	
-						//TODO: there is some error if i put onDraw in the if statement. Even worse if i put more things in it.
-						//It has something to do with the non-instaneous pause of the animation.
-						//Probably the Npc class is bugged somehow
 						//TODO: maybe add one initial update and draw before the while loop to have a proper starting state
-						if (mWorld.getGameState() == GameState.RUNNING) {
-							mWorld.update();
-						}	
+						mWorld.update();
 						mWorld.render(canvas);
 					}
 				}
+				
 			} finally {
 				if (canvas != null) {
 					mGameView.getHolder().unlockCanvasAndPost(canvas);
@@ -75,6 +74,13 @@ public class GameLoopThread extends Thread {
 				}
 			} catch (Exception e) {
 				// do nothing
+			}
+			
+			
+			
+			//Finish the game 
+			if(mWorld.getGameState() == GameState.END) {
+				mGameActivity.onGameEnd();
 			}
 		}
 	}
