@@ -23,9 +23,6 @@ public class GameLoopThread extends Thread {
 	private static final long FPS = 25;
 	private static final long TICKS_PS = 1000 / FPS;
 
-//	public GameLoopThread(GameView gameView) {
-//	}
-
 	public GameLoopThread(GameView gameView, World world, GameActivity gameActivity) {
 		mGameView = gameView;
 		mWorld = world;
@@ -85,13 +82,6 @@ public class GameLoopThread extends Thread {
 		}
 	}
 
-	public void doResume() {
-		mWorld.setGameState(GameState.RUNNING);
-	}
-
-	public void doPause() {
-		mWorld.setGameState(GameState.PAUSED);
-	}
 
 	public void saveState(Bundle outState) {
 		// TODO Auto-generated method stub

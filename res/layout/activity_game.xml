@@ -64,6 +64,19 @@
             android:text="@string/score_value" />
 
         <ImageButton
+            android:id="@+id/exit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@null"
+            android:contentDescription="@string/exit"
+            android:enabled="true"
+            android:onClick="onClickExit"
+            android:padding="5dip"
+            android:src="@drawable/exit"
+            android:visibility="visible" />
+        
+        <ImageButton
             android:id="@+id/pause"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -75,18 +88,17 @@
             android:padding="5dip"
             android:src="@drawable/pause"
             android:visibility="gone" />
-
-        <ImageButton
-            android:id="@+id/play"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:background="@null"
-            android:contentDescription="@string/play"
-            android:enabled="true"
-            android:onClick="onClickPlay"
-            android:padding="5dip"
-            android:src="@drawable/play" />
     </LinearLayout>
 
+    <ImageButton
+        android:id="@+id/play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@null"
+        android:contentDescription="@string/play"
+        android:enabled="true"
+        android:onClick="onClickPlay"
+        android:padding="5dip"
+        android:src="@drawable/play" />
 </RelativeLayout>

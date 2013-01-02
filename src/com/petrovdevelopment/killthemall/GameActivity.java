@@ -16,8 +16,8 @@ import android.widget.TextView;
 /**
  * TODO: add ETC1 compression to the images if using OpenGl TODO: In this branch build the Activities and menus and all extra
  * things around the maing game TODO: Add scoring, begin and end activities TODO: fix the score, time, exit, (pause/resume)
- * bar TODO: play button should be in the middle after pause is pressed It is important to recompile the activity if its
- * layout xml has changed
+ * bar. 
+ * It is important to recompile the activity if itslayout xml has changed
  * 
  * @author andrey
  * 
@@ -28,16 +28,22 @@ public class GameActivity extends Activity {
 	private GameView mGameView;
 	private World mWorld;
 	private GameLoopThread mGameLoopThread;
+	
 	private ImageButton mPlayButton;
 	private ImageButton mPauseButton;
+	private ImageButton mExitButton;
+	
 	private Bundle mSavedInstanceState = null;
 	private Handler mScoreHandler;
+	
 	private TextView mScoreTextTitleView;
 	private TextView mScoreTextValueView;
-
 	private TextView mTimeTextTitleView;
 	private TextView mTimeTextValueView;
-
+	
+	private int mCurrentTime; //in seconds
+	private int mCurrentScore;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -47,6 +53,8 @@ public class GameActivity extends Activity {
 		mGameView = (GameView) findViewById(R.id.game_view);
 		mPlayButton = (ImageButton) findViewById(R.id.play);
 		mPauseButton = (ImageButton) findViewById(R.id.pause);
+		mExitButton = (ImageButton) findViewById(R.id.exit);
+		
 		mWorld = World.getInstance();
 		mSavedInstanceState = savedInstanceState;
 
@@ -86,6 +94,12 @@ public class GameActivity extends Activity {
 	public void onGameViewSurfaceCreated() {
 		initializeHandler();
 		mWorld.initialize(mGameView, mSavedInstanceState, mScoreHandler);
+		
+		//initialize time and score 
+		mCurrentTime = mWorld.getTime(); 
+		mCurrentScore = mWorld.getScore(); 
+		updateTimeAndScoreViews();
+		
 		mGameLoopThread = new GameLoopThread(mGameView, mWorld, this);
 
 		// Start the actual game thread
@@ -95,20 +109,33 @@ public class GameActivity extends Activity {
 	}
 
 	/**
-	 * Create a handler that will be working on the application's main thread (the UI thread) and update the score and time
+	 * Create a handler that will be working on the application's main thread (the UI thread) 
+	 * and update the score and time.
+	 * The score and time updates will be coming in separate messages but via the same handler, 
+	 * Assign the new values or keep the old if no new vales are coming in the message.
 	 * TODO: add time manipulation
 	 */
 	private void initializeHandler() {
 		// TODO Does it matter if this handler is static or no?
 		mScoreHandler = new Handler(Looper.getMainLooper()) {
 			@Override
-			public void handleMessage(Message msg) {
-				mScoreTextValueView.setText(Integer.toString(msg.getData().getInt(World.SCORE)));
+			public void handleMessage(Message msg) {				
+				//assign the new values or keep the old if no new vales are coming in the message
+				int timeValue =  msg.getData().getInt(World.TIME, mCurrentTime);
+				int scoreValue = msg.getData().getInt(World.SCORE, mCurrentScore);	
+				
+				mCurrentTime = timeValue;
+				mCurrentScore = scoreValue;			
+				updateTimeAndScoreViews();
 			}
 		};
 
 	}
 
+	private void updateTimeAndScoreViews() {
+		mTimeTextValueView.setText(Integer.toString(mCurrentTime));
+		mScoreTextValueView.setText(Integer.toString(mCurrentScore));
+	}
 	/**
 	 * Method called by the underlying GameView
 	 * 
@@ -142,8 +169,9 @@ public class GameActivity extends Activity {
 	 */
 	public void onClickPlay(View view) {
 		view.setVisibility(View.GONE);
+		mExitButton.setVisibility(View.GONE);
 		mPauseButton.setVisibility(View.VISIBLE);
-		mGameLoopThread.doResume();
+		mWorld.resume();
 	}
 
 	/**
@@ -152,9 +180,17 @@ public class GameActivity extends Activity {
 	public void onClickPause(View view) {
 		view.setVisibility(View.GONE);
 		mPlayButton.setVisibility(View.VISIBLE);
-		mGameLoopThread.doPause();
+		mExitButton.setVisibility(View.VISIBLE);
+		mWorld.pause();
 	}
 
+	/**
+	 * Called when the Exit ImageButton is clicked
+	 */
+	public void onClickExit(View view) {
+		finish();
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -175,7 +211,7 @@ public class GameActivity extends Activity {
 		super.onPause();
 		mPauseButton.setVisibility(View.GONE);
 		mPlayButton.setVisibility(View.VISIBLE);
-		mGameLoopThread.doPause();
+		mWorld.pause();
 	}
 
 	/**
@@ -197,6 +233,7 @@ public class GameActivity extends Activity {
 	 * Finish the current activity and start the End Game activity. This method executes on the GameLoop thread.
 	 */
 	public void onGameEnd() {
+		//TODO: pass final score and information about the reason of the game's end
 		Intent intent = new Intent(this, EndGameActivity.class);
 		startActivity(intent);
 		finish();
