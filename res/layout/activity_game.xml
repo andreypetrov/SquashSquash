@@ -63,6 +63,32 @@
             android:paddingTop="5dip"
             android:text="@string/score_value" />
 
+
+        
+        <ImageView 
+		    android:id="@+id/sound"
+            android:contentDescription="@string/sound"
+		    android:src="@drawable/sound_on"
+		    android:layout_width="wrap_content" 
+		    android:layout_height="wrap_content" 
+		    android:layout_gravity="center_vertical"
+		    android:padding="5dip"
+		    android:clickable="true" 
+		    android:onClick="onClickSound"
+            android:visibility="visible" />
+        
+         <ImageView 
+		    android:id="@+id/exit"
+            android:contentDescription="@string/exit"
+		    android:src="@drawable/exit"
+		    android:layout_width="wrap_content" 
+		    android:layout_height="wrap_content" 
+		    android:layout_gravity="center_vertical"
+		    android:padding="5dip"
+		    android:clickable="true" 
+		    android:onClick="onClickExit"
+            android:visibility="visible" />
+      <!--    
         <ImageButton
             android:id="@+id/exit"
             android:layout_width="wrap_content"
@@ -74,7 +100,7 @@
             android:onClick="onClickExit"
             android:padding="5dip"
             android:src="@drawable/exit"
-            android:visibility="visible" />
+            android:visibility="visible" /> -->
         
         <ImageButton
             android:id="@+id/pause"

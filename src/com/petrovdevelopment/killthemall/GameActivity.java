@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -31,7 +32,8 @@ public class GameActivity extends Activity {
 	
 	private ImageButton mPlayButton;
 	private ImageButton mPauseButton;
-	private ImageButton mExitButton;
+	private ImageView mExitButton;
+	private ImageView mSoundButton;
 	
 	private Bundle mSavedInstanceState = null;
 	private Handler mScoreHandler;
@@ -44,6 +46,9 @@ public class GameActivity extends Activity {
 	private int mCurrentTime; //in seconds
 	private int mCurrentScore;
 	
+	//TODO: put this to preferences file to enable/disable sound permanently between games
+	private boolean hasSound = true; 
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -53,7 +58,8 @@ public class GameActivity extends Activity {
 		mGameView = (GameView) findViewById(R.id.game_view);
 		mPlayButton = (ImageButton) findViewById(R.id.play);
 		mPauseButton = (ImageButton) findViewById(R.id.pause);
-		mExitButton = (ImageButton) findViewById(R.id.exit);
+		mExitButton = (ImageView) findViewById(R.id.exit);
+		mSoundButton = (ImageView) findViewById(R.id.sound);
 		
 		mWorld = World.getInstance();
 		mSavedInstanceState = savedInstanceState;
@@ -169,6 +175,7 @@ public class GameActivity extends Activity {
 	 */
 	public void onClickPlay(View view) {
 		view.setVisibility(View.GONE);
+		mSoundButton.setVisibility(View.GONE);
 		mExitButton.setVisibility(View.GONE);
 		mPauseButton.setVisibility(View.VISIBLE);
 		mWorld.resume();
@@ -180,6 +187,7 @@ public class GameActivity extends Activity {
 	public void onClickPause(View view) {
 		view.setVisibility(View.GONE);
 		mPlayButton.setVisibility(View.VISIBLE);
+		mSoundButton.setVisibility(View.VISIBLE);
 		mExitButton.setVisibility(View.VISIBLE);
 		mWorld.pause();
 	}
@@ -191,6 +199,21 @@ public class GameActivity extends Activity {
 		finish();
 	}
 	
+	/**
+	 * Called when the Sound ImageButton is clicked. Toggles sound on/off
+	 */
+	public void onClickSound(View view) {
+		//TODO: stop and start actual sound 
+		hasSound = !hasSound;
+		if(hasSound){
+			mSoundButton.setImageResource(R.drawable.sound_on);
+		} else {
+			mSoundButton.setImageResource(R.drawable.sound_off);
+		}
+	}
+	
+	
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -200,6 +223,8 @@ public class GameActivity extends Activity {
 
 	@Override
 	protected void onResume() {
+		mPauseButton.setVisibility(View.GONE);
+		mPlayButton.setVisibility(View.VISIBLE);
 		super.onResume();
 		// Do not resume immediately the game. 
 		// Instead resume only explicitly with the Play button
@@ -209,8 +234,6 @@ public class GameActivity extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		mPauseButton.setVisibility(View.GONE);
-		mPlayButton.setVisibility(View.VISIBLE);
 		mWorld.pause();
 	}
 

@@ -299,6 +299,10 @@ public class World implements GameElement {
 		mGameEndReason = gameEndReason;		
 	}
 	
+	public GameEndReason getGameEndReason() {
+		return mGameEndReason;
+	}
+	
 	public int getScore() {
 		return mScore;
 	}

@@ -1,13 +1,5 @@
 package com.petrovdevelopment.killthemall;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-
 /**
  * A singleton variation, with controlled number of instances, Need to be preloaded with initialize(). Uses only one bmp for
  * every DeathEffect instance
