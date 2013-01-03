@@ -1,5 +1,7 @@
 package com.petrovdevelopment.killthemall;
 
+import com.petrovdevelopment.killthemall.game.World;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;

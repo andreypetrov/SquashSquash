@@ -1,7 +1,9 @@
-package com.petrovdevelopment.killthemall;
+package com.petrovdevelopment.killthemall.game;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.petrovdevelopment.killthemall.R;
 
 
 public enum NpcType implements Parcelable {

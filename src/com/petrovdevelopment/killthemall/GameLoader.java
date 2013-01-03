@@ -3,6 +3,10 @@ package com.petrovdevelopment.killthemall;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.petrovdevelopment.killthemall.game.DeathEffectContainer;
+import com.petrovdevelopment.killthemall.game.Npc;
+import com.petrovdevelopment.killthemall.game.NpcType;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 

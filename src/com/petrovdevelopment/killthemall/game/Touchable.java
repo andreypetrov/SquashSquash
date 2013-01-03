@@ -1,4 +1,4 @@
-package com.petrovdevelopment.killthemall;
+package com.petrovdevelopment.killthemall.game;
 
 public interface Touchable {
 	/**

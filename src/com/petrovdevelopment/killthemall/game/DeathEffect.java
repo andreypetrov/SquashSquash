@@ -1,4 +1,4 @@
-package com.petrovdevelopment.killthemall;
+package com.petrovdevelopment.killthemall.game;
 
 /**
  * A singleton variation, with controlled number of instances, Need to be preloaded with initialize(). Uses only one bmp for

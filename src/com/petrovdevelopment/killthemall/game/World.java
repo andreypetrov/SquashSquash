@@ -1,7 +1,12 @@
-package com.petrovdevelopment.killthemall;
+package com.petrovdevelopment.killthemall.game;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import com.petrovdevelopment.killthemall.Background;
+import com.petrovdevelopment.killthemall.GameLoader;
+import com.petrovdevelopment.killthemall.GameRecoveryLoader;
+import com.petrovdevelopment.killthemall.GameView;
 
 import android.graphics.Canvas;
 import android.os.Bundle;

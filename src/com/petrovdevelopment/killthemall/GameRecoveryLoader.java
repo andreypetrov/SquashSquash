@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.petrovdevelopment.killthemall.game.Npc;
+import com.petrovdevelopment.killthemall.game.World;
+
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;

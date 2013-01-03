@@ -1,9 +1,11 @@
-package com.petrovdevelopment.killthemall;
+package com.petrovdevelopment.killthemall.game;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+
+import com.petrovdevelopment.killthemall.GameView;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
