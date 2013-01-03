@@ -16,7 +16,7 @@ import android.graphics.Canvas;
  * @author andrey
  * 
  */
-public class DeathEffectContainer {
+public class DeathEffectContainer implements GameElement {
 	
 	public static DeathEffectContainer mInstance;
 
@@ -83,7 +83,8 @@ public class DeathEffectContainer {
 	 * TODO: resolve why this is throwing concurrentModification when using iterator.next() Update the temp sprites if there
 	 * are any
 	 */
-	public void updateAll() {
+	@Override
+	public void update() {
 		if (mDeathEffects != null) {
 			synchronized (mDeathEffects) {
 				for (Iterator<DeathEffect> iterator = mDeathEffects.iterator(); iterator.hasNext();) {
@@ -97,7 +98,8 @@ public class DeathEffectContainer {
 		}
 	}
 
-	public void renderAll(Canvas canvas) {
+	@Override
+	public void render(Canvas canvas) {
 		if (mDeathEffects != null) {
 			synchronized (mDeathEffects) {
 				for (DeathEffect deathEffect : mDeathEffects) {

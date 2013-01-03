@@ -1,76 +1,71 @@
 package com.petrovdevelopment.killthemall.game;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
-
-import com.petrovdevelopment.killthemall.Background;
-import com.petrovdevelopment.killthemall.GameLoader;
-import com.petrovdevelopment.killthemall.GameRecoveryLoader;
-import com.petrovdevelopment.killthemall.GameView;
 
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.Parcelable;
+
+import com.petrovdevelopment.killthemall.Background;
+import com.petrovdevelopment.killthemall.GameRecoveryLoader;
+import com.petrovdevelopment.killthemall.GameView;
 
 /**
  * Game World, holding all other elements. Singleton. TODO: handle properly score, alienCount, humanCount, etc. in
- * onSaveInstanceState
- * Have in mind that the GameWorld instance is not guaranteed to be destroyed when the activity is, 
+ * onSaveInstanceState Have in mind that the GameWorld instance is not guaranteed to be destroyed when the activity is,
  * because it is static, so all initialization should happen in the initialize() method
+ * 
  * @author andrey
  * 
  */
 public class World implements GameElement {
-	//KEYS used in the bundle in saveState() and in the Handler's messages
+	// KEYS used in the bundle in saveState() and in the Handler's messages
 	public static final String NPCS = "npcs";
 	public static final String SCORE = "score";
 	public static final String TIME = "time";
 	public static final String TIME_MILLIS = "time_millis";
-		
+
 	public static final String DEATH_EFFECTS = "deathEffects"; // Ignore for now
 	public static final String BIRTH_EFFECTS = "birthEffects"; // Ignore for now
 
 	public static final Long GAME_DURATION_MILISECONDS = 15000l;
 	public static final int GAME_DURATION_SECONDS = 15;
 	public static final int INITIAL_SCORE = 0;
+
+	private static final int ALIEN_KILL_POINTS = 10; // plus 10 points for killing an alien
+	private static final int HUMAN_KILL_POINTS = -5; // minus 5 points for killing a human
 	
 	public static World mInstance;
 
-	//TODO check if those initializations are ok, since they are not resetting on a new game
+	// TODO check if those initializations are ok, since they are not resetting on a new game
 	private GameState mGameState = GameState.PAUSED;
 	private GameEndReason mGameEndReason = GameEndReason.NONE;
-	
+
 	private Difficulty mDifficulty = Difficulty.MEDIUM; // Ignore for now
-	
-	
+
 	public enum GameState {
 		RUNNING, PAUSED, END
 	}
-	
+
 	public enum GameEndReason {
 		NONE, TIME_IS_UP, ALL_ALIENS_DEAD, ALL_HUMEN_DEAD
 	}
-	
+
 	public enum Difficulty {
 		EASY, MEDIUM, HARD
 	}
 
-	
-	
-	
 	private Handler mScoreHandler;
 
 	private int mScore;
-	private int mAlienCount;
-	private int mHumanCount;
 	private int mTimeLeftInSeconds;
 	private long mTimeLeftInMilliseconds;
 	private long mCurrentTimeInMilliseconds;
 
 	private Background mBackground;
-	private List<Npc> mNpcs;
+
+	private NpcContainer mNpcContainer;
 	private DeathEffectContainer mDeathEffectContainer;
 
 	private World() {
@@ -89,35 +84,20 @@ public class World implements GameElement {
 		if (savedInstanceState == null) {
 			mScore = INITIAL_SCORE;
 			mTimeLeftInSeconds = GAME_DURATION_SECONDS;
-			mTimeLeftInMilliseconds = GAME_DURATION_MILISECONDS;			
+			mTimeLeftInMilliseconds = GAME_DURATION_MILISECONDS;
 			gameLoader = new GameLoader(gameView);
 		} else {
 			mScore = savedInstanceState.getInt(SCORE);
-			mTimeLeftInSeconds =  savedInstanceState.getInt(TIME);
-			mTimeLeftInMilliseconds = savedInstanceState.getLong(TIME_MILLIS);	
+			mTimeLeftInSeconds = savedInstanceState.getInt(TIME);
+			mTimeLeftInMilliseconds = savedInstanceState.getLong(TIME_MILLIS);
 			gameLoader = new GameRecoveryLoader(gameView, savedInstanceState);
 		}
 		mBackground = gameLoader.loadBackground();
-		mNpcs = gameLoader.loadNpcs();
+		mNpcContainer = gameLoader.loadNpcContainer();
 		mDeathEffectContainer = gameLoader.loadDeathEffectContainer();
 
 		// mScore = gameLoader.loadScore();
 		// mTimeLeftInMilliseconds = gameLoader.loadTimeLeft();
-
-		setAlienAndHumanCount();
-
-	}
-
-	private void setAlienAndHumanCount() {
-		mAlienCount = 0;
-		mHumanCount = 0;
-		for (Npc npc : mNpcs) {
-			if (npc.getNpcType().isAlien()) {
-				mAlienCount++;
-			} else {
-				mHumanCount++;
-			}
-		}
 	}
 
 	/**
@@ -128,10 +108,8 @@ public class World implements GameElement {
 		if (getGameState() == GameState.RUNNING) {
 			updateTime();
 			mBackground.update();
-			mDeathEffectContainer.updateAll();
-			for (Npc npc : mNpcs) {
-				npc.update();
-			}
+			mDeathEffectContainer.update();
+			mNpcContainer.update();
 		}
 	}
 
@@ -142,10 +120,8 @@ public class World implements GameElement {
 	@Override
 	public void render(Canvas canvas) {
 		mBackground.render(canvas);
-		mDeathEffectContainer.renderAll(canvas);
-		for (Npc npc : mNpcs) {
-			npc.render(canvas);
-		}
+		mDeathEffectContainer.render(canvas);
+		mNpcContainer.render(canvas);
 	}
 
 	/**
@@ -157,36 +133,27 @@ public class World implements GameElement {
 	 */
 	public void onTouchEvent(float touchX, float touchY) {
 		if (mGameState == GameState.RUNNING) {
-			// TODO: rework this with using Iterator for safe removal
-			for (int i = mNpcs.size() - 1; i >= 0; i--) {
-				Npc npc = mNpcs.get(i);
-				if (npc.isTouched(touchX, touchY)) {
-					npc.touch(); // does nothing currently
-
-					// no need this class to keep track of the created deathEffects.
-					// the class DeathEffects itself does that
-					boolean isAlien = npc.getNpcType().isAlien();
-					updateScore(isAlien);
-					mDeathEffectContainer.createDeathEffect(touchX, touchY, isAlien);
-					// remove the Npc from the list (kill it)
-					mNpcs.remove(i);
-					// kill only the top most NPC, i.e. only the last one by not checking the rest of the list
-					break;
-				}
-			}
-			if (mAlienCount <= 0) {
-				end(GameEndReason.ALL_ALIENS_DEAD);
-			} else if (mHumanCount <= 0) {
-				end(GameEndReason.ALL_HUMEN_DEAD);
+			Npc touchedNpc = mNpcContainer.removeTopTouchedNpc(touchX, touchY);
+			if (touchedNpc != null) {
+				boolean isAlien = touchedNpc.getNpcType().isAlien();
+				updateScore(isAlien);
+				// Create a new death effect at the location of the kill
+				mDeathEffectContainer.createDeathEffect(touchX, touchY, isAlien);
 			}
 		}
+		// Check for game end condition
+		if (mNpcContainer.getAlienCount() <= 0) {
+			end(GameEndReason.ALL_ALIENS_DEAD);
+		} else if (mNpcContainer.getHumanCount() <= 0) {
+			end(GameEndReason.ALL_HUMEN_DEAD);
+		}
+
 	}
 
 	private void end(GameEndReason gameEndReason) {
-		setGameState(GameState.END);	
+		setGameState(GameState.END);
 		setGameEndReason(gameEndReason);
 	}
-
 
 	private void updateTime() {
 		long lastUpdateTime = mCurrentTimeInMilliseconds;
@@ -216,18 +183,16 @@ public class World implements GameElement {
 	}
 
 	/**
-	 * Calculates the game score
+	 * Calculates the game score, based on the type of the killed Npc
 	 * 
 	 * @param isAlien
 	 */
 	private void updateScore(boolean isAlien) {
 		// Update the score
 		if (isAlien) {
-			mScore += 10; // plus 10 points for killing an alien
-			mAlienCount--;
+			mScore += ALIEN_KILL_POINTS;
 		} else {
-			mScore -= 5; // minus 5 points for killing a human
-			mHumanCount--;
+			mScore += HUMAN_KILL_POINTS; 
 		}
 		updateScoreView();
 	}
@@ -251,12 +216,7 @@ public class World implements GameElement {
 	 * @param outState
 	 */
 	public void saveState(Bundle outState) {
-
-		Parcelable[] npcs = new Parcelable[mNpcs.size()];
-		for (int i = 0; i < mNpcs.size(); i++) {
-			npcs[i] = mNpcs.get(i);
-		}
-		outState.putParcelableArray(NPCS, npcs);
+		mNpcContainer.saveState(outState);
 		outState.putInt(SCORE, mScore);
 		outState.putInt(TIME, mTimeLeftInSeconds);
 		outState.putLong(TIME_MILLIS, mTimeLeftInMilliseconds);
@@ -299,19 +259,17 @@ public class World implements GameElement {
 		mGameState = gameState;
 	}
 
-
 	private void setGameEndReason(GameEndReason gameEndReason) {
-		mGameEndReason = gameEndReason;		
+		mGameEndReason = gameEndReason;
 	}
-	
+
 	public GameEndReason getGameEndReason() {
 		return mGameEndReason;
 	}
-	
+
 	public int getScore() {
 		return mScore;
 	}
-	
 
 	public int getTime() {
 		return mTimeLeftInSeconds;
