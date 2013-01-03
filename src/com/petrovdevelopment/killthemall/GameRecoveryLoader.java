@@ -8,6 +8,12 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
 
+/**
+ * Recovers npc positions from previous state. 
+ * Also used the GameLoader implementation to load the rest of the resources
+ * @author andrey
+ *
+ */
 public class GameRecoveryLoader extends GameLoader {
 
 	Bundle mSavedInstanceState;
