@@ -11,14 +11,12 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
 /**
- * Singleton container of all death effects
+ *  Container of death effects
  * 
  * @author andrey
  * 
  */
 public class DeathEffectContainer implements GameElement {
-	
-	public static DeathEffectContainer mInstance;
 
 	private GameView mGameView;
 	private Bitmap mBitmapAlien;
@@ -29,23 +27,16 @@ public class DeathEffectContainer implements GameElement {
 
 	private List<DeathEffect> mDeathEffects;
 
-	public static DeathEffectContainer getInstance() {
-		if (mInstance == null) {
-			mInstance = new DeathEffectContainer();
-		}
-		return mInstance;
-	}
-
-	private DeathEffectContainer() {
-	}
-
 	/**
-	 * Initialize the singleton variables. Images of human and alien should have the same size
-	 * 
-	 * @param gameView
-	 * @param bitmap
+	 * Create a new object.
+	 * Images of human and alien should have the same size
+	 * @return
 	 */
-	public void initialize(GameView gameView, Bitmap bitmapAlien, Bitmap bitmapHuman) {
+	public static DeathEffectContainer create(GameView gameView, Bitmap bitmapAlien, Bitmap bitmapHuman) {
+		return new DeathEffectContainer(gameView, bitmapAlien, bitmapHuman);
+	}
+
+	private DeathEffectContainer(GameView gameView, Bitmap bitmapAlien, Bitmap bitmapHuman) {
 		mGameView = gameView;
 		mBitmapAlien = bitmapAlien;
 		mBitmapHuman = bitmapHuman;
@@ -75,7 +66,13 @@ public class DeathEffectContainer implements GameElement {
 		}
 		int x = Math.round(Math.min(Math.max(centerX - mBitmapWidth / 2, 0), mGameView.getWidth() - mBitmapWidth));
 		int y = Math.round(Math.min(Math.max(centerY - mBitmapHeight / 2, 0), mGameView.getHeight() - mBitmapHeight));
-		DeathEffect deathEffect = new DeathEffect(x, y, isAlien);
+		
+		DeathEffect deathEffect;
+		if(isAlien) {
+			deathEffect = new DeathEffect(x, y, isAlien, mBitmapAlien);
+		} else {
+			deathEffect = new DeathEffect(x, y, isAlien, mBitmapHuman);
+		}
 		mDeathEffects.add(deathEffect);
 	}
 
@@ -89,7 +86,7 @@ public class DeathEffectContainer implements GameElement {
 			synchronized (mDeathEffects) {
 				for (Iterator<DeathEffect> iterator = mDeathEffects.iterator(); iterator.hasNext();) {
 					DeathEffect currentDeathEffect = iterator.next();
-					currentDeathEffect.decrementLife();
+					currentDeathEffect.update();
 					if (currentDeathEffect.getLife() == 0) {
 						iterator.remove();
 					}
@@ -103,18 +100,15 @@ public class DeathEffectContainer implements GameElement {
 		if (mDeathEffects != null) {
 			synchronized (mDeathEffects) {
 				for (DeathEffect deathEffect : mDeathEffects) {
-					if (deathEffect.isAlien()) {
-						canvas.drawBitmap(mBitmapAlien, deathEffect.getX(), deathEffect.getY(), null);
-					} else {
-						canvas.drawBitmap(mBitmapHuman, deathEffect.getX(), deathEffect.getY(), null);
-					}
+					deathEffect.render(canvas);
 				}
 			}
 		}
 	}
 
 	/**
-	 * discard the whole list of death effects on game's end
+	 * discard the whole list of death effects on game's end.
+	 * TODO: Remove? not needed for now?
 	 */
 	public void removeAll() {
 		mDeathEffects = null;

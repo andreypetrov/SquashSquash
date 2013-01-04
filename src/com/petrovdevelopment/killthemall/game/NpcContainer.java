@@ -8,6 +8,7 @@ import java.util.Random;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.petrovdevelopment.killthemall.GameView;
 
@@ -23,7 +24,12 @@ public class NpcContainer implements GameElement {
 	private int mAlienCount;
 	private int mHumanCount;
 
-	public NpcContainer(GameView gameView) {
+
+	public static NpcContainer create(GameView gameView) {
+		return new NpcContainer(gameView);
+	}
+	
+	private NpcContainer(GameView gameView) {
 		mAlienCount = 0;
 		mHumanCount = 0;
 		mGameView = gameView;
@@ -31,10 +37,6 @@ public class NpcContainer implements GameElement {
 	}
 
 	public void createNpc(NpcType npcType) {
-		// Lazy initialize mNpcs. Maybe remove this.
-		if (mNpcs == null) {
-			mNpcs = Collections.synchronizedList(new ArrayList<Npc>());
-		}
 		Npc npc = new Npc(mGameView, npcType);
 		add(npc);
 	}
@@ -62,7 +64,8 @@ public class NpcContainer implements GameElement {
 	}
 
 	/**
-	 * discard the whole list of death effects on game's end
+	 * Discard the whole list of Npcs. 
+	 * TODO Remove? Probably not needed
 	 */
 	public void removeAll() {
 		mNpcs = Collections.synchronizedList(new ArrayList<Npc>());
@@ -103,8 +106,9 @@ public class NpcContainer implements GameElement {
 		if (npc.getNpcType().isAlien()) {
 			mAlienCount++;
 		} else {
-			mAlienCount--;
+			mHumanCount++;
 		}
+		Log.i(this.getClass().getSimpleName(), "mAlienCount: " + getAlienCount());
 		return true;
 	}
 
@@ -148,6 +152,7 @@ public class NpcContainer implements GameElement {
 	 * @return The Npc removed from the container
 	 */
 	public Npc removeTopTouchedNpc(float touchX, float touchY) {
+		System.out.println("RemoveTop");
 		Npc touchedNpc = getTopTouched(touchX, touchY);
 		if (touchedNpc != null) {
 			remove(touchedNpc);
@@ -158,8 +163,8 @@ public class NpcContainer implements GameElement {
 	}
 
 	/**
-	 * Check list elements in reverse order to find the last (top most) NPC that was touched. Return null if no npc was
-	 * touched.
+	 * Checks list elements in reverse order to find the last (top most) NPC that was touched. 
+	 * Returns null if no Npc was touched.
 	 * 
 	 * @param touchX
 	 * @param touchY

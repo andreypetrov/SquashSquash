@@ -1,11 +1,13 @@
-package com.petrovdevelopment.killthemall.game;
+package com.petrovdevelopment.killthemall;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import com.petrovdevelopment.killthemall.Background;
-import com.petrovdevelopment.killthemall.GameView;
 import com.petrovdevelopment.killthemall.R;
+import com.petrovdevelopment.killthemall.game.Background;
+import com.petrovdevelopment.killthemall.game.DeathEffectContainer;
+import com.petrovdevelopment.killthemall.game.NpcContainer;
+import com.petrovdevelopment.killthemall.game.NpcType;
 
 /**
  * Class responsible for loading of all resources.
@@ -15,7 +17,7 @@ import com.petrovdevelopment.killthemall.R;
  *
  */
 public class GameLoader {
-	private GameView mGameView;
+	protected GameView mGameView;
 	public GameLoader(GameView gameView) {
 		mGameView = gameView;
 	}
@@ -25,7 +27,7 @@ public class GameLoader {
 	}
 
 	public NpcContainer loadNpcContainer() {
-		NpcContainer npcContainer = new NpcContainer(mGameView);
+		NpcContainer npcContainer = NpcContainer.create(mGameView);
 		//Create one NPC from every possible type
 		for (NpcType npcType : NpcType.values()) {
 			npcContainer.createNpc(npcType);
@@ -36,8 +38,7 @@ public class GameLoader {
 	public DeathEffectContainer loadDeathEffectContainer() {
 		Bitmap bitmapBloodAlien = BitmapFactory.decodeResource(mGameView.getResources(), R.drawable.blood_alien);
 		Bitmap bitmapBloodHuman = BitmapFactory.decodeResource(mGameView.getResources(), R.drawable.blood_human);
-		DeathEffectContainer deathEffectContainer = DeathEffectContainer.getInstance();
-		deathEffectContainer.initialize(mGameView, bitmapBloodAlien, bitmapBloodHuman);	
+		DeathEffectContainer deathEffectContainer = DeathEffectContainer.create(mGameView, bitmapBloodAlien, bitmapBloodHuman);
 		return deathEffectContainer;
 	}
 

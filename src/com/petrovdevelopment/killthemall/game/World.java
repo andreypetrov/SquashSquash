@@ -6,13 +6,18 @@ import android.graphics.Canvas;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
-import com.petrovdevelopment.killthemall.Background;
+import com.petrovdevelopment.killthemall.GameLoader;
 import com.petrovdevelopment.killthemall.GameRecoveryLoader;
 import com.petrovdevelopment.killthemall.GameView;
 
 /**
- * Game World, holding all other elements. Singleton. TODO: handle properly score, alienCount, humanCount, etc. in
+ * Game World, holding all other elements.
+ * There should be one game world for now. 
+ * The class is not static to insure it is properly destroyed with the 
+ * Activity and the GameLoopThread destroyed. 
+ * TODO: handle properly score, alienCount, humanCount, etc. in
  * onSaveInstanceState Have in mind that the GameWorld instance is not guaranteed to be destroyed when the activity is,
  * because it is static, so all initialization should happen in the initialize() method
  * 
@@ -25,7 +30,8 @@ public class World implements GameElement {
 	public static final String SCORE = "score";
 	public static final String TIME = "time";
 	public static final String TIME_MILLIS = "time_millis";
-
+	public static final String GAME_END_REASON = "game_end_reason";
+	
 	public static final String DEATH_EFFECTS = "deathEffects"; // Ignore for now
 	public static final String BIRTH_EFFECTS = "birthEffects"; // Ignore for now
 
@@ -36,7 +42,6 @@ public class World implements GameElement {
 	private static final int ALIEN_KILL_POINTS = 10; // plus 10 points for killing an alien
 	private static final int HUMAN_KILL_POINTS = -5; // minus 5 points for killing a human
 	
-	public static World mInstance;
 
 	// TODO check if those initializations are ok, since they are not resetting on a new game
 	private GameState mGameState = GameState.PAUSED;
@@ -71,11 +76,13 @@ public class World implements GameElement {
 	private World() {
 	}
 
-	public static World getInstance() {
-		if (mInstance == null) {
-			mInstance = new World();
-		}
-		return mInstance;
+	/**
+	 * Static factory method returning a new World instance.
+	 * There may be unlimited new words
+	 * @return
+	 */
+	public static World createWorld() {
+		return new World();
 	}
 
 	public void initialize(GameView gameView, Bundle savedInstanceState, Handler scoreHandler) {
@@ -142,6 +149,7 @@ public class World implements GameElement {
 			}
 		}
 		// Check for game end condition
+		Log.i(this.getClass().getSimpleName(), "Aliens count: " + mNpcContainer.getAlienCount());
 		if (mNpcContainer.getAlienCount() <= 0) {
 			end(GameEndReason.ALL_ALIENS_DEAD);
 		} else if (mNpcContainer.getHumanCount() <= 0) {
@@ -227,6 +235,7 @@ public class World implements GameElement {
 	 */
 	public void onDestroy() {
 		mDeathEffectContainer.removeAll();
+		mNpcContainer.removeAll();
 	}
 
 	public void resume() {

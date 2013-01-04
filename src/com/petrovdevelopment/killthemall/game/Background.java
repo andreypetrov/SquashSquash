@@ -1,6 +1,5 @@
-package com.petrovdevelopment.killthemall;
+package com.petrovdevelopment.killthemall.game;
 
-import com.petrovdevelopment.killthemall.game.GameElement;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;

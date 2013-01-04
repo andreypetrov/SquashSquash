@@ -1,5 +1,8 @@
 package com.petrovdevelopment.killthemall.game;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+
 /**
  * A singleton variation, with controlled number of instances, Need to be preloaded with initialize(). Uses only one bmp for
  * every DeathEffect instance
@@ -7,7 +10,7 @@ package com.petrovdevelopment.killthemall.game;
  * @author andrey
  * 
  */
-public class DeathEffect {
+public class DeathEffect implements GameElement {
 	// TODO: change the life to be in seconds, independent of the number of game ticks
 	private static int INITIAL_LIFE = 15; // number of game ticks
 	
@@ -19,9 +22,11 @@ public class DeathEffect {
 	private final boolean mIsAlien;
 	
 	private int mLife = INITIAL_LIFE;
+	private Bitmap mBitmap;
 	
-	public DeathEffect(int x, int y, boolean isAlien) {
+	public DeathEffect(int x, int y, boolean isAlien, Bitmap bitmap) {
 		mIsAlien = isAlien;
+		mBitmap = bitmap;
 		mX = x;
 		mY = y;
 	}
@@ -30,11 +35,11 @@ public class DeathEffect {
 		return mLife;
 	}
 	
-	public int getX() {
+	private int getX() {
 		return mX;
 	}
 
-	public int getY() {
+	private int getY() {
 		return mY;
 	}
 
@@ -42,8 +47,19 @@ public class DeathEffect {
 		return mIsAlien;
 	}
 	
-	public void decrementLife() {
+	private void decrementLife() {
 		mLife--;
 	}
 
+	@Override
+	public void update() {
+		decrementLife();	
+	}
+
+	@Override
+	public void render(Canvas canvas) {
+		canvas.drawBitmap(mBitmap, getX(), getY(), null);
+	}
+
+	
 }

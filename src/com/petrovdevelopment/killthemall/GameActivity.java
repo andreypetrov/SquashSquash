@@ -63,7 +63,7 @@ public class GameActivity extends Activity {
 		mExitButton = (ImageView) findViewById(R.id.exit);
 		mSoundButton = (ImageView) findViewById(R.id.sound);
 		
-		mWorld = World.getInstance();
+		mWorld = World.createWorld();
 		mSavedInstanceState = savedInstanceState;
 
 		initializeTextFields();
@@ -260,6 +260,8 @@ public class GameActivity extends Activity {
 	public void onGameEnd() {
 		//TODO: pass final score and information about the reason of the game's end
 		Intent intent = new Intent(this, EndGameActivity.class);
+		String gameEndReason = mWorld.getGameEndReason().toString();
+		intent.putExtra(World.GAME_END_REASON, gameEndReason);
 		startActivity(intent);
 		finish();
 	}
