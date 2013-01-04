@@ -1,7 +1,5 @@
 package com.petrovdevelopment.killthemall;
 
-import com.petrovdevelopment.killthemall.game.World;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -11,21 +9,28 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.Menu;
+import android.view.SurfaceHolder;
+import android.view.SurfaceHolder.Callback;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.petrovdevelopment.killthemall.game.World;
+
 /**
- * TODO: add ETC1 compression to the images if using OpenGl TODO: In this branch build the Activities and menus and all extra
- * things around the maing game TODO: Add scoring, begin and end activities TODO: fix the score, time, exit, (pause/resume)
- * bar. 
- * It is important to recompile the activity if itslayout xml has changed
+ * The game activity.
+ * It creates also the GameLoopThread and the game World.
+ * In two cases  it calls the World - when the world is initialized and on touch events
+ * In the first case the surface view is passed after it was  created, 
+ * which allows the world to calculate the game element dimensions properly.
+ * In the second case any touch event is passed to be handled by the world.
+ * For any other purpose the World is accessed only by the GameLoopThread
  * 
  * @author andrey
  * 
  */
-public class GameActivity extends Activity {
+public class GameActivity extends Activity  implements Callback {
 	private static final String ASSETS_FONT_LOCATION = "fonts/ObelixPro-cyr.ttf";
 
 	private GameView mGameView;
@@ -94,10 +99,15 @@ public class GameActivity extends Activity {
 
 	}
 
+	
+
+	
+
 	/**
 	 * Called when mGameView has already been loaded so its size is known
 	 */
-	public void onGameViewSurfaceCreated() {
+	@Override
+	public void surfaceCreated(SurfaceHolder holder) {
 		initializeHandler();
 		mWorld = World.createWorld(mGameView, mSavedInstanceState, mScoreHandler);
 		
@@ -113,6 +123,38 @@ public class GameActivity extends Activity {
 		mGameLoopThread.start();
 		Log.i(this.getClass().getSimpleName(), "mGameLooThread started " + mGameLoopThread);
 	}
+
+	
+	/**
+	 * Called when mGameView resizes
+	 */
+	@Override
+	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+		System.out.println("Width: " + width);
+		System.out.println("Height: " + height);		
+		System.out.println("mWidth: " + mGameView.getWidth());
+		System.out.println("mHeght: " + mGameView.getHeight());
+	}
+	
+	/**
+	 * Stop the thread and release world resources;
+	 */
+	@Override
+	public void surfaceDestroyed(SurfaceHolder holder) {
+		boolean retry = true;
+		mGameLoopThread.setRunning(false);
+		while (retry) {
+			try {
+				mGameLoopThread.join();
+				retry = false;
+			} catch (InterruptedException e) {
+			}
+		}
+		mWorld.onDestroy();
+		Log.i(this.getClass().getSimpleName(), "Surface destroyed");
+	}
+	
+	
 
 	/**
 	 * Create a handler that will be working on the application's main thread (the UI thread) 
@@ -152,23 +194,7 @@ public class GameActivity extends Activity {
 		mWorld.onTouchEvent(touchX, touchY);
 	}
 
-	/**
-	 * Stop the thread and release world resources;
-	 */
-	public void onGameViewSurfaceDestroyed() {
-		boolean retry = true;
-		mGameLoopThread.setRunning(false);
-		while (retry) {
-			try {
-				mGameLoopThread.join();
-				retry = false;
-			} catch (InterruptedException e) {
-			}
-		}
-		mWorld.onDestroy();
-		Log.i(this.getClass().getSimpleName(), "Surface destroyed");
 
-	}
 
 	/**
 	 * Called when the Play ImageButton is clicked
@@ -263,4 +289,6 @@ public class GameActivity extends Activity {
 		startActivity(intent);
 		finish();
 	}
+
+
 }

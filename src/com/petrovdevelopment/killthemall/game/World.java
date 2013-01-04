@@ -130,9 +130,8 @@ public class World implements GameElement {
 	}
 
 	/**
-	 * On touch remove top touched npc and create a death effect on the touched spot. Trigger GameState.END if the last Alien
-	 * was killed TODO rework this to put the death effectin the middle of the npc sprite, not on the touch coordinates
-	 * 
+	 * On touch remove top touched npc and create a death effect on the touched spot. Trigger GameState.END if the last Alien or Human
+	 * was killed 
 	 * @param touchX
 	 * @param touchY
 	 */
@@ -142,10 +141,11 @@ public class World implements GameElement {
 			if (touchedNpc != null) {
 				boolean isAlien = touchedNpc.getNpcType().isAlien();
 				updateScore(isAlien);
-				// Create a new death effect at the location of the kill
-				mDeathEffectContainer.createDeathEffect(touchX, touchY, isAlien);
+				// Create a new death effect at the location of the killed npc
+				mDeathEffectContainer.createDeathEffect(touchedNpc.getCenterX(), touchedNpc.getCenterY(), isAlien);
 			}
 		}
+		
 		// Check for game end condition
 		Log.i(this.getClass().getSimpleName(), "Aliens count: " + mNpcContainer.getAlienCount());
 		if (mNpcContainer.getAlienCount() <= 0) {

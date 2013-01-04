@@ -108,7 +108,6 @@ public class NpcContainer implements GameElement {
 		} else {
 			mHumanCount++;
 		}
-		Log.i(this.getClass().getSimpleName(), "mAlienCount: " + getAlienCount());
 		return true;
 	}
 

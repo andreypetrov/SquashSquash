@@ -12,9 +12,8 @@ import android.util.Log;
 import android.view.View;
 
 /**
- * Class representing a single npc. TODO: add getters for all the state variables, to be able to bundle on SaveInstanceState
- * TODO: add ValueObject representing the npc state, that will be loaded to and from the bundle
- * 
+ * Class representing a single npc. 
+ * Parceable so that it can restore its state, if the game stops
  * @author andrey
  * 
  */
@@ -77,7 +76,7 @@ public class Npc implements GameElement, Touchable, Parcelable {
 	 * @param source
 	 */
 	private Npc(Parcel source) {
-		//It is mandatory to read in the same order in which values were written in the parcel!
+		// It is mandatory to read in the same order in which values were written in the parcel!
 		Log.i(this.getClass().getSimpleName(), "Npc(Parcep source) called");
 		mNpcType = source.readParcelable(NpcType.class.getClassLoader());
 		mX = source.readInt();
@@ -88,11 +87,10 @@ public class Npc implements GameElement, Touchable, Parcelable {
 		mHeight = source.readInt();
 		mCurrentFrame = source.readInt();
 		mCurrentAnimationRow = source.readInt();
-		
-		
+
 		Log.i(this.getClass().getSimpleName(), "Animation Row: " + mCurrentAnimationRow);
 		Log.i(this.getClass().getSimpleName(), "Frame" + mCurrentFrame);
-	}	
+	}
 
 	/**
 	 * Sets up the game view the bitmap and some prerender calculations. Mandatory call this after using the private
@@ -215,8 +213,8 @@ public class Npc implements GameElement, Touchable, Parcelable {
 	}
 
 	/**
-	 * Creator responsible for the recreating the Npc if the app was killed while in the background
-	 * If this field is not implemented there will be a runtime BadParcelableException
+	 * Creator responsible for the recreating the Npc if the app was killed while in the background If this field is not
+	 * implemented there will be a runtime BadParcelableException
 	 */
 	public static final Creator<Npc> CREATOR = new Creator<Npc>() {
 		@Override
@@ -231,7 +229,6 @@ public class Npc implements GameElement, Touchable, Parcelable {
 
 	};
 
-	
 	public int getX() {
 		return mX;
 	}
@@ -239,7 +236,7 @@ public class Npc implements GameElement, Touchable, Parcelable {
 	public void setX(int x) {
 		mX = x;
 	}
-	
+
 	public int getY() {
 		return mY;
 	}
@@ -247,7 +244,7 @@ public class Npc implements GameElement, Touchable, Parcelable {
 	public void setY(int y) {
 		mY = y;
 	}
-	
+
 	public int getWidth() {
 		return mWidth;
 	}
@@ -256,7 +253,15 @@ public class Npc implements GameElement, Touchable, Parcelable {
 		return mHeight;
 	}
 
-	public NpcType getNpcType () {
+	public NpcType getNpcType() {
 		return mNpcType;
+	}
+
+	public float getCenterX() {
+		return mX + (mWidth / 2);
+	}
+
+	public float getCenterY() {
+		return mY + (mHeight / 2);
 	}
 }

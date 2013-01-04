@@ -4,9 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
 /**
- * A singleton variation, with controlled number of instances, Need to be preloaded with initialize(). Uses only one bmp for
- * every DeathEffect instance
- * 
+ * A death effect used when an NPC is dying for a short time.
+ * It is an independent entity from the Npc. The World is synchronizing them
  * @author andrey
  * 
  */
