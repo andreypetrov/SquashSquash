@@ -63,9 +63,7 @@ public class GameActivity extends Activity {
 		mExitButton = (ImageView) findViewById(R.id.exit);
 		mSoundButton = (ImageView) findViewById(R.id.sound);
 		
-		mWorld = World.createWorld();
 		mSavedInstanceState = savedInstanceState;
-
 		initializeTextFields();
 
 		// For Debugging only:
@@ -101,7 +99,7 @@ public class GameActivity extends Activity {
 	 */
 	public void onGameViewSurfaceCreated() {
 		initializeHandler();
-		mWorld.initialize(mGameView, mSavedInstanceState, mScoreHandler);
+		mWorld = World.createWorld(mGameView, mSavedInstanceState, mScoreHandler);
 		
 		//initialize time and score 
 		mCurrentTime = mWorld.getTime(); 

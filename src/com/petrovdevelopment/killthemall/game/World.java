@@ -72,20 +72,20 @@ public class World implements GameElement {
 
 	private NpcContainer mNpcContainer;
 	private DeathEffectContainer mDeathEffectContainer;
-
-	private World() {
-	}
-
+	
 	/**
 	 * Static factory method returning a new World instance.
 	 * There may be unlimited new words
+	 * @param gameView
+	 * @param savedInstanceState
+	 * @param scoreHandler
 	 * @return
 	 */
-	public static World createWorld() {
-		return new World();
+	public static World createWorld(GameView gameView, Bundle savedInstanceState, Handler scoreHandler) {
+		return new World(gameView, savedInstanceState, scoreHandler);
 	}
-
-	public void initialize(GameView gameView, Bundle savedInstanceState, Handler scoreHandler) {
+	
+	private World(GameView gameView, Bundle savedInstanceState, Handler scoreHandler) {
 		mScoreHandler = scoreHandler;
 		GameLoader gameLoader;
 		if (savedInstanceState == null) {
@@ -102,10 +102,8 @@ public class World implements GameElement {
 		mBackground = gameLoader.loadBackground();
 		mNpcContainer = gameLoader.loadNpcContainer();
 		mDeathEffectContainer = gameLoader.loadDeathEffectContainer();
-
-		// mScore = gameLoader.loadScore();
-		// mTimeLeftInMilliseconds = gameLoader.loadTimeLeft();
 	}
+
 
 	/**
 	 * Update all game elements. Consider update methods execution dependencies. Currently there are none.
@@ -231,7 +229,8 @@ public class World implements GameElement {
 	}
 
 	/**
-	 * Make sure to empty the death effects list
+	 * Make sure to empty the death effects and the npcs.
+	 * TODO: Remove? Probably not needed.
 	 */
 	public void onDestroy() {
 		mDeathEffectContainer.removeAll();
@@ -240,7 +239,7 @@ public class World implements GameElement {
 
 	public void resume() {
 		setGameState(GameState.RUNNING);
-		// set the time of the last restart, based on it you will be calculating the elapsed time
+		// set the time of the current restart, based on it you will be calculating the elapsed time
 		mCurrentTimeInMilliseconds = System.currentTimeMillis();
 	}
 
@@ -287,4 +286,5 @@ public class World implements GameElement {
 	public long getTimeInMilliseconds() {
 		return mTimeLeftInMilliseconds;
 	}
+
 }
