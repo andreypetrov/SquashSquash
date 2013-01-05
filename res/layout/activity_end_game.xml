@@ -6,12 +6,14 @@
     android:background="@drawable/background"
     android:gravity="center"
     >
-
-    <TextView
+    
+  	<TextView
+        android:id="@+id/endGameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="@string/end_game" />
-
+        android:textColor="@color/Magenta" 
+        android:padding="20dip"/>
+    
 </RelativeLayout>

@@ -23,7 +23,7 @@ public class GameLoader {
 	}
 
 	public Background loadBackground(){
-		return new Background(mGameView.getResources(), R.drawable.back, mGameView.getWidth(), mGameView.getHeight());
+		return new Background(mGameView.getResources(), R.drawable.wall_bg, mGameView.getWidth(), mGameView.getHeight());
 	}
 
 	public NpcContainer loadNpcContainer() {

@@ -31,7 +31,7 @@ import com.petrovdevelopment.killthemall.game.World;
  * 
  */
 public class GameActivity extends Activity  implements Callback {
-	private static final String ASSETS_FONT_LOCATION = "fonts/ObelixPro-cyr.ttf";
+	
 
 	private GameView mGameView;
 	private World mWorld;
@@ -91,7 +91,7 @@ public class GameActivity extends Activity  implements Callback {
 		mScoreTextTitleView = (TextView) findViewById(R.id.scoreTitle);
 		mScoreTextValueView = (TextView) findViewById(R.id.scoreValue);
 
-		Typeface font = Typeface.createFromAsset(getAssets(), ASSETS_FONT_LOCATION);
+		Typeface font = Typeface.createFromAsset(getAssets(), MainMenuActivity.ASSETS_FONT_LOCATION);
 		mTimeTextTitleView.setTypeface(font);
 		mTimeTextValueView.setTypeface(font);
 		mScoreTextTitleView.setTypeface(font);
@@ -243,7 +243,7 @@ public class GameActivity extends Activity  implements Callback {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.activity_main, menu);
+		getMenuInflater().inflate(R.menu.activity_game, menu);
 		return true;
 	}
 
@@ -285,7 +285,12 @@ public class GameActivity extends Activity  implements Callback {
 		//TODO: pass final score and information about the reason of the game's end
 		Intent intent = new Intent(this, EndGameActivity.class);
 		String gameEndReason = mWorld.getGameEndReason().toString();
+		int score = mWorld.getScore();
+		int timePassed = mWorld.getTimePassed();
+		
 		intent.putExtra(World.GAME_END_REASON, gameEndReason);
+		intent.putExtra(World.SCORE, score);
+		intent.putExtra(World.TIME_PASSED, timePassed);
 		startActivity(intent);
 		finish();
 	}

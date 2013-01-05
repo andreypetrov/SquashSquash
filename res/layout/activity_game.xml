@@ -41,7 +41,7 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:paddingTop="5dip"
-            android:text="@string/time_value" />
+			/>
 
         <TextView
             android:id="@+id/scoreTitle"
@@ -61,7 +61,7 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:paddingTop="5dip"
-            android:text="@string/score_value" />
+            />
 
 
         

@@ -30,6 +30,7 @@ public class World implements GameElement {
 	public static final String SCORE = "score";
 	public static final String TIME = "time";
 	public static final String TIME_MILLIS = "time_millis";
+	public static final String TIME_PASSED = "time_passed";
 	public static final String GAME_END_REASON = "game_end_reason";
 	
 	public static final String DEATH_EFFECTS = "deathEffects"; // Ignore for now
@@ -53,9 +54,6 @@ public class World implements GameElement {
 		RUNNING, PAUSED, END
 	}
 
-	public enum GameEndReason {
-		NONE, TIME_IS_UP, ALL_ALIENS_DEAD, ALL_HUMEN_DEAD
-	}
 
 	public enum Difficulty {
 		EASY, MEDIUM, HARD
@@ -282,9 +280,13 @@ public class World implements GameElement {
 	public int getTime() {
 		return mTimeLeftInSeconds;
 	}
-
+	
 	public long getTimeInMilliseconds() {
 		return mTimeLeftInMilliseconds;
+	}
+	
+	public int getTimePassed() {
+		return World.GAME_DURATION_SECONDS - mTimeLeftInSeconds;
 	}
 
 }

@@ -2,69 +2,76 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainMenuActivity" 
     android:background="@drawable/background"
     android:gravity="center"
-    >  
-    
-    <ImageView 
-	      android:id="@+id/mainMenuTitle"
-	      android:src="@drawable/title"
-	      android:adjustViewBounds="true"
-	      android:layout_width="336dp" 
-	      android:layout_height="153dp" 
-	      android:layout_gravity="center_horizontal" 
-	      android:layout_marginTop="20dp"/>     
-	       
+    tools:context=".MainMenuActivity" >
+
+   <ImageView
+       android:id="@+id/mainMenuTitle"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_gravity="center_horizontal"
+       android:layout_alignParentTop="true"       
+       android:src="@drawable/squash" 
+       android:padding="20dip"
+       />
+   
+    <ImageView
+        android:id="@+id/mainMenuCharacter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_margin="20dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/big_demon" />
+
     <LinearLayout
-	     	android:layout_width="fill_parent"
-			android:layout_height="fill_parent" 
-			xmlns:android="http://schemas.android.com/apk/res/android"
-	     	android:orientation="vertical"
-	     	android:gravity="bottom"
-	     	android:id="@+id/mainSectionMenu"
-	     	android:layout_centerInParent="true">
-	    
-	    
-	    <ImageView 
-	        android:id="@+id/newGameButton"
-	        android:src="@drawable/button_new_game"
-	        android:layout_width="wrap_content" 
-	        android:layout_height="wrap_content" 
-	        android:layout_gravity="center_horizontal"
-	        android:clickable="true" 
-	        android:onClick="onClickNewGame"/>
-	
-	        
-		<ImageView 
-		    android:id="@+id/optionsButton"
-		    android:src="@drawable/button_options"
-		    android:layout_width="wrap_content" 
-		    android:layout_height="wrap_content" 
-		    android:layout_gravity="center_horizontal"
-		    android:paddingTop="20dp"
-		    android:clickable="true" 
-		    android:onClick="onClickOptions"/>
-	       
-		<ImageView 
-		    android:id="@+id/infoButton"
-		    android:src="@drawable/button_info"
-		    android:layout_width="wrap_content" 
-		    android:layout_height="wrap_content" 
-		    android:layout_gravity="center_horizontal"
-		    android:paddingTop="20dp"
-		    android:clickable="true" 
-		    android:onClick="onClickInfo"/>
-		<ImageView 
-		    android:id="@+id/exitButton"
-		    android:src="@drawable/button_exit"
-		    android:layout_width="wrap_content" 
-		    android:layout_height="wrap_content" 
-		    android:layout_gravity="center_horizontal"
-		    android:paddingTop="20dp"
-		    android:paddingBottom="20dp"
-		    android:clickable="true" 
-		    android:onClick="onClickExit"/>
-		
-	</LinearLayout>
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/mainSectionMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical" >
+
+        <ImageView
+            android:id="@+id/newGameButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:clickable="true"
+            android:onClick="onClickNewGame"
+            android:paddingTop="100dp"
+            android:src="@drawable/button_new_game" />
+
+        <ImageView
+            android:id="@+id/optionsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:clickable="true"
+            android:onClick="onClickOptions"
+            android:paddingTop="20dp"
+            android:src="@drawable/button_options" />
+
+        <ImageView
+            android:id="@+id/infoButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:clickable="true"
+            android:onClick="onClickInfo"
+            android:paddingTop="20dp"
+            android:src="@drawable/button_info" />
+
+        <ImageView
+            android:id="@+id/exitButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:clickable="true"
+            android:onClick="onClickExit"
+            android:paddingTop="20dp"
+            android:src="@drawable/button_exit" />
+    </LinearLayout>
+
 </RelativeLayout>
