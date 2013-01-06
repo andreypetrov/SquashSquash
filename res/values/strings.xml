@@ -18,4 +18,24 @@
     <string name="info3">Do not squash the innocent humans:</string>
  	<string name="info4">The humankind depends on you.</string>
  	<string name="info5">Good luck!</string>
+ 	
+ 	
+ 	
+ 	
+ 	<string name="win1">Congratulations, you did\nsquash-squash all demons!</string>
+ 	<string name="win2">You saved the humankind in</string>
+ 	<string name="win3">Wow!</string>
+ 	
+ 	<string name="loss1">Eh&#8230; You did it on purpose, didn\'t you?</string>
+ 	<string name="loss2">You destroyed the humankind in</string>
+ 	<string name="loss3">Eh&#8230; </string>
+ 	
+ 	<string name="time_up1">Sorry, your time is up! </string>
+ 	<string name="time_up2">You got </string>
+ 	<string name="time_up3">and the demons busted you! </string>
+ 	
+ 	<string name="seconds">seconds</string>
+ 	<string name="and_you_got">and you got</string>
+ 	<string name="points">points</string>
+ 	
 </resources>

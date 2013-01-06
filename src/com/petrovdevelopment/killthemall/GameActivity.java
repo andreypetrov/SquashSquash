@@ -283,13 +283,15 @@ public class GameActivity extends Activity  implements Callback {
 	 */
 	public void onGameEnd() {
 		//TODO: pass final score and information about the reason of the game's end
-		Intent intent = new Intent(this, EndGameActivity.class);
+		Intent intent = new Intent(this, EndActivity.class);
 		String gameEndReason = mWorld.getGameEndReason().toString();
 		int score = mWorld.getScore();
+		int time = mWorld.getTime();
 		int timePassed = mWorld.getTimePassed();
 		
 		intent.putExtra(World.GAME_END_REASON, gameEndReason);
 		intent.putExtra(World.SCORE, score);
+		intent.putExtra(World.TIME, time);
 		intent.putExtra(World.TIME_PASSED, timePassed);
 		startActivity(intent);
 		finish();

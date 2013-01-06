@@ -17,10 +17,7 @@ import com.petrovdevelopment.killthemall.GameView;
  * There should be one game world for now. 
  * The class is not static to insure it is properly destroyed with the 
  * Activity and the GameLoopThread destroyed. 
- * TODO: handle properly score, alienCount, humanCount, etc. in
- * onSaveInstanceState Have in mind that the GameWorld instance is not guaranteed to be destroyed when the activity is,
- * because it is static, so all initialization should happen in the initialize() method
- * 
+ * TODO: extract time tracking in a separate TimeManager class
  * @author andrey
  * 
  */
@@ -48,13 +45,18 @@ public class World implements GameElement {
 	private GameState mGameState = GameState.PAUSED;
 	private GameEndReason mGameEndReason = GameEndReason.NONE;
 
+	
+	
 	private Difficulty mDifficulty = Difficulty.MEDIUM; // Ignore for now
 
 	public enum GameState {
 		RUNNING, PAUSED, END
 	}
 
-
+	public enum GameEndReason {
+		NONE, TIME_IS_UP, ALL_ALIENS_DEAD, ALL_HUMANS_DEAD;
+	}
+	
 	public enum Difficulty {
 		EASY, MEDIUM, HARD
 	}
@@ -149,7 +151,7 @@ public class World implements GameElement {
 		if (mNpcContainer.getAlienCount() <= 0) {
 			end(GameEndReason.ALL_ALIENS_DEAD);
 		} else if (mNpcContainer.getHumanCount() <= 0) {
-			end(GameEndReason.ALL_HUMEN_DEAD);
+			end(GameEndReason.ALL_HUMANS_DEAD);
 		}
 
 	}
@@ -277,14 +279,26 @@ public class World implements GameElement {
 		return mScore;
 	}
 
+	/**
+	 * Time left in seconds
+	 * @return
+	 */
 	public int getTime() {
 		return mTimeLeftInSeconds;
 	}
 	
+	/**
+	 * Time left in milliseconds
+	 * @return
+	 */
 	public long getTimeInMilliseconds() {
 		return mTimeLeftInMilliseconds;
 	}
 	
+	/**
+	 * Time passed since the beginning of the game
+	 * @return
+	 */
 	public int getTimePassed() {
 		return World.GAME_DURATION_SECONDS - mTimeLeftInSeconds;
 	}

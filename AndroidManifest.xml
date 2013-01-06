@@ -27,7 +27,7 @@
             >
         </activity>
         <activity
-            android:name="com.petrovdevelopment.killthemall.EndGameActivity"
+            android:name="com.petrovdevelopment.killthemall.EndActivity"
             >
         </activity>
     </application>

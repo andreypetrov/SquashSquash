@@ -1,7 +1,6 @@
 package com.petrovdevelopment.killthemall;
 
 import android.app.Activity;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -56,6 +55,5 @@ public class MainMenuActivity extends Activity {
 		textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
 		textView.setTypeface(font);
 		//set text size to 12dip. Problem: it reverts the font back to plain
-		
 	}
 }
