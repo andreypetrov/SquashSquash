@@ -22,7 +22,7 @@
         android:padding="5dip" >
 
         <TextView
-            android:id="@+id/winText1"
+            android:id="@+id/endText1"
             style="@style/InfoPadding"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
             android:textColor="@color/Black" />
 
         <TextView
-            android:id="@+id/winText2"
+            android:id="@+id/endText2"
             style="@style/InfoPadding"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -48,14 +48,14 @@
             android:paddingTop="10dip">
 
             <TextView
-                android:id="@+id/timeValueWin"
+                android:id="@+id/timeValue"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:textColor="@color/Black" 
                 android:paddingRight="5dip"/>
 
             <TextView
-                android:id="@+id/secondsWin"
+                android:id="@+id/seconds"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:text="@string/seconds"
@@ -72,7 +72,7 @@
             android:paddingTop="10dip">
 			
             <TextView
-                android:id="@+id/gotWin"
+                android:id="@+id/got"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:text="@string/and_you_got"
@@ -81,14 +81,14 @@
                 android:textColor="@color/Black" />
             
             <TextView
-                android:id="@+id/scoreValueWin"
+                android:id="@+id/scoreValue"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:textColor="@color/Black" 
                 android:paddingRight="5dip"/>
 
             <TextView
-                android:id="@+id/pointsWin"
+                android:id="@+id/points"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:text="@string/points"
@@ -98,7 +98,7 @@
         
         
         <TextView
-            android:id="@+id/winText3"
+            android:id="@+id/endText3"
             style="@style/InfoPadding"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -113,7 +113,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:clickable="true"
-            android:src="@drawable/back" />
+            android:src="@drawable/ok" 
+            android:onClick="onClickOk"/>
     </LinearLayout>
 </RelativeLayout>
 

@@ -3,109 +3,103 @@ package com.petrovdevelopment.killthemall;
 import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.TypedValue;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.petrovdevelopment.killthemall.game.GameUtils;
 import com.petrovdevelopment.killthemall.game.World;
 import com.petrovdevelopment.killthemall.game.World.GameEndReason;
+
 /**
- * TODO rework to have 3 different layouts for the different GameEndReasons, instead of using the enum to hardcode the final strings
- * TODO: either find how to stroke the textView properly or use surfaceView to create nice text stroke... or pregenerate images
+ * TODO rework to have 3 different layouts for the different GameEndReasons, instead of using the enum to hardcode the final
+ * strings TODO: either find how to stroke the textView properly or use surfaceView to create nice text stroke... or
+ * pregenerate images
  * 
  * TODO add Back/New Game/Main Menu button
+ * 
  * @author andrey
- *
+ * 
  */
 public class EndActivity extends Activity {
-	GameEndReason mGameEndReason; 
-	int mScore;
-	int mTime;
-	int mTimePassed;
+	private GameEndReason mGameEndReason;
+	private int mScore;
+	private int mTimePassed;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		getIntentExtras();
-		setContentView();	
+		setContentView();
 	}
 
 	private void setContentView() {
 		switch (mGameEndReason) {
 		case ALL_ALIENS_DEAD:
-			setContentView(R.layout.end_win);	
-			setTextViewsWin();
+			setLayout(R.layout.end_win);
 			break;
 		case ALL_HUMANS_DEAD:
-			setContentView(R.layout.end_loss);	
+			setLayout(R.layout.end_loss);
 			break;
 		case TIME_IS_UP:
-			setContentView(R.layout.end_time);	
+			setLayout(R.layout.end_time);
 			break;
 		case NONE:
-			//do nothing
+			// do nothing
 			break;
 		default:
-			
 			break;
 		}
-		setContentView(R.layout.end_win);	
-		
 	}
 
+	/**
+	 * Get the info passed in by the GameActivity
+	 */
 	private void getIntentExtras() {
 		String gameEndReason = getIntent().getStringExtra(World.GAME_END_REASON);
 		mGameEndReason = GameEndReason.valueOf(gameEndReason);
 		mScore = getIntent().getIntExtra(World.SCORE, 0);
-		mTime = getIntent().getIntExtra(World.TIME, 0);
 		mTimePassed = getIntent().getIntExtra(World.TIME_PASSED, 0);
 	}
 
-
 	/**
-	 * On Win set the end game text views with the proper font, messages and colors
+	 * Set the end game text views with the proper font, messages and colors
+	 * 
 	 * @param gameEndReason
 	 */
-	private void setTextViewsWin() {
-		TextView winText1 = (TextView) findViewById(R.id.winText1);	
-		TextView winText2 = (TextView) findViewById(R.id.winText2);
-		TextView timeValue = (TextView) findViewById(R.id.timeValueWin);
-		TextView seconds = (TextView) findViewById(R.id.secondsWin);
-		TextView andYouGot = (TextView) findViewById(R.id.gotWin);
-		TextView scoreValue = (TextView) findViewById(R.id.scoreValueWin);
-		TextView points = (TextView) findViewById(R.id.pointsWin);
-		TextView winText3 = (TextView) findViewById(R.id.winText3);
-			
-		timeValue.setText(Integer.toString(mTimePassed));
-		timeValue.setTextColor(GameUtils.getTimePassedColorResource(mTimePassed));
-		scoreValue.setText(Integer.toString(mScore));
-		timeValue.setTextColor(GameUtils.getScoreColorResource(mScore));
-		
-		setTextViewFont(winText1);
-		setTextViewFont(winText2);
-		setTextViewFont(timeValue);
-		setTextViewFont(seconds);
-		setTextViewFont(andYouGot);
-		setTextViewFont(scoreValue);
-		setTextViewFont(points);
-		setTextViewFont(winText3);
-	}
-	
-	
-	
+	private void setLayout(int layoutId) {
+		ViewGroup endLayout = (ViewGroup) getLayoutInflater().inflate(layoutId, null);
+		Typeface customFont = ((MainApplication) getApplication()).getCustomFont();
 
-	
-	
-	
-	/**
-	 * Helper method to send the font and its size
-	 * TODO The same method is in MainMenuActivity rework it to have it only once maybe? 
-	 * @param textView
-	 */
-	public void setTextViewFont(TextView textView) {
-		Typeface font = Typeface.createFromAsset(getAssets(), MainMenuActivity.ASSETS_FONT_LOCATION);
-		textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
-		textView.setTypeface(font);	
+		Utils.setCustomFont(endLayout, customFont, MainApplication.FONT_SIZE);
+		//Set the activity's layout
+		setContentView(endLayout);
+		setTimeAndScoreFontColors();
 	}
-	
+
+	private void setTimeAndScoreFontColors() {
+		TextView timeValue = (TextView) findViewById(R.id.timeValue);
+		if (timeValue != null) {
+			timeValue.setText(Integer.toString(mTimePassed));
+			int timeColor = getResources().getColor(GameUtils.getTimePassedColorResource(mTimePassed));
+			timeValue.setTextColor(timeColor);
+		}
+
+		TextView scoreValue = (TextView) findViewById(R.id.scoreValue);
+		if (scoreValue != null) {
+			scoreValue.setText(Integer.toString(mScore));
+			int scoreColor = getResources().getColor(GameUtils.getScoreColorResource(mScore));
+			scoreValue.setTextColor(scoreColor);
+		}
+		
+	}
+
+	/**
+	 * Called when the Ok ImageButton is clicked
+	 */
+	public void onClickOk(View view) {
+		finish();
+	}
+
 }

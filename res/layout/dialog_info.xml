@@ -87,13 +87,13 @@
             android:textColor="@color/Black" />
 
         <ImageView
-            android:id="@+id/backInfoButton"
+            android:id="@+id/okInfoButton"
             style="@style/InfoPadding"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:clickable="true"
-            android:src="@drawable/back" />
+            android:src="@drawable/ok" />
     </LinearLayout>
 
 </RelativeLayout>

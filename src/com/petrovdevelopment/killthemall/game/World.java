@@ -228,15 +228,6 @@ public class World implements GameElement {
 		outState.putLong(TIME_MILLIS, mTimeLeftInMilliseconds);
 	}
 
-	/**
-	 * Make sure to empty the death effects and the npcs.
-	 * TODO: Remove? Probably not needed.
-	 */
-	public void onDestroy() {
-		mDeathEffectContainer.removeAll();
-		mNpcContainer.removeAll();
-	}
-
 	public void resume() {
 		setGameState(GameState.RUNNING);
 		// set the time of the current restart, based on it you will be calculating the elapsed time

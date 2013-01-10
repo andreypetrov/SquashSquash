@@ -80,7 +80,7 @@
          <ImageView 
 		    android:id="@+id/exit"
             android:contentDescription="@string/exit"
-		    android:src="@drawable/exit"
+		    android:src="@drawable/back"
 		    android:layout_width="wrap_content" 
 		    android:layout_height="wrap_content" 
 		    android:layout_gravity="center_vertical"
@@ -99,7 +99,7 @@
             android:enabled="true"
             android:onClick="onClickExit"
             android:padding="5dip"
-            android:src="@drawable/exit"
+            android:src="@drawable/back"
             android:visibility="visible" /> -->
         
         <ImageButton

@@ -8,10 +8,12 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -45,9 +47,7 @@ public class GameActivity extends Activity  implements Callback {
 	private Bundle mSavedInstanceState = null;
 	private Handler mScoreHandler;
 	
-	private TextView mScoreTextTitleView;
 	private TextView mScoreTextValueView;
-	private TextView mTimeTextTitleView;
 	private TextView mTimeTextValueView;
 	
 	private int mCurrentTime; //in seconds
@@ -60,16 +60,18 @@ public class GameActivity extends Activity  implements Callback {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.activity_game);
+		setLayout(R.layout.activity_game);
 
 		mGameView = (GameView) findViewById(R.id.game_view);
 		mPlayButton = (ImageButton) findViewById(R.id.play);
 		mPauseButton = (ImageButton) findViewById(R.id.pause);
 		mExitButton = (ImageView) findViewById(R.id.exit);
 		mSoundButton = (ImageView) findViewById(R.id.sound);
+		mScoreTextValueView = (TextView) findViewById(R.id.scoreValue);
+		mTimeTextValueView = (TextView) findViewById(R.id.timeValue);
 		
 		mSavedInstanceState = savedInstanceState;
-		initializeTextFields();
+		
 
 		// For Debugging only:
 		if (savedInstanceState == null) {
@@ -83,31 +85,24 @@ public class GameActivity extends Activity  implements Callback {
 	}
 
 	/**
-	 * Get text fields references and use custom font for the fields
+	 * Set the layout and its text views with the proper font
+	 * 
+	 * @param gameEndReason
 	 */
-	private void initializeTextFields() {
-		mTimeTextTitleView = (TextView) findViewById(R.id.timeTitle);
-		mTimeTextValueView = (TextView) findViewById(R.id.timeValue);
-		mScoreTextTitleView = (TextView) findViewById(R.id.scoreTitle);
-		mScoreTextValueView = (TextView) findViewById(R.id.scoreValue);
-
-		Typeface font = Typeface.createFromAsset(getAssets(), MainMenuActivity.ASSETS_FONT_LOCATION);
-		mTimeTextTitleView.setTypeface(font);
-		mTimeTextValueView.setTypeface(font);
-		mScoreTextTitleView.setTypeface(font);
-		mScoreTextValueView.setTypeface(font);
-
+	private void setLayout(int layoutId) {
+		ViewGroup layout = (ViewGroup) getLayoutInflater().inflate(layoutId, null);
+		Typeface customFont = ((MainApplication) getApplication()).getCustomFont();
+		Utils.setCustomFont(layout, customFont, MainApplication.FONT_SIZE);
+		//Set the activity's layout
+		setContentView(layout);
 	}
-
-	
-
-	
 
 	/**
 	 * Called when mGameView has already been loaded so its size is known
 	 */
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
+		
 		initializeHandler();
 		mWorld = World.createWorld(mGameView, mSavedInstanceState, mScoreHandler);
 		
@@ -118,7 +113,7 @@ public class GameActivity extends Activity  implements Callback {
 		
 		mGameLoopThread = new GameLoopThread(mGameView, mWorld, this);
 
-		// Start the actual game thread
+		// Start the game thread
 		mGameLoopThread.setRunning(true);
 		mGameLoopThread.start();
 		Log.i(this.getClass().getSimpleName(), "mGameLooThread started " + mGameLoopThread);
@@ -150,7 +145,6 @@ public class GameActivity extends Activity  implements Callback {
 			} catch (InterruptedException e) {
 			}
 		}
-		mWorld.onDestroy();
 		Log.i(this.getClass().getSimpleName(), "Surface destroyed");
 	}
 	
@@ -211,18 +205,18 @@ public class GameActivity extends Activity  implements Callback {
 	 * Called when the Pause ImageButton is clicked
 	 */
 	public void onClickPause(View view) {
+		mWorld.pause();
 		view.setVisibility(View.GONE);
 		mPlayButton.setVisibility(View.VISIBLE);
 		mSoundButton.setVisibility(View.VISIBLE);
-		mExitButton.setVisibility(View.VISIBLE);
-		mWorld.pause();
+		mExitButton.setVisibility(View.VISIBLE);		
 	}
 
 	/**
 	 * Called when the Exit ImageButton is clicked
 	 */
 	public void onClickExit(View view) {
-		finish();
+		showConfirmDialog();
 	}
 	
 	/**
@@ -272,6 +266,7 @@ public class GameActivity extends Activity  implements Callback {
 	 */
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
+		Log.i(this.getClass().getSimpleName(), "mWorld.mNpcContainer.mNpcs.size()");
 		// just have the View's thread save its state into our Bundle
 		super.onSaveInstanceState(outState);
 		mWorld.saveState(outState);
@@ -296,6 +291,22 @@ public class GameActivity extends Activity  implements Callback {
 		startActivity(intent);
 		finish();
 	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    if (keyCode == KeyEvent.KEYCODE_BACK) {
+	    	onClickPause(mPauseButton);	//simulate pause press
+	    	showConfirmDialog();
+	    	return true;
+	    }
+	    return super.onKeyDown(keyCode, event);
+	}
 
-
+	/**
+	 * Show a dialog asking the user to confirm if they want to leave the game
+	 */
+	private void showConfirmDialog(){
+		ConfirmDialog confirmDialog = new ConfirmDialog();
+		confirmDialog.show(getFragmentManager(), MainApplication.DIALOG);
+	}
 }

@@ -12,7 +12,6 @@
     <string name="score_title">Score:</string>
     <string name="time_title">Time:</string>
     
-    
     <string name="info1">Squash-squash the evil demons: </string>
     <string name="info2">Do it before your time is up!</string>
     <string name="info3">Do not squash the innocent humans:</string>
@@ -37,5 +36,5 @@
  	<string name="seconds">seconds</string>
  	<string name="and_you_got">and you got</string>
  	<string name="points">points</string>
- 	
+ 	<string name="confirm">Are you sure?</string>
 </resources>

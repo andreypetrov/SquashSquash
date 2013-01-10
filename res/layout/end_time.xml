@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background" >
 
     <ImageView
         style="@style/InfoPadding"
@@ -9,90 +10,78 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:adjustViewBounds="true"
-        android:src="@drawable/parch_bg" 
-        android:padding="5dip"/>
-    
+        android:padding="5dip"
+        android:src="@drawable/parch_bg" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:gravity="center"
         android:orientation="vertical"
         android:padding="5dip" >
 
         <TextView
-            android:id="@+id/infoText1"
+            android:id="@+id/endText1"
             style="@style/InfoPadding"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
             android:gravity="center"
-            android:text="@string/info1"
+            android:text="@string/time_up1"
+            android:textColor="@color/Black" />
+
+        <!-- THE SCORE LINE -->
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:paddingTop="10dip" >
+
+            <TextView
+                android:id="@+id/endText2"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingRight="5dip"
+                android:text="@string/time_up2"
+                android:textColor="@color/Black" />
+            
+            <TextView
+                android:id="@+id/scoreValue"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingRight="5dip"
+                android:textColor="@color/Black" />
+
+            <TextView
+                android:id="@+id/points"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/points"
+                android:textColor="@color/Black" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/endText3"
+            style="@style/InfoPadding"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/time_up3"
             android:textColor="@color/Black" />
 
         <ImageView
+            android:id="@+id/ok"
             style="@style/InfoPadding"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:adjustViewBounds="true"
-            android:src="@drawable/all_bad" />
-
-        <TextView
-            android:id="@+id/infoText2"
-            style="@style/InfoPadding"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"
-            android:text="@string/info2"
-            android:textColor="@color/Black" />
-
-        <TextView
-            android:id="@+id/infoText3"
-            style="@style/InfoPadding"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"
-            android:text="@string/info3"
-            android:textColor="@color/Black" />
-
-        <ImageView
-            style="@style/InfoPadding"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:adjustViewBounds="true"
-            android:src="@drawable/all_good" />
-
-        <TextView
-            android:id="@+id/infoText4"
-            style="@style/InfoPadding"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"
-            android:text="@string/info4"
-            android:textColor="@color/Black" />
-
-        <TextView
-            android:id="@+id/infoText5"
-            style="@style/InfoPadding"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"
-            android:text="@string/info5"
-            android:textColor="@color/Black" />
-
-        <ImageView
-            android:id="@+id/backInfoButton"
-            style="@style/InfoPadding"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
             android:clickable="true"
-            android:src="@drawable/back" />
+            android:gravity="center"
+            android:onClick="onClickOk"
+            android:src="@drawable/ok" />
     </LinearLayout>
 
 </RelativeLayout>

@@ -77,7 +77,7 @@ public class Npc implements GameElement, Touchable, Parcelable {
 	 */
 	private Npc(Parcel source) {
 		// It is mandatory to read in the same order in which values were written in the parcel!
-		Log.i(this.getClass().getSimpleName(), "Npc(Parcep source) called");
+		Log.i(this.getClass().getSimpleName(), "Npc(Parcel source) called");
 		mNpcType = source.readParcelable(NpcType.class.getClassLoader());
 		mX = source.readInt();
 		mY = source.readInt();
@@ -199,6 +199,7 @@ public class Npc implements GameElement, Touchable, Parcelable {
 	public void writeToParcel(Parcel dest, int flags) {
 		// the second is a flag which could be 0 or PARCELABLE_WRITE_RETURN_VALUE.
 		// For this app it does not matter really
+		Log.i(this.getClass().getSimpleName(), "writeToParcel called");
 		dest.writeParcelable(mNpcType, 0);
 		dest.writeInt(mX);
 		dest.writeInt(mY);

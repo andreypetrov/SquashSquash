@@ -2,6 +2,7 @@ package com.petrovdevelopment.killthemall;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import com.petrovdevelopment.killthemall.R;
 import com.petrovdevelopment.killthemall.game.Background;
@@ -32,6 +33,7 @@ public class GameLoader {
 		for (NpcType npcType : NpcType.values()) {
 			npcContainer.createNpc(npcType);
 		}
+		Log.i(this.getClass().getSimpleName(), "loadNpcContainer() called");
 		return npcContainer;
 	}
 

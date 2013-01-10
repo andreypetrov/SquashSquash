@@ -54,14 +54,14 @@
             android:src="@drawable/button_options" />
 
         <ImageView
-            android:id="@+id/infoButton"
+            android:id="@+id/instructionsButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:clickable="true"
-            android:onClick="onClickInfo"
+            android:onClick="onClickInstructions"
             android:paddingTop="20dp"
-            android:src="@drawable/button_info" />
+            android:src="@drawable/button_instructions" />
 
         <ImageView
             android:id="@+id/exitButton"
