@@ -10,7 +10,8 @@
         android:layout_centerInParent="true"
         android:adjustViewBounds="true"
         android:padding="5dip"
-        android:src="@drawable/parch2_bg" />
+        android:src="@drawable/parch2_bg" 
+        android:contentDescription="@string/background"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -42,6 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:clickable="true"
+                android:contentDescription="@android:string/cancel"
                 android:src="@drawable/cancel" />
 
             <ImageView
@@ -51,6 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:clickable="true"
+                android:contentDescription="@android:string/ok"
                 android:src="@drawable/ok" />
         </LinearLayout>
     </LinearLayout>

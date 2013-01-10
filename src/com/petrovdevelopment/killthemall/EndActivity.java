@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.petrovdevelopment.killthemall.game.GameUtils;
 import com.petrovdevelopment.killthemall.game.World;
 import com.petrovdevelopment.killthemall.game.World.GameEndReason;
 
@@ -78,21 +77,15 @@ public class EndActivity extends Activity {
 		setTimeAndScoreFontColors();
 	}
 
+	/**
+	 * Assigns value and colors if the score and/or time views exist.
+	 */
 	private void setTimeAndScoreFontColors() {
-		TextView timeValue = (TextView) findViewById(R.id.timeValue);
-		if (timeValue != null) {
-			timeValue.setText(Integer.toString(mTimePassed));
-			int timeColor = getResources().getColor(GameUtils.getTimePassedColorResource(mTimePassed));
-			timeValue.setTextColor(timeColor);
-		}
-
-		TextView scoreValue = (TextView) findViewById(R.id.scoreValue);
-		if (scoreValue != null) {
-			scoreValue.setText(Integer.toString(mScore));
-			int scoreColor = getResources().getColor(GameUtils.getScoreColorResource(mScore));
-			scoreValue.setTextColor(scoreColor);
-		}
+		TextView timeTextView = (TextView) findViewById(R.id.timeValue);
+		((MainApplication) getApplication()).setScore(timeTextView,  mTimePassed);
 		
+		TextView scoreTextView = (TextView) findViewById(R.id.scoreValue);
+		((MainApplication) getApplication()).setTimeLeft(scoreTextView, mScore);
 	}
 
 	/**

@@ -47,8 +47,8 @@ public class GameActivity extends Activity  implements Callback {
 	private Bundle mSavedInstanceState = null;
 	private Handler mScoreHandler;
 	
-	private TextView mScoreTextValueView;
-	private TextView mTimeTextValueView;
+	private TextView mScoreValueTextView;
+	private TextView mTimeValueTextView;
 	
 	private int mCurrentTime; //in seconds
 	private int mCurrentScore;
@@ -67,8 +67,8 @@ public class GameActivity extends Activity  implements Callback {
 		mPauseButton = (ImageButton) findViewById(R.id.pause);
 		mExitButton = (ImageView) findViewById(R.id.exit);
 		mSoundButton = (ImageView) findViewById(R.id.sound);
-		mScoreTextValueView = (TextView) findViewById(R.id.scoreValue);
-		mTimeTextValueView = (TextView) findViewById(R.id.timeValue);
+		mScoreValueTextView = (TextView) findViewById(R.id.scoreValue);
+		mTimeValueTextView = (TextView) findViewById(R.id.timeValue);
 		
 		mSavedInstanceState = savedInstanceState;
 		
@@ -163,11 +163,8 @@ public class GameActivity extends Activity  implements Callback {
 			@Override
 			public void handleMessage(Message msg) {				
 				//assign the new values or keep the old if no new vales are coming in the message
-				int timeValue =  msg.getData().getInt(World.TIME, mCurrentTime);
-				int scoreValue = msg.getData().getInt(World.SCORE, mCurrentScore);	
-				
-				mCurrentTime = timeValue;
-				mCurrentScore = scoreValue;			
+				mCurrentTime =  msg.getData().getInt(World.TIME, mCurrentTime);
+				mCurrentScore = msg.getData().getInt(World.SCORE, mCurrentScore);		
 				updateTimeAndScoreViews();
 			}
 		};
@@ -175,8 +172,8 @@ public class GameActivity extends Activity  implements Callback {
 	}
 
 	private void updateTimeAndScoreViews() {
-		mTimeTextValueView.setText(Integer.toString(mCurrentTime));
-		mScoreTextValueView.setText(Integer.toString(mCurrentScore));
+		((MainApplication) getApplication()).setScore(mScoreValueTextView,  mCurrentScore);
+		((MainApplication) getApplication()).setTimeLeft(mTimeValueTextView,  mCurrentTime);
 	}
 	/**
 	 * Method called by the underlying GameView

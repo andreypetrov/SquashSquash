@@ -13,6 +13,7 @@
         android:layout_centerInParent="true"
         android:layout_margin="20dp"
         android:adjustViewBounds="true"
+        android:contentDescription="@string/background"
         android:src="@drawable/big_demon" />
 
     <ImageView
@@ -22,6 +23,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
+        android:contentDescription="@string/title"
         android:padding="20dip"
         android:src="@drawable/squash" />
 
@@ -39,6 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:clickable="true"
+            android:contentDescription="@string/new_game"
             android:onClick="onClickNewGame"
             android:paddingTop="100dp"
             android:src="@drawable/button_new_game" />
@@ -49,6 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:clickable="true"
+            android:contentDescription="@string/options"
             android:onClick="onClickOptions"
             android:paddingTop="20dp"
             android:src="@drawable/button_options" />
@@ -59,6 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:clickable="true"
+            android:contentDescription="@string/instructions"
             android:onClick="onClickInstructions"
             android:paddingTop="20dp"
             android:src="@drawable/button_instructions" />
@@ -69,6 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:clickable="true"
+            android:contentDescription="@string/exit"
             android:onClick="onClickExit"
             android:paddingTop="20dp"
             android:src="@drawable/button_exit" />

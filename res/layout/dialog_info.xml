@@ -11,7 +11,8 @@
         android:layout_centerInParent="true"
         android:adjustViewBounds="true"
         android:padding="5dip"
-        android:src="@drawable/parch_bg" />
+        android:src="@drawable/parch_bg" 
+        android:contentDescription="@string/background"/>
     
     <LinearLayout
         android:layout_width="wrap_content"
@@ -36,7 +37,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:adjustViewBounds="true"
-            android:src="@drawable/all_bad" />
+            android:src="@drawable/all_bad" 
+            android:contentDescription="@string/bad_chibis"/>
 
         <TextView
             android:id="@+id/infoText2"
@@ -64,7 +66,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:adjustViewBounds="true"
-            android:src="@drawable/all_good" />
+            android:src="@drawable/all_good" 
+            android:contentDescription="@string/good_chibis"/>
 
         <TextView
             android:id="@+id/infoText4"
@@ -93,7 +96,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:clickable="true"
-            android:src="@drawable/ok" />
+            android:src="@drawable/ok" 
+            android:contentDescription="@android:string/ok"/>
     </LinearLayout>
 
 </RelativeLayout>

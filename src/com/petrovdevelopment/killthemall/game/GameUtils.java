@@ -14,7 +14,7 @@ public class GameUtils {
 	 * @param score
 	 * @return
 	 */
-	public static int getScoreColorResource(int score) {
+	public static int getScoreColorResourceId(int score) {
 		if (score <= SCORE_RED_THRESHOLD) {
 			return R.color.Red;
 		} else {
@@ -50,7 +50,7 @@ public class GameUtils {
 	 * @param timePassed
 	 * @return
 	 */
-	public static int getTimePassedColorResource(int timePassed) {
+	public static int getTimePassedColorResourceId(int timePassed) {
 		int timeLeft = World.GAME_DURATION_SECONDS - timePassed;
 		return getTimeColorResource(timeLeft);
 	}

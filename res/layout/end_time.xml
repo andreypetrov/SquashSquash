@@ -11,7 +11,8 @@
         android:layout_centerInParent="true"
         android:adjustViewBounds="true"
         android:padding="5dip"
-        android:src="@drawable/parch_bg" />
+        android:src="@drawable/parch_bg" 
+        android:contentDescription="@string/background"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -81,7 +82,8 @@
             android:clickable="true"
             android:gravity="center"
             android:onClick="onClickOk"
-            android:src="@drawable/ok" />
+            android:src="@drawable/ok" 
+            android:contentDescription="@android:string/ok"/>
     </LinearLayout>
 
 </RelativeLayout>
