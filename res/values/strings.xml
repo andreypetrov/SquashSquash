@@ -22,6 +22,10 @@
     <string name="score_title">Score:</string>
     <string name="time_title">Time:</string>
     
+    
+    
+    
+    <!-- INSTRUCTIONS -->
     <string name="info1">Squash-squash the evil demons: </string>
     <string name="info2">Do it before your time is up!</string>
     <string name="info3">Do not squash the innocent humans:</string>
@@ -29,8 +33,8 @@
  	<string name="info5">Good luck!</string>
  	
  	
- 	
- 	
+ 
+ 	<!-- END GAME -->
  	<string name="win1">Congratulations, you did\nsquash-squash all demons!</string>
  	<string name="win2">You saved the humankind in</string>
  	<string name="win3">Wow!</string>
@@ -47,4 +51,21 @@
  	<string name="and_you_got">and you got</string>
  	<string name="points">points</string>
  	<string name="confirm">Are you sure?</string>
+ 	
+ 	
+ 	<!-- HIGH SCORES -->
+ 	<string name="hs_title">high scores</string>
+ 	<string name="hs_points">points</string>
+ 	<string name="hs_difficulty">difficulty</string>
+ 	<string name="hs_easy">easy</string>
+ 	<string name="hs_medium">medium</string>
+ 	<string name="hs_hard">hard</string>
+
+ 	
+ 	<!-- OPTIONS -->
+  	<string name="opt_easy">easy</string>
+ 	<string name="opt_medium">medium</string>
+ 	<string name="opt_hard">hard</string>
+ 	<string name="opt_sound">sound</string>
+ 	
 </resources>

@@ -13,7 +13,6 @@ import android.view.Menu;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -90,7 +89,7 @@ public class GameActivity extends Activity  implements Callback {
 	 * @param gameEndReason
 	 */
 	private void setLayout(int layoutId) {
-		ViewGroup layout = (ViewGroup) getLayoutInflater().inflate(layoutId, null);
+		View layout = getLayoutInflater().inflate(layoutId, null);
 		Typeface customFont = ((MainApplication) getApplication()).getCustomFont();
 		Utils.setCustomFont(layout, customFont, MainApplication.FONT_SIZE);
 		//Set the activity's layout
@@ -172,7 +171,7 @@ public class GameActivity extends Activity  implements Callback {
 	}
 
 	private void updateTimeAndScoreViews() {
-		((MainApplication) getApplication()).setScore(mScoreValueTextView,  mCurrentScore);
+		mScoreValueTextView.setText(Integer.toString(mCurrentScore));
 		((MainApplication) getApplication()).setTimeLeft(mTimeValueTextView,  mCurrentTime);
 	}
 	/**
@@ -192,7 +191,7 @@ public class GameActivity extends Activity  implements Callback {
 	 */
 	public void onClickPlay(View view) {
 		view.setVisibility(View.GONE);
-		mSoundButton.setVisibility(View.GONE);
+		mSoundButton.setVisibility(View.INVISIBLE);
 		mExitButton.setVisibility(View.GONE);
 		mPauseButton.setVisibility(View.VISIBLE);
 		mWorld.resume();
@@ -241,6 +240,7 @@ public class GameActivity extends Activity  implements Callback {
 	@Override
 	protected void onResume() {
 		mPauseButton.setVisibility(View.GONE);
+		mSoundButton.setVisibility(View.VISIBLE);
 		mPlayButton.setVisibility(View.VISIBLE);
 		super.onResume();
 		// Do not resume immediately the game. 

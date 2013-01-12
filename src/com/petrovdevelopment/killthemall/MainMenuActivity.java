@@ -35,7 +35,7 @@ public class MainMenuActivity extends Activity {
 	}
 	
 	public void onClickInstructions(View view) {
-		InfoDialog infoDialog = new InfoDialog();
+		InstructionsDialog infoDialog = new InstructionsDialog();
 		infoDialog.show(getFragmentManager(), MainApplication.DIALOG);
 	}
 	

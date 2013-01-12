@@ -49,7 +49,7 @@ public class MainApplication extends Application{
 	
 	/**
 	 * Set the color of the textView dependent on the time left thresholds.
-	 * Color can be RED, YELLOW, GREEN
+	 * Color can be BLACK, RED
 	 * @param textView
 	 * @param score
 	 */
@@ -89,14 +89,14 @@ public class MainApplication extends Application{
 			if (score <= SCORE_YELLOW_THRESHOLD) {
 				return R.color.Yellow;
 			} else {
-				return R.color.Lime;
+				return R.color.Green;
 			}
 		}
 	}
 
 	/**
 	 * The color for drawing the time left, dependent on the time thresholds.
-	 * Could be RED, YELLOW, GREEN
+	 * Could be BLACK, RED
 	 * @param time
 	 * @return
 	 */
@@ -104,11 +104,7 @@ public class MainApplication extends Application{
 		if (time <= TIME_RED_THRESHOLD) {
 			return R.color.Red;
 		} else { 
-			if (time <= TIME_YELLOW_THRESHOLD) {
-				return R.color.Yellow;
-			} else {
-				return R.color.Lime;
-			}
+				return R.color.Black;
 		}
 	}
 	
@@ -120,6 +116,14 @@ public class MainApplication extends Application{
 	 */
 	private int getTimePassedColorResourceId(int timePassed) {
 		int timeLeft = World.GAME_DURATION_SECONDS - timePassed;
-		return getTimeLeftColorResourceId(timeLeft);
+		if (timeLeft <= TIME_RED_THRESHOLD) {
+			return R.color.Red;
+		} else { 
+			if (timeLeft <= TIME_YELLOW_THRESHOLD) {
+				return R.color.Yellow;
+			} else {
+				return R.color.Green;
+			}
+		}
 	}
 }

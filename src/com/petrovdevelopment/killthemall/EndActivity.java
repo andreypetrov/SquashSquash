@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.petrovdevelopment.killthemall.game.World;
@@ -68,9 +67,8 @@ public class EndActivity extends Activity {
 	 * @param gameEndReason
 	 */
 	private void setLayout(int layoutId) {
-		ViewGroup endLayout = (ViewGroup) getLayoutInflater().inflate(layoutId, null);
+		View endLayout = getLayoutInflater().inflate(layoutId, null);
 		Typeface customFont = ((MainApplication) getApplication()).getCustomFont();
-
 		Utils.setCustomFont(endLayout, customFont, MainApplication.FONT_SIZE);
 		//Set the activity's layout
 		setContentView(endLayout);

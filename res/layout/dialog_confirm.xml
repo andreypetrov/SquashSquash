@@ -37,7 +37,7 @@
             android:padding="5dip" >
 
             <ImageView
-                android:id="@+id/cancelConfirmButton"
+                android:id="@+id/cancelButton"
                 style="@style/InfoPadding"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
                 android:src="@drawable/cancel" />
 
             <ImageView
-                android:id="@+id/okConfirmButton"
+                android:id="@+id/okButton"
                 style="@style/InfoPadding"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
