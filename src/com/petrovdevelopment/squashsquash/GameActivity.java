@@ -17,7 +17,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.petrovdevelopment.squashsquash.fragments.ConfirmDialog;
 import com.petrovdevelopment.squashsquash.game.World;
+import com.petrovdevelopment.squashsquash.utils.TextEditor;
+import com.petrovdevelopment.squashsquash.utils.Utils;
 
 /**
  * The game activity.
@@ -90,8 +93,8 @@ public class GameActivity extends Activity  implements Callback {
 	 */
 	private void setLayout(int layoutId) {
 		View layout = getLayoutInflater().inflate(layoutId, null);
-		Typeface customFont = ((MainApplication) getApplication()).getCustomFont();
-		Utils.setCustomFont(layout, customFont, MainApplication.FONT_SIZE);
+		Typeface customFont = ((MainApplication) getApplication()).getTextEditor().getCustomFont();
+		Utils.setCustomFont(layout, customFont, TextEditor.FONT_SIZE);
 		//Set the activity's layout
 		setContentView(layout);
 	}
@@ -172,7 +175,7 @@ public class GameActivity extends Activity  implements Callback {
 
 	private void updateTimeAndScoreViews() {
 		mScoreValueTextView.setText(Integer.toString(mCurrentScore));
-		((MainApplication) getApplication()).setTimeLeft(mTimeValueTextView,  mCurrentTime);
+		((MainApplication) getApplication()).getTextEditor().setTimeLeft(mTimeValueTextView,  mCurrentTime);
 	}
 	/**
 	 * Method called by the underlying GameView

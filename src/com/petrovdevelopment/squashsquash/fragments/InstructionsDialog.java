@@ -1,9 +1,11 @@
-package com.petrovdevelopment.squashsquash;
+package com.petrovdevelopment.squashsquash.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.petrovdevelopment.squashsquash.R;
 
 /**
  * Dialog giving information about the rules of the game

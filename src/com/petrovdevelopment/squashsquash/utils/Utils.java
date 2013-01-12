@@ -1,4 +1,4 @@
-package com.petrovdevelopment.squashsquash;
+package com.petrovdevelopment.squashsquash.utils;
 
 import android.graphics.Typeface;
 import android.util.TypedValue;

@@ -1,5 +1,8 @@
 package com.petrovdevelopment.squashsquash;
 
+import com.petrovdevelopment.squashsquash.fragments.ConfirmDialog;
+import com.petrovdevelopment.squashsquash.fragments.InstructionsDialog;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;

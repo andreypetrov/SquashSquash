@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import com.petrovdevelopment.squashsquash.game.World;
 import com.petrovdevelopment.squashsquash.game.World.GameEndReason;
+import com.petrovdevelopment.squashsquash.utils.TextEditor;
+import com.petrovdevelopment.squashsquash.utils.Utils;
 
 /**
  * TODO rework to have 3 different layouts for the different GameEndReasons, instead of using the enum to hardcode the final
@@ -68,8 +70,8 @@ public class EndActivity extends Activity {
 	 */
 	private void setLayout(int layoutId) {
 		View endLayout = getLayoutInflater().inflate(layoutId, null);
-		Typeface customFont = ((MainApplication) getApplication()).getCustomFont();
-		Utils.setCustomFont(endLayout, customFont, MainApplication.FONT_SIZE);
+		Typeface customFont = ((MainApplication) getApplication()).getTextEditor().getCustomFont();
+		Utils.setCustomFont(endLayout, customFont, TextEditor.FONT_SIZE);
 		//Set the activity's layout
 		setContentView(endLayout);
 		setTimeAndScoreFontColors();
@@ -80,10 +82,10 @@ public class EndActivity extends Activity {
 	 */
 	private void setTimeAndScoreFontColors() {
 		TextView timeTextView = (TextView) findViewById(R.id.timeValue);
-		((MainApplication) getApplication()).setScore(timeTextView,  mTimePassed);
+		((MainApplication) getApplication()).getTextEditor().setScore(timeTextView,  mTimePassed);
 		
 		TextView scoreTextView = (TextView) findViewById(R.id.scoreValue);
-		((MainApplication) getApplication()).setTimeLeft(scoreTextView, mScore);
+		((MainApplication) getApplication()).getTextEditor().setTimeLeft(scoreTextView, mScore);
 	}
 
 	/**
