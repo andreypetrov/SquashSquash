@@ -1,4 +1,4 @@
-package com.petrovdevelopment.killthemall;
+package com.petrovdevelopment.squashsquash;
 
 import android.content.Context;
 import android.util.AttributeSet;

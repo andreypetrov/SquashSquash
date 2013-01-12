@@ -1,4 +1,4 @@
-package com.petrovdevelopment.killthemall;
+package com.petrovdevelopment.squashsquash;
 
 import android.app.Activity;
 import android.graphics.Typeface;
@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.petrovdevelopment.killthemall.game.World;
-import com.petrovdevelopment.killthemall.game.World.GameEndReason;
+import com.petrovdevelopment.squashsquash.game.World;
+import com.petrovdevelopment.squashsquash.game.World.GameEndReason;
 
 /**
  * TODO rework to have 3 different layouts for the different GameEndReasons, instead of using the enum to hardcode the final

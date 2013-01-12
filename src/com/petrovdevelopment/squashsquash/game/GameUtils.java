@@ -1,6 +1,6 @@
-package com.petrovdevelopment.killthemall.game;
+package com.petrovdevelopment.squashsquash.game;
 
-import com.petrovdevelopment.killthemall.R;
+import com.petrovdevelopment.squashsquash.R;
 
 public class GameUtils {
 	private static final int SCORE_YELLOW_THRESHOLD = 30; //TODO should be dependent on the max possible score number (let's say 1/2 of it)

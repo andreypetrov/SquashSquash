@@ -1,10 +1,10 @@
-package com.petrovdevelopment.killthemall;
+package com.petrovdevelopment.squashsquash;
 
 import android.app.Application;
 import android.graphics.Typeface;
 import android.widget.TextView;
 
-import com.petrovdevelopment.killthemall.game.World;
+import com.petrovdevelopment.squashsquash.game.World;
 
 /**
  * Main application class. 

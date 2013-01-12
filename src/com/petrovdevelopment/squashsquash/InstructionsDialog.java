@@ -1,4 +1,4 @@
-package com.petrovdevelopment.killthemall;
+package com.petrovdevelopment.squashsquash;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

@@ -1,4 +1,4 @@
-package com.petrovdevelopment.killthemall.game;
+package com.petrovdevelopment.squashsquash.game;
 
 import java.util.concurrent.TimeUnit;
 
@@ -8,9 +8,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import com.petrovdevelopment.killthemall.GameLoader;
-import com.petrovdevelopment.killthemall.GameRecoveryLoader;
-import com.petrovdevelopment.killthemall.GameView;
+import com.petrovdevelopment.squashsquash.GameLoader;
+import com.petrovdevelopment.squashsquash.GameRecoveryLoader;
+import com.petrovdevelopment.squashsquash.GameView;
 
 /**
  * Game World, holding all other elements.

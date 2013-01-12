@@ -1,4 +1,4 @@
-package com.petrovdevelopment.killthemall.game;
+package com.petrovdevelopment.squashsquash.game;
 
 
 import android.content.res.Resources;

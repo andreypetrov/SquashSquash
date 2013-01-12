@@ -1,11 +1,11 @@
-package com.petrovdevelopment.killthemall.game;
+package com.petrovdevelopment.squashsquash.game;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import com.petrovdevelopment.killthemall.GameView;
+import com.petrovdevelopment.squashsquash.GameView;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;

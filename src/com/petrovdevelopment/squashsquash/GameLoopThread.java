@@ -1,11 +1,11 @@
-package com.petrovdevelopment.killthemall;
+package com.petrovdevelopment.squashsquash;
 
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.petrovdevelopment.killthemall.game.World;
-import com.petrovdevelopment.killthemall.game.World.GameState;
+import com.petrovdevelopment.squashsquash.game.World;
+import com.petrovdevelopment.squashsquash.game.World.GameState;
 
 /**
  * Game loop thread. TODO: stop the thread before exiting the application TODO: forbid switching screen orientation to

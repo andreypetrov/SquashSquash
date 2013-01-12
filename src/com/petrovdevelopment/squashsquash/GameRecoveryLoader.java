@@ -1,8 +1,8 @@
-package com.petrovdevelopment.killthemall;
+package com.petrovdevelopment.squashsquash;
 
 import android.os.Bundle;
 
-import com.petrovdevelopment.killthemall.game.NpcContainer;
+import com.petrovdevelopment.squashsquash.game.NpcContainer;
 
 /**
  * Recovers npc positions from previous state. 

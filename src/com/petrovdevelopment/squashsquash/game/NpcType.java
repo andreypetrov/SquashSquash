@@ -1,9 +1,9 @@
-package com.petrovdevelopment.killthemall.game;
+package com.petrovdevelopment.squashsquash.game;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.petrovdevelopment.killthemall.R;
+import com.petrovdevelopment.squashsquash.R;
 
 
 public enum NpcType implements Parcelable {

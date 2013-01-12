@@ -1,4 +1,4 @@
-package com.petrovdevelopment.killthemall.game;
+package com.petrovdevelopment.squashsquash.game;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,7 +10,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
 
-import com.petrovdevelopment.killthemall.GameView;
+import com.petrovdevelopment.squashsquash.GameView;
 
 /**
  * Container of npcs TODO: test with non-synchronized list

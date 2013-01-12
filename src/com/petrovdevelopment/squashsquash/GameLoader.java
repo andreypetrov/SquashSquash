@@ -1,14 +1,14 @@
-package com.petrovdevelopment.killthemall;
+package com.petrovdevelopment.squashsquash;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
-import com.petrovdevelopment.killthemall.R;
-import com.petrovdevelopment.killthemall.game.Background;
-import com.petrovdevelopment.killthemall.game.DeathEffectContainer;
-import com.petrovdevelopment.killthemall.game.NpcContainer;
-import com.petrovdevelopment.killthemall.game.NpcType;
+import com.petrovdevelopment.squashsquash.R;
+import com.petrovdevelopment.squashsquash.game.Background;
+import com.petrovdevelopment.squashsquash.game.DeathEffectContainer;
+import com.petrovdevelopment.squashsquash.game.NpcContainer;
+import com.petrovdevelopment.squashsquash.game.NpcType;
 
 /**
  * Class responsible for loading of all resources.
