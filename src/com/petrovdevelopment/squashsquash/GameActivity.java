@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import com.petrovdevelopment.squashsquash.fragments.ConfirmDialog;
 import com.petrovdevelopment.squashsquash.game.World;
-import com.petrovdevelopment.squashsquash.utils.TextEditor;
+import com.petrovdevelopment.squashsquash.utils.TextManager;
 import com.petrovdevelopment.squashsquash.utils.Utils;
 
 /**
@@ -93,8 +93,8 @@ public class GameActivity extends Activity  implements Callback {
 	 */
 	private void setLayout(int layoutId) {
 		View layout = getLayoutInflater().inflate(layoutId, null);
-		Typeface customFont = ((MainApplication) getApplication()).getTextEditor().getCustomFont();
-		Utils.setCustomFont(layout, customFont, TextEditor.FONT_SIZE);
+		Typeface customFont = ((MainApplication) getApplication()).getTextManager().getCustomFont();
+		Utils.setCustomFont(layout, customFont, TextManager.FONT_SIZE);
 		//Set the activity's layout
 		setContentView(layout);
 	}
@@ -175,7 +175,7 @@ public class GameActivity extends Activity  implements Callback {
 
 	private void updateTimeAndScoreViews() {
 		mScoreValueTextView.setText(Integer.toString(mCurrentScore));
-		((MainApplication) getApplication()).getTextEditor().setTimeLeft(mTimeValueTextView,  mCurrentTime);
+		((MainApplication) getApplication()).getTextManager().setTimeLeft(mTimeValueTextView,  mCurrentTime);
 	}
 	/**
 	 * Method called by the underlying GameView

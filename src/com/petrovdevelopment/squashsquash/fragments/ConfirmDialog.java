@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.petrovdevelopment.squashsquash.MainApplication;
 import com.petrovdevelopment.squashsquash.R;
-import com.petrovdevelopment.squashsquash.utils.TextEditor;
+import com.petrovdevelopment.squashsquash.utils.TextManager;
 import com.petrovdevelopment.squashsquash.utils.Utils;
 
 public class ConfirmDialog extends DialogFragment {
@@ -53,8 +53,8 @@ public class ConfirmDialog extends DialogFragment {
 	 * @param view
 	 */
 	protected void setCustomFont(View view) {
-		Typeface customFont = ((MainApplication) getActivity().getApplication()).getTextEditor().getCustomFont();
-		Utils.setCustomFont(view, customFont, TextEditor.FONT_SIZE);
+		Typeface customFont = ((MainApplication) getActivity().getApplication()).getTextManager().getCustomFont();
+		Utils.setCustomFont(view, customFont, TextManager.FONT_SIZE);
 	}
 	
 	/**

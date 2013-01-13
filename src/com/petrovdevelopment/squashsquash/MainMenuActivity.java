@@ -35,6 +35,7 @@ public class MainMenuActivity extends Activity {
 	//TODO maybe remove this for now?
 	public void onClickOptions(View view) {
 		Log.i(this.getClass().getSimpleName(), "onOptions called");
+		((MainApplication) getApplication()).getMediaManager().toggleMusic();
 	}
 	
 	public void onClickInstructions(View view) {
@@ -63,4 +64,15 @@ public class MainMenuActivity extends Activity {
 		confirmDialog.show(getFragmentManager(), MainApplication.DIALOG);
 	}
 	
+	@Override
+	protected void onPause() {
+		((MainApplication) getApplication()).getMediaManager().stopMusic();
+		super.onPause();
+	}
+	
+	@Override
+	protected void onResume() {
+		((MainApplication) getApplication()).getMediaManager().prepareMusic();
+		super.onResume();
+	}
 }
