@@ -1,6 +1,5 @@
 package com.petrovdevelopment.squashsquash;
 
-import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
@@ -21,7 +20,7 @@ import com.petrovdevelopment.squashsquash.utils.Utils;
  * @author andrey
  * 
  */
-public class EndActivity extends Activity {
+public class EndActivity extends MediaClientActivity {
 	private GameEndReason mGameEndReason;
 	private int mScore;
 	private int mTimePassed;

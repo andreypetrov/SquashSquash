@@ -34,6 +34,7 @@ public class MediaManager {
 	}
 	
 	public void toggleMusic() {
+		Log.i(this.getClass().getSimpleName(), "mIsMusicOn = " + mIsMusicOn);	
 		mIsMusicOn = !mIsMusicOn;
 		saveMusicPreferences();
 		if (mIsMusicOn) {
@@ -47,14 +48,17 @@ public class MediaManager {
 		Editor editor = mContext.getSharedPreferences(MainApplication.PREFERENCES, Context.MODE_PRIVATE).edit();
 		editor.putBoolean(MUSIC, mIsMusicOn);
 		editor.commit();
+		Log.i(this.getClass().getSimpleName(), "PreferencesSaved");
 	}
 	
 	public void resumeMusic() {
+			Log.i(this.getClass().getSimpleName(), "MediaPlayer.start()");
 			mMediaPlayer.start();
 	}
 
 	public void pauseMusic() {
 		if (mMediaPlayer.isPlaying()) {
+			Log.i(this.getClass().getSimpleName(), "MediaPlayer.pause()");
 			mMediaPlayer.pause();
 		}
 	}

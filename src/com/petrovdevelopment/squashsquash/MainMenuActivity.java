@@ -1,9 +1,5 @@
 package com.petrovdevelopment.squashsquash;
 
-import com.petrovdevelopment.squashsquash.fragments.ConfirmDialog;
-import com.petrovdevelopment.squashsquash.fragments.InstructionsDialog;
-
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,14 +7,20 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 
-public class MainMenuActivity extends Activity {
-	
+import com.petrovdevelopment.squashsquash.fragments.ConfirmDialog;
+import com.petrovdevelopment.squashsquash.fragments.InstructionsDialog;
+
+public class MainMenuActivity extends MediaClientActivity {
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main_menu);
+		
+		//start the media service independently, to be able to connect via other activities too
+		//startService(getMediaIntent());
 	}
-
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -35,7 +37,7 @@ public class MainMenuActivity extends Activity {
 	//TODO maybe remove this for now?
 	public void onClickOptions(View view) {
 		Log.i(this.getClass().getSimpleName(), "onOptions called");
-		((MainApplication) getApplication()).getMediaManager().toggleMusic();
+		toggleMusic();
 	}
 	
 	public void onClickInstructions(View view) {
@@ -66,13 +68,17 @@ public class MainMenuActivity extends Activity {
 	
 	@Override
 	protected void onPause() {
-		((MainApplication) getApplication()).getMediaManager().stopMusic();
+		Log.i(this.getClass().getSimpleName(), "onPause");
+		//((MainApplication) getApplication()).getMediaManager().pauseMusic();
+		//((MainApplication) getApplication()).getMediaManager().stopMusic();
 		super.onPause();
 	}
 	
 	@Override
 	protected void onResume() {
-		((MainApplication) getApplication()).getMediaManager().prepareMusic();
+		Log.i(this.getClass().getSimpleName(), "onResume");
+		//((MainApplication) getApplication()).getMediaManager().prepareMusic();
 		super.onResume();
 	}
+	
 }

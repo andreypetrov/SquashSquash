@@ -1,5 +1,6 @@
 package com.petrovdevelopment.squashsquash.fragments;
 
+import android.app.Activity;
 import android.app.DialogFragment;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -40,25 +41,27 @@ public class ConfirmDialog extends DialogFragment {
 	}
 
 	/**
-	 * Inflate a layout, to be used by the dialog view. 
+	 * Inflate a layout, to be used by the dialog view.
 	 * 
 	 */
 	protected View inflateLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View confirmLayout = (ViewGroup) inflater.inflate(R.layout.dialog_confirm, container, false);
 		return confirmLayout;
 	}
-	
+
 	/**
 	 * Set custom font to the View if it is a TextView or to its children if it a ViewGroup
+	 * 
 	 * @param view
 	 */
 	protected void setCustomFont(View view) {
 		Typeface customFont = ((MainApplication) getActivity().getApplication()).getTextManager().getCustomFont();
 		Utils.setCustomFont(view, customFont, TextManager.FONT_SIZE);
 	}
-	
+
 	/**
 	 * Close the parent activity
+	 * 
 	 * @param view
 	 */
 	protected void setOkHandler(View view) {
@@ -68,15 +71,22 @@ public class ConfirmDialog extends DialogFragment {
 			okButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					getActivity().finish();
+					Activity parentActivity = getActivity();
+					//optional interface allowing for customized OK behavior
+					if (parentActivity instanceof ConfirmDialogParent) {
+						((ConfirmDialogParent) parentActivity).onDialogOkClick();
+					} else { //default if the 
+						getActivity().finish();
+					}
 				}
 			});
 		}
 
 	}
-	
+
 	/**
 	 * Dismiss the fragment
+	 * 
 	 * @param view
 	 */
 	protected void setCancelHandler(View view) {
@@ -89,14 +99,15 @@ public class ConfirmDialog extends DialogFragment {
 				}
 			});
 		}
-	
+
 	}
-	
+
 	/**
 	 * A method to be overwritten to provide some custom behavior
+	 * 
 	 * @param view
 	 */
 	protected void customizeView(View view) {
-		//do nothing
+		// do nothing
 	}
 }

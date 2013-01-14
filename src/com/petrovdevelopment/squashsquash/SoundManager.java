@@ -4,10 +4,10 @@ import java.util.HashMap;
 
 import android.content.Context;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.util.Log;
 
+//TODO choose jolly sounds that go well with the jolly music
 public class SoundManager {
 	public static final String SOUND = "sound";
 	public static final String MUSIC = "music";

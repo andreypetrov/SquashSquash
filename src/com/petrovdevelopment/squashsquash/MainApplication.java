@@ -16,13 +16,11 @@ public class MainApplication extends Application{
 	
 	private TextManager mTextManager;
 	private SoundManager mSoundManager;
-	private MediaManager mMediaManager;
 	
 	@Override
 	public void onCreate() {
 		super.onCreate();		
 		mTextManager = new TextManager(this);
-		mMediaManager = new MediaManager(this);
 		mSoundManager = new SoundManager(this);
 	}
 
@@ -33,8 +31,5 @@ public class MainApplication extends Application{
 	public SoundManager getSoundManager() {
 		return mSoundManager;
 	}
-	
-	public MediaManager getMediaManager() {
-		return mMediaManager;
-	}
+
 }

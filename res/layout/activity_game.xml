@@ -55,13 +55,13 @@
             android:paddingTop="5dip" />
 
         <ImageView
-            android:id="@+id/sound"
+            android:id="@+id/music"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:clickable="true"
-            android:contentDescription="@string/sound"
-            android:onClick="onClickSound"
+            android:contentDescription="@string/music"
+            android:onClick="onClickMusic"
             android:padding="5dip"
             android:src="@drawable/sound_on"
             android:visibility="visible" />
