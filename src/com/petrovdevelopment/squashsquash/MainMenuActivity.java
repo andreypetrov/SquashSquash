@@ -6,11 +6,11 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.petrovdevelopment.squashsquash.fragments.ConfirmDialog;
 import com.petrovdevelopment.squashsquash.fragments.InstructionsDialog;
 
-//TODO: make icons
 //TODO: pause on phone lock (onPause?) the music (check the game music blog entry)
 public class MainMenuActivity extends MediaClientActivity {
 
@@ -18,9 +18,7 @@ public class MainMenuActivity extends MediaClientActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main_menu);
-		
-		//start the media service independently, to be able to connect via other activities too
-		//startService(getMediaIntent());
+		setMusicButton((ImageView) findViewById(R.id.music));
 	}
 	
 	@Override
@@ -36,11 +34,10 @@ public class MainMenuActivity extends MediaClientActivity {
 		startActivity(intent);
 	}
 	
-	//TODO maybe remove this for now?
-	public void onClickOptions(View view) {
-		Log.i(this.getClass().getSimpleName(), "onOptions called");
-		toggleMusic();
-	}
+//	public void onClickOptions(View view) {
+//		Log.i(this.getClass().getSimpleName(), "onOptions called");
+//		toggleMusic();
+//	}
 	
 	public void onClickInstructions(View view) {
 		InstructionsDialog infoDialog = new InstructionsDialog();

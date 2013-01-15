@@ -96,7 +96,7 @@
                 android:paddingTop="100dp"
                 android:src="@drawable/button_new_game" />
 
-            <ImageView
+<!--             <ImageView
                 android:id="@+id/optionsButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -105,7 +105,7 @@
                 android:contentDescription="@string/options"
                 android:onClick="onClickOptions"
                 android:paddingTop="20dp"
-                android:src="@drawable/button_options" />
+                android:src="@drawable/button_options" /> -->
 
             <ImageView
                 android:id="@+id/instructionsButton"

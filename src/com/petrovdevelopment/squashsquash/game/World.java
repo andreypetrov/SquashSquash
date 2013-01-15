@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
 import com.petrovdevelopment.squashsquash.GameLoader;
 import com.petrovdevelopment.squashsquash.GameRecoveryLoader;
@@ -37,7 +36,7 @@ public class World implements GameElement {
 	public static final int GAME_DURATION_SECONDS = 15;
 	public static final int INITIAL_SCORE = 0;
 
-	private static final int ALIEN_KILL_POINTS = 10; // plus 10 points for killing an alien
+	private static final int DEMON_KILL_POINTS = 10; // plus 10 points for killing an demon
 	private static final int HUMAN_KILL_POINTS = -5; // minus 5 points for killing a human
 	
 
@@ -54,7 +53,7 @@ public class World implements GameElement {
 	}
 
 	public enum GameEndReason {
-		NONE, TIME_IS_UP, ALL_ALIENS_DEAD, ALL_HUMANS_DEAD;
+		NONE, TIME_IS_UP, ALL_DEMONS_DEAD, ALL_HUMANS_DEAD;
 	}
 	
 	public enum Difficulty {
@@ -130,7 +129,7 @@ public class World implements GameElement {
 	}
 
 	/**
-	 * On touch remove top touched npc and create a death effect on the touched spot. Trigger GameState.END if the last Alien or Human
+	 * On touch remove top touched npc and create a death effect on the touched spot. Trigger GameState.END if the last Demon or Human
 	 * was killed 
 	 * @param touchX
 	 * @param touchY
@@ -139,17 +138,16 @@ public class World implements GameElement {
 		if (mGameState == GameState.RUNNING) {
 			Npc touchedNpc = mNpcContainer.removeTopTouchedNpc(touchX, touchY);
 			if (touchedNpc != null) {
-				boolean isAlien = touchedNpc.getNpcType().isAlien();
-				updateScore(isAlien);
+				boolean isDemon = touchedNpc.getNpcType().isDemon();
+				updateScore(isDemon);
 				// Create a new death effect at the location of the killed npc
-				mDeathEffectContainer.createDeathEffect(touchedNpc.getCenterX(), touchedNpc.getCenterY(), isAlien);
+				mDeathEffectContainer.createDeathEffect(touchedNpc.getCenterX(), touchedNpc.getCenterY(), isDemon);
 			}
 		}
 		
 		// Check for game end condition
-		Log.i(this.getClass().getSimpleName(), "Aliens count: " + mNpcContainer.getAlienCount());
-		if (mNpcContainer.getAlienCount() <= 0) {
-			end(GameEndReason.ALL_ALIENS_DEAD);
+		if (mNpcContainer.getDemonCount() <= 0) {
+			end(GameEndReason.ALL_DEMONS_DEAD);
 		} else if (mNpcContainer.getHumanCount() <= 0) {
 			end(GameEndReason.ALL_HUMANS_DEAD);
 		}
@@ -191,12 +189,12 @@ public class World implements GameElement {
 	/**
 	 * Calculates the game score, based on the type of the killed Npc
 	 * 
-	 * @param isAlien
+	 * @param isDemon
 	 */
-	private void updateScore(boolean isAlien) {
+	private void updateScore(boolean isDemon) {
 		// Update the score
-		if (isAlien) {
-			mScore += ALIEN_KILL_POINTS;
+		if (isDemon) {
+			mScore += DEMON_KILL_POINTS;
 		} else {
 			mScore += HUMAN_KILL_POINTS; 
 		}

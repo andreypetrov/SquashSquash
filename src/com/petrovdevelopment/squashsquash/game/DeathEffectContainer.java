@@ -19,7 +19,7 @@ import android.graphics.Canvas;
 public class DeathEffectContainer implements GameElement {
 
 	private GameView mGameView;
-	private Bitmap mBitmapAlien;
+	private Bitmap mBitmapDemon;
 	private Bitmap mBitmapHuman;
 
 	private int mBitmapWidth;
@@ -29,19 +29,19 @@ public class DeathEffectContainer implements GameElement {
 
 	/**
 	 * Create a new object.
-	 * Images of human and alien should have the same size
+	 * Images of human and demon should have the same size
 	 * @return
 	 */
-	public static DeathEffectContainer create(GameView gameView, Bitmap bitmapAlien, Bitmap bitmapHuman) {
-		return new DeathEffectContainer(gameView, bitmapAlien, bitmapHuman);
+	public static DeathEffectContainer create(GameView gameView, Bitmap bitmapDemon, Bitmap bitmapHuman) {
+		return new DeathEffectContainer(gameView, bitmapDemon, bitmapHuman);
 	}
 
-	private DeathEffectContainer(GameView gameView, Bitmap bitmapAlien, Bitmap bitmapHuman) {
+	private DeathEffectContainer(GameView gameView, Bitmap bitmapDemon, Bitmap bitmapHuman) {
 		mGameView = gameView;
-		mBitmapAlien = bitmapAlien;
+		mBitmapDemon = bitmapDemon;
 		mBitmapHuman = bitmapHuman;
-		mBitmapWidth = bitmapAlien.getWidth();
-		mBitmapHeight = bitmapAlien.getHeight();
+		mBitmapWidth = bitmapDemon.getWidth();
+		mBitmapHeight = bitmapDemon.getHeight();
 	}
 
 	/**
@@ -51,12 +51,12 @@ public class DeathEffectContainer implements GameElement {
 	 *            the x coordinate
 	 * @param y
 	 *            the y coordinate
-	 * @param isAlien
-	 *            alien or human death effect
+	 * @param isDemon
+	 *            demon or human death effect
 	 * @return
 	 */
-	public void createDeathEffect(float centerX, float centerY, boolean isAlien) {
-		if (mBitmapAlien == null || mBitmapHuman == null || mGameView == null) {
+	public void createDeathEffect(float centerX, float centerY, boolean isDemon) {
+		if (mBitmapDemon == null || mBitmapHuman == null || mGameView == null) {
 			throw new NullPointerException(
 					"mBitmap == null or mGameView == null, probably DeathEffect.initialize() method has not been called");
 		}
@@ -68,17 +68,16 @@ public class DeathEffectContainer implements GameElement {
 		int y = Math.round(Math.min(Math.max(centerY - mBitmapHeight / 2, 0), mGameView.getHeight() - mBitmapHeight));
 		
 		DeathEffect deathEffect;
-		if(isAlien) {
-			deathEffect = new DeathEffect(x, y, isAlien, mBitmapAlien);
+		if(isDemon) {
+			deathEffect = new DeathEffect(x, y, isDemon, mBitmapDemon);
 		} else {
-			deathEffect = new DeathEffect(x, y, isAlien, mBitmapHuman);
+			deathEffect = new DeathEffect(x, y, isDemon, mBitmapHuman);
 		}
 		mDeathEffects.add(deathEffect);
 	}
 
 	/**
-	 * TODO: resolve why this is throwing concurrentModification when using iterator.next() Update the temp sprites if there
-	 * are any
+	 * Update the temp sprites if there are any
 	 */
 	@Override
 	public void update() {
@@ -106,11 +105,4 @@ public class DeathEffectContainer implements GameElement {
 		}
 	}
 
-	/**
-	 * discard the whole list of death effects on game's end.
-	 * TODO: Remove? not needed for now?
-	 */
-	public void removeAll() {
-		mDeathEffects = null;
-	}
 }

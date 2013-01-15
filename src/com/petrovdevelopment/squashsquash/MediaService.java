@@ -61,7 +61,7 @@ public class MediaService extends Service {
 	public void saveMusicPreferences() {
 		Editor editor = this.getSharedPreferences(MainApplication.PREFERENCES, Context.MODE_PRIVATE).edit();
 		editor.putBoolean(MUSIC, mIsMusicOn);
-		editor.commit();
+		editor.apply(); //async unlike commit. TODO: test if it works better than commit
 		Log.i(this.getClass().getSimpleName(), "PreferencesSaved");
 	}
 	

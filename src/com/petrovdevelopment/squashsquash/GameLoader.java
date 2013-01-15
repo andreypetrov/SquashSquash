@@ -38,20 +38,10 @@ public class GameLoader {
 	}
 
 	public DeathEffectContainer loadDeathEffectContainer() {
-		Bitmap bitmapBloodAlien = BitmapFactory.decodeResource(mGameView.getResources(), R.drawable.blood_alien);
+		Bitmap bitmapBloodDemon = BitmapFactory.decodeResource(mGameView.getResources(), R.drawable.blood_demon);
 		Bitmap bitmapBloodHuman = BitmapFactory.decodeResource(mGameView.getResources(), R.drawable.blood_human);
-		DeathEffectContainer deathEffectContainer = DeathEffectContainer.create(mGameView, bitmapBloodAlien, bitmapBloodHuman);
+		DeathEffectContainer deathEffectContainer = DeathEffectContainer.create(mGameView, bitmapBloodDemon, bitmapBloodHuman);
 		return deathEffectContainer;
-	}
-
-	public int loadScore() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public long loadTimeLeft() {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 }

@@ -11,8 +11,6 @@ import android.graphics.drawable.BitmapDrawable;
 /**
  * Class representing the background (mostly just an image on the back of the canvas)
  * It needs to be actually rendered before any other element otherwise it will not be a background.
- * TODO: use loader to load all the images in the beginning (and whenever needed later?)
- * 
  * @author andrey
  * 
  */

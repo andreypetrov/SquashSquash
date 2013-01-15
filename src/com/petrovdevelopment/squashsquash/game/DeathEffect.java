@@ -18,13 +18,13 @@ public class DeathEffect implements GameElement {
 	//
 	private final int mX;
 	private final int mY;
-	private final boolean mIsAlien;
+	private final boolean mIsDemon;
 	
 	private int mLife = INITIAL_LIFE;
 	private Bitmap mBitmap;
 	
-	public DeathEffect(int x, int y, boolean isAlien, Bitmap bitmap) {
-		mIsAlien = isAlien;
+	public DeathEffect(int x, int y, boolean isDemon, Bitmap bitmap) {
+		mIsDemon = isDemon;
 		mBitmap = bitmap;
 		mX = x;
 		mY = y;
@@ -42,8 +42,8 @@ public class DeathEffect implements GameElement {
 		return mY;
 	}
 
-	public boolean isAlien() {
-		return mIsAlien;
+	public boolean isDemon() {
+		return mIsDemon;
 	}
 	
 	private void decrementLife() {

@@ -22,18 +22,18 @@ public enum NpcType implements Parcelable {
 		
 	
 	private final int mResourceId;
-	private final boolean mIsAlien;
+	private final boolean mIsDemon;
 	
-	private NpcType(int resourceId, boolean isAlien) {
+	private NpcType(int resourceId, boolean isDemon) {
 		mResourceId = resourceId;
-		mIsAlien = isAlien;
+		mIsDemon = isDemon;
 	}
 	
 	public int resourceId() {
 		return mResourceId;
 	}
-	public boolean isAlien() {
-		return mIsAlien;
+	public boolean isDemon() {
+		return mIsDemon;
 	}
 	
 	@Override

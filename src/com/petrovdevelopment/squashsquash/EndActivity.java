@@ -31,7 +31,7 @@ public class EndActivity extends MediaClientActivity {
 
 	private void setContentView() {
 		switch (mGameEndReason) {
-		case ALL_ALIENS_DEAD:
+		case ALL_DEMONS_DEAD:
 			setLayout(R.layout.end_win);
 			break;
 		case ALL_HUMANS_DEAD:

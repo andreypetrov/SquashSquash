@@ -8,8 +8,7 @@ import com.petrovdevelopment.squashsquash.game.World;
 import com.petrovdevelopment.squashsquash.game.World.GameState;
 
 /**
- * Game loop thread. TODO: stop the thread before exiting the application TODO: forbid switching screen orientation to
- * landscape/portrait
+ * Game loop thread.
  * 
  * @author andrey
  * 
@@ -81,17 +80,6 @@ public class GameLoopThread extends Thread {
 				mGameActivity.onGameEnd();
 			}
 		}
-	}
-
-
-	public void saveState(Bundle outState) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void restoreState(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-
 	}
 
 }

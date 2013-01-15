@@ -21,7 +21,7 @@ import com.petrovdevelopment.squashsquash.GameView;
 public class NpcContainer implements GameElement {
 	private GameView mGameView;
 	private List<Npc> mNpcs;
-	private int mAlienCount;
+	private int mDemonCount;
 	private int mHumanCount;
 
 	public static NpcContainer create(GameView gameView) {
@@ -29,7 +29,7 @@ public class NpcContainer implements GameElement {
 	}
 
 	private NpcContainer(GameView gameView) {
-		mAlienCount = 0;
+		mDemonCount = 0;
 		mHumanCount = 0;
 		mGameView = gameView;
 		mNpcs = Collections.synchronizedList(new ArrayList<Npc>());
@@ -68,13 +68,13 @@ public class NpcContainer implements GameElement {
 	public void removeAll() {
 		synchronized (mNpcs) {
 			mNpcs = Collections.synchronizedList(new ArrayList<Npc>());
-			mAlienCount = 0;
+			mDemonCount = 0;
 			mHumanCount = 0;
 		}
 	}
 
-	public int getAlienCount() {
-		return mAlienCount;
+	public int getDemonCount() {
+		return mDemonCount;
 	}
 
 	public int getHumanCount() {
@@ -93,8 +93,8 @@ public class NpcContainer implements GameElement {
 			// verify if actually an npc was removed
 			if (npcWasRemoved) {
 				// adjust counters
-				if (npc.getNpcType().isAlien()) {
-					mAlienCount--;
+				if (npc.getNpcType().isDemon()) {
+					mDemonCount--;
 				} else {
 					mHumanCount--;
 				}
@@ -107,8 +107,8 @@ public class NpcContainer implements GameElement {
 		synchronized (mNpcs) {
 			Log.i(this.getClass().getSimpleName(), "NpcContainer.add() called");
 			mNpcs.add(npc);
-			if (npc.getNpcType().isAlien()) {
-				mAlienCount++;
+			if (npc.getNpcType().isDemon()) {
+				mDemonCount++;
 			} else {
 				mHumanCount++;
 			}

@@ -230,8 +230,8 @@ public class GameActivity extends MediaClientActivity implements Callback {
 	}
 
 	/**
-	 * Notification that something is about to happen, to give the Activity a chance to save state. TODO: persist score on
-	 * storage?
+	 * Notification that something is about to happen, to give the Activity a chance to save state. 
+	 * TODO: persist score, time, music, etc on storage?
 	 * 
 	 * @param outState
 	 *            a Bundle into which this Activity should save its state
