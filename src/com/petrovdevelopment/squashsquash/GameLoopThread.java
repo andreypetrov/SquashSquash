@@ -36,7 +36,6 @@ public class GameLoopThread extends Thread {
 	//TODO add one rendering before the loop and after the initial setup
 	@Override
 	public void run() {	
-		Log.i(this.getClass().getSimpleName(), mWorld.getGameState().toString());
 		
 		while (running) {
 			long startTime;

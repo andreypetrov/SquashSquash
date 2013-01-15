@@ -33,7 +33,6 @@ public class GameLoader {
 		for (NpcType npcType : NpcType.values()) {
 			npcContainer.createNpc(npcType);
 		}
-		Log.i(this.getClass().getSimpleName(), "loadNpcContainer() called");
 		return npcContainer;
 	}
 

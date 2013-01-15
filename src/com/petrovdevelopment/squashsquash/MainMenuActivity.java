@@ -35,7 +35,6 @@ public class MainMenuActivity extends MediaClientActivity {
 	}
 	
 //	public void onClickOptions(View view) {
-//		Log.i(this.getClass().getSimpleName(), "onOptions called");
 //		toggleMusic();
 //	}
 	
@@ -63,21 +62,6 @@ public class MainMenuActivity extends MediaClientActivity {
 	private void showConfirmDialog(){
 		ConfirmDialog confirmDialog = new ConfirmDialog();
 		confirmDialog.show(getFragmentManager(), MainApplication.DIALOG);
-	}
-	
-	@Override
-	protected void onPause() {
-		Log.i(this.getClass().getSimpleName(), "onPause");
-		//((MainApplication) getApplication()).getMediaManager().pauseMusic();
-		//((MainApplication) getApplication()).getMediaManager().stopMusic();
-		super.onPause();
-	}
-	
-	@Override
-	protected void onResume() {
-		Log.i(this.getClass().getSimpleName(), "onResume");
-		//((MainApplication) getApplication()).getMediaManager().prepareMusic();
-		super.onResume();
 	}
 	
 }

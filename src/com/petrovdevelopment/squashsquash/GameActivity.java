@@ -19,7 +19,7 @@ import android.widget.TextView;
 import com.petrovdevelopment.squashsquash.fragments.ConfirmDialog;
 import com.petrovdevelopment.squashsquash.game.World;
 import com.petrovdevelopment.squashsquash.utils.TextManager;
-import com.petrovdevelopment.squashsquash.utils.Utils;
+import com.petrovdevelopment.squashsquash.utils.U;
 
 /**
  * The game activity. It creates also the GameLoopThread and the game World. In two cases it calls the World - when the world
@@ -70,11 +70,9 @@ public class GameActivity extends MediaClientActivity implements Callback {
 		// For Debugging only:
 		if (savedInstanceState == null) {
 			// we were just launched: set up a new game
-			Log.i(this.getClass().getSimpleName(), "SIS is null");
-
+		
 		} else {
 			// we are being restored: resume a previous game
-			Log.i(this.getClass().getSimpleName(), "SIS is nonnull");
 		}
 	}
 
@@ -86,7 +84,7 @@ public class GameActivity extends MediaClientActivity implements Callback {
 	private void setLayout(int layoutId) {
 		View layout = getLayoutInflater().inflate(layoutId, null);
 		Typeface customFont = ((MainApplication) getApplication()).getTextManager().getCustomFont();
-		Utils.setCustomFont(layout, customFont, TextManager.FONT_SIZE);
+		U.setCustomFont(layout, customFont, TextManager.FONT_SIZE);
 		// Set the activity's layout
 		setContentView(layout);
 	}
@@ -110,7 +108,6 @@ public class GameActivity extends MediaClientActivity implements Callback {
 		// Start the game thread
 		mGameLoopThread.setRunning(true);
 		mGameLoopThread.start();
-		Log.i(this.getClass().getSimpleName(), "mGameLooThread started " + mGameLoopThread);
 	}
 
 	/**
@@ -138,7 +135,6 @@ public class GameActivity extends MediaClientActivity implements Callback {
 			} catch (InterruptedException e) {
 			}
 		}
-		Log.i(this.getClass().getSimpleName(), "Surface destroyed");
 	}
 
 	/**
@@ -238,11 +234,9 @@ public class GameActivity extends MediaClientActivity implements Callback {
 	 */
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		Log.i(this.getClass().getSimpleName(), "mWorld.mNpcContainer.mNpcs.size()");
 		// just have the View's thread save its state into our Bundle
 		super.onSaveInstanceState(outState);
 		mWorld.saveState(outState);
-		Log.i(this.getClass().getSimpleName(), "SIS called");
 	}
 
 	/**

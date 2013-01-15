@@ -12,8 +12,8 @@ import android.util.Log;
 import android.view.View;
 
 /**
- * Class representing a single npc. 
- * Parceable so that it can restore its state, if the game stops
+ * Class representing a single npc. Parceable so that it can restore its state, if the game stops
+ * 
  * @author andrey
  * 
  */
@@ -52,7 +52,6 @@ public class Npc implements GameElement, Touchable, Parcelable {
 	 * @param npcType
 	 */
 	public Npc(View parentView, NpcType npcType) {
-		Log.i(this.getClass().getSimpleName(), "Npc(View parentView, NpcType npcType) called");
 		mParentView = parentView;
 		mNpcType = npcType;
 		Random random = new Random();
@@ -77,7 +76,6 @@ public class Npc implements GameElement, Touchable, Parcelable {
 	 */
 	private Npc(Parcel source) {
 		// It is mandatory to read in the same order in which values were written in the parcel!
-		Log.i(this.getClass().getSimpleName(), "Npc(Parcel source) called");
 		mNpcType = source.readParcelable(NpcType.class.getClassLoader());
 		mX = source.readInt();
 		mY = source.readInt();
@@ -87,9 +85,6 @@ public class Npc implements GameElement, Touchable, Parcelable {
 		mHeight = source.readInt();
 		mCurrentFrame = source.readInt();
 		mCurrentAnimationRow = source.readInt();
-
-		Log.i(this.getClass().getSimpleName(), "Animation Row: " + mCurrentAnimationRow);
-		Log.i(this.getClass().getSimpleName(), "Frame" + mCurrentFrame);
 	}
 
 	/**
@@ -199,7 +194,6 @@ public class Npc implements GameElement, Touchable, Parcelable {
 	public void writeToParcel(Parcel dest, int flags) {
 		// the second is a flag which could be 0 or PARCELABLE_WRITE_RETURN_VALUE.
 		// For this app it does not matter really
-		Log.i(this.getClass().getSimpleName(), "writeToParcel called");
 		dest.writeParcelable(mNpcType, 0);
 		dest.writeInt(mX);
 		dest.writeInt(mY);
@@ -209,8 +203,6 @@ public class Npc implements GameElement, Touchable, Parcelable {
 		dest.writeInt(mHeight);
 		dest.writeInt(mCurrentFrame);
 		dest.writeInt(mCurrentAnimationRow);
-		Log.i(this.getClass().getSimpleName(), "Animation Row: " + mCurrentAnimationRow);
-		Log.i(this.getClass().getSimpleName(), "Frame" + mCurrentFrame);
 	}
 
 	/**

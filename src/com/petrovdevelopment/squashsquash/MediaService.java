@@ -22,15 +22,14 @@ public class MediaService extends Service {
 	private boolean mIsMusicOn;
 	private MediaPlayer mMediaPlayer;
 	private IBinder mBinder = new MediaBinder();
-	
+
 	public MediaService() {
 	}
 
 	@Override
 	public void onCreate() {
-		//check from the preferences file if the music should be on or not, by default true
+		// check from the preferences file if the music should be on or not, by default true
 		mIsMusicOn = this.getSharedPreferences(MainApplication.PREFERENCES, Context.MODE_PRIVATE).getBoolean(MUSIC, true);
-		Log.i(this.getClass().getSimpleName(), "mIsMusicOn = " + mIsMusicOn);
 		prepareMusic();
 		if (mIsMusicOn) {
 			resumeMusic();
@@ -51,26 +50,24 @@ public class MediaService extends Service {
 			stopMusic();
 		}
 	}
-	
+
 	public class MediaBinder extends Binder {
-		MediaService getService () {
+		MediaService getService() {
 			return MediaService.this;
 		}
 	}
-	
+
 	public void saveMusicPreferences() {
 		Editor editor = this.getSharedPreferences(MainApplication.PREFERENCES, Context.MODE_PRIVATE).edit();
 		editor.putBoolean(MUSIC, mIsMusicOn);
-		editor.apply(); //async unlike commit. TODO: test if it works better than commit
-		Log.i(this.getClass().getSimpleName(), "PreferencesSaved");
+		editor.apply(); // async unlike commit. TODO: test if it works better than commit
 	}
-	
-	
+
 	public void prepareMusic() {
 		mMediaPlayer = MediaPlayer.create(this, R.raw.theme);
 		mMediaPlayer.setLooping(true);
 	}
-	
+
 	/**
 	 * Pause/resume the background music
 	 */
@@ -81,30 +78,27 @@ public class MediaService extends Service {
 			resumeMusic();
 		}
 	}
-	
+
 	public void resumeMusic() {
-			Log.i(this.getClass().getSimpleName(), "MediaPlayer.start()");
-			mIsMusicOn = true;
-			saveMusicPreferences();
-			mMediaPlayer.start();
+		mIsMusicOn = true;
+		saveMusicPreferences();
+		mMediaPlayer.start();
 	}
 
 	public void pauseMusic() {
-		Log.i(this.getClass().getSimpleName(), "MediaPlayer.pause()");
-		if (mMediaPlayer.isPlaying()) {			
+		if (mMediaPlayer.isPlaying()) {
 			mIsMusicOn = false;
 			saveMusicPreferences();
 			mMediaPlayer.pause();
 		}
 	}
 
-	public void stopMusic(){
-		Log.i(this.getClass().getSimpleName(), "MediaPlayer.stop()");
+	public void stopMusic() {
 		mMediaPlayer.stop();
 		mMediaPlayer.release();
 		mMediaPlayer = null;
 	}
-	
+
 	public boolean isMusicOn() {
 		return mIsMusicOn;
 	}

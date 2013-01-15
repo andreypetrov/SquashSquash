@@ -26,7 +26,6 @@ public class SoundManager {
 		// true.
 		mIsSoundOn = context.getSharedPreferences(MainApplication.PREFERENCES, Context.MODE_PRIVATE).getBoolean(SOUND, true);
 		
-		Log.i(this.getClass().getSimpleName(), "mIsSoundOn = " + mIsSoundOn);
 		mContext = context;
 		mSoundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
 
@@ -50,11 +49,9 @@ public class SoundManager {
 		mSoundPool.setOnLoadCompleteListener(new OnLoadCompleteListener() {
 			@Override
 			public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
-				Log.i(SoundManager.this.getClass().getSimpleName(), "Loading completed");
 				// playSound(THEME, -1);
 			}
 		});
-		Log.i(this.getClass().getSimpleName(), "Start loading sounds");
 		int soundId = mSoundPool.load(mContext, R.raw.theme, 1);
 		mSoundPoolMap.put(THEME, soundId);*/
 	}
@@ -91,7 +88,6 @@ public class SoundManager {
 	 * @return
 	 */
 	public void playSound(String soundName, int loop) {
-		Log.i(this.getClass().getSimpleName(), "Playing sound " + soundName);
 		int streamVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
 		int streamId = mSoundPool.play(mSoundPoolMap.get(soundName), streamVolume, streamVolume, 1, loop, 1f);
 		mSoundStreamMap.put(soundName, streamId);

@@ -1,12 +1,18 @@
 package com.petrovdevelopment.squashsquash.utils;
 
 import android.graphics.Typeface;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class Utils {
+/**
+ * Utility class
+ * @author andrey
+ *
+ */
+public class U {
 
 	/**
 	 * Set a custom font recursively to all TextViews in the given View and its children
@@ -36,6 +42,18 @@ public class Utils {
 	private static void customizeView(TextView textView, Typeface font, int fontSize) {
 		textView.setTypeface(font);
 		textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, fontSize);
+	}
+	
+	/**
+	 * A convenience debug method.
+	 * Logs an info message in the LogCat.
+	 * The log tag is the name of the class generating it (without the package)
+	 * Usage: U.log(this, message); 
+	 *
+	 * @param message
+	 */
+	public static void log(Object author, String message) {
+		Log.i(author.getClass().getSimpleName(), message);
 	}
 
 }

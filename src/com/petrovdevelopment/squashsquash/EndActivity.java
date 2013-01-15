@@ -8,7 +8,7 @@ import android.widget.TextView;
 import com.petrovdevelopment.squashsquash.game.World;
 import com.petrovdevelopment.squashsquash.game.World.GameEndReason;
 import com.petrovdevelopment.squashsquash.utils.TextManager;
-import com.petrovdevelopment.squashsquash.utils.Utils;
+import com.petrovdevelopment.squashsquash.utils.U;
 
 /**
  * 3 different layouts for the different GameEndReasons TODO: fix colors of points and time
@@ -66,7 +66,7 @@ public class EndActivity extends MediaClientActivity {
 	private void setLayout(int layoutId) {
 		View endLayout = getLayoutInflater().inflate(layoutId, null);
 		Typeface customFont = ((MainApplication) getApplication()).getTextManager().getCustomFont();
-		Utils.setCustomFont(endLayout, customFont, TextManager.FONT_SIZE);
+		U.setCustomFont(endLayout, customFont, TextManager.FONT_SIZE);
 		// Set the activity's layout
 		setContentView(endLayout);
 		setTimeAndScoreFontColors();

@@ -105,7 +105,6 @@ public class NpcContainer implements GameElement {
 
 	private boolean add(Npc npc) {
 		synchronized (mNpcs) {
-			Log.i(this.getClass().getSimpleName(), "NpcContainer.add() called");
 			mNpcs.add(npc);
 			if (npc.getNpcType().isDemon()) {
 				mDemonCount++;
@@ -117,7 +116,6 @@ public class NpcContainer implements GameElement {
 	}
 
 	public void saveState(Bundle outState) {
-		Log.i(this.getClass().getSimpleName(), "NpcContainer.saveState() called");
 		// FIXME here mNpcs.size() returns 0,
 		// if i try to save immediately, without pressing "Play" button
 		// is it because i access from the UI thread without sync?
@@ -125,14 +123,12 @@ public class NpcContainer implements GameElement {
 			Parcelable[] npcs = new Parcelable[mNpcs.size()];
 			for (int i = 0; i < mNpcs.size(); i++) {
 				npcs[i] = mNpcs.get(i);
-				Log.i(this.getClass().getSimpleName(), "Saving " + mNpcs.get(i).getNpcType().toString());
 			}
 			outState.putParcelableArray(World.NPCS, npcs);
 		}
 	}
 
 	public void restoreState(Bundle inState) {
-		Log.i(this.getClass().getSimpleName(), "restoreState()");
 		Parcelable[] npcsArray = inState.getParcelableArray(World.NPCS);
 		for (int i = 0; i < npcsArray.length; i++) {
 			Random random = new Random();
