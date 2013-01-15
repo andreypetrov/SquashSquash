@@ -11,11 +11,7 @@ import com.petrovdevelopment.squashsquash.utils.TextManager;
 import com.petrovdevelopment.squashsquash.utils.Utils;
 
 /**
- * TODO rework to have 3 different layouts for the different GameEndReasons, instead of using the enum to hardcode the final
- * strings TODO: either find how to stroke the textView properly or use surfaceView to create nice text stroke... or
- * pregenerate images
- * 
- * TODO add Back/New Game/Main Menu button
+ * 3 different layouts for the different GameEndReasons TODO: fix colors of points and time
  * 
  * @author andrey
  * 
@@ -24,11 +20,11 @@ public class EndActivity extends MediaClientActivity {
 	private GameEndReason mGameEndReason;
 	private int mScore;
 	private int mTimePassed;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		getIntentExtras();
 		setContentView();
 	}
@@ -71,7 +67,7 @@ public class EndActivity extends MediaClientActivity {
 		View endLayout = getLayoutInflater().inflate(layoutId, null);
 		Typeface customFont = ((MainApplication) getApplication()).getTextManager().getCustomFont();
 		Utils.setCustomFont(endLayout, customFont, TextManager.FONT_SIZE);
-		//Set the activity's layout
+		// Set the activity's layout
 		setContentView(endLayout);
 		setTimeAndScoreFontColors();
 	}
@@ -81,10 +77,10 @@ public class EndActivity extends MediaClientActivity {
 	 */
 	private void setTimeAndScoreFontColors() {
 		TextView timeTextView = (TextView) findViewById(R.id.timeValue);
-		((MainApplication) getApplication()).getTextManager().setScore(timeTextView,  mTimePassed);
-		
+		((MainApplication) getApplication()).getTextManager().setTimePassed(timeTextView, mTimePassed);
+
 		TextView scoreTextView = (TextView) findViewById(R.id.scoreValue);
-		((MainApplication) getApplication()).getTextManager().setTimeLeft(scoreTextView, mScore);
+		((MainApplication) getApplication()).getTextManager().setScore(scoreTextView, mScore);
 	}
 
 	/**

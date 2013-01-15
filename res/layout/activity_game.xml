@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:paddingLeft="5dip"
+            android:paddingLeft="20dip"
             android:paddingTop="5dip"
             android:text="@string/time_title" />
 

@@ -249,7 +249,6 @@ public class GameActivity extends MediaClientActivity implements Callback {
 	 * Finish the current activity and start the End Game activity. This method executes on the GameLoop thread.
 	 */
 	public void onGameEnd() {
-		// TODO: pass final score and information about the reason of the game's end
 		Intent intent = new Intent(this, EndActivity.class);
 		String gameEndReason = mWorld.getGameEndReason().toString();
 		int score = mWorld.getScore();
