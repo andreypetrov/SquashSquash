@@ -10,6 +10,8 @@ import android.view.View;
 import com.petrovdevelopment.squashsquash.fragments.ConfirmDialog;
 import com.petrovdevelopment.squashsquash.fragments.InstructionsDialog;
 
+//TODO: make icons
+//TODO: pause on phone lock (onPause?) the music (check the game music blog entry)
 public class MainMenuActivity extends MediaClientActivity {
 
 	@Override
