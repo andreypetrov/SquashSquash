@@ -12,7 +12,7 @@ import com.petrovdevelopment.squashsquash.GameRecoveryLoader;
 import com.petrovdevelopment.squashsquash.GameView;
 
 /**
- * Game World, holding all other elements.
+ * Game World, holding all other game elements.
  * There should be one game world for now. 
  * The class is not static to insure it is properly destroyed with the 
  * Activity and the GameLoopThread destroyed. 
