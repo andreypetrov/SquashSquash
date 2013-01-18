@@ -2,51 +2,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     android:orientation="vertical"
-    tools:context=".GameActivity" 
-    android:background="@drawable/background">
-  <!-- The bar with the time, score, sound, pause -->
+    tools:context=".GameActivity" >
 
-    <LinearLayout
-        android:id="@+id/top_panel"
-        android:layout_width="match_parent"
-        android:layout_height="40dip"
-        android:orientation="horizontal"
-        android:paddingLeft="20dip"
-        android:paddingRight="15dip">
-
-        <TextView
-            android:id="@+id/filler"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:paddingTop="5dip" />
-
-        <ImageView
-            android:id="@+id/music"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:clickable="true"
-            android:contentDescription="@string/music"
-            android:onClick="onClickMusic"
-            android:padding="5dip"
-            android:src="@drawable/sound_on"
-            android:visibility="visible" />
-
-        <ImageButton
-            android:id="@+id/filler2"
-            android:layout_width="42dip"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:background="@null"
-            android:contentDescription="@string/exit"
-            android:enabled="true"
-            android:onClick="onClickExit"
-            android:visibility="visible" />
-
-    </LinearLayout>
+    <include layout="@layout/action_bar_layout" />
 
     <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -96,7 +56,8 @@
                 android:paddingTop="100dp"
                 android:src="@drawable/button_new_game" />
 
-<!--             <ImageView
+            <!--
+                 <ImageView
                 android:id="@+id/optionsButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -105,7 +66,8 @@
                 android:contentDescription="@string/options"
                 android:onClick="onClickOptions"
                 android:paddingTop="20dp"
-                android:src="@drawable/button_options" /> -->
+                android:src="@drawable/button_options" />
+            -->
 
             <ImageView
                 android:id="@+id/instructionsButton"

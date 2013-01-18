@@ -2,14 +2,13 @@ package com.petrovdevelopment.squashsquash;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.petrovdevelopment.squashsquash.fragments.ConfirmDialog;
 import com.petrovdevelopment.squashsquash.fragments.InstructionsDialog;
+import com.petrovdevelopment.squashsquash.sound.MediaClientActivity;
 
 //TODO: pause on phone lock (onPause?) the music (check the game music blog entry)
 public class MainMenuActivity extends MediaClientActivity {

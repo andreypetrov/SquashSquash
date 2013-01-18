@@ -37,7 +37,7 @@ public class GameView extends SurfaceView {
 	}
 
 	/**
-	 * Delegate to World.onTouchEvent()
+	 * Delegate to GameActivity the touch evetns
 	 */
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {

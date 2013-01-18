@@ -38,7 +38,7 @@
         </activity>
 
         <service
-            android:name="com.petrovdevelopment.squashsquash.MediaService"
+            android:name="com.petrovdevelopment.squashsquash.sound.MediaService"
             android:enabled="true"
             android:exported="false" >
         </service>

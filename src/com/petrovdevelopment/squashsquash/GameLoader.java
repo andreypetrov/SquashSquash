@@ -2,9 +2,7 @@ package com.petrovdevelopment.squashsquash;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 
-import com.petrovdevelopment.squashsquash.R;
 import com.petrovdevelopment.squashsquash.game.Background;
 import com.petrovdevelopment.squashsquash.game.DeathEffectContainer;
 import com.petrovdevelopment.squashsquash.game.NpcContainer;

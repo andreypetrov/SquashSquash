@@ -1,4 +1,4 @@
-package com.petrovdevelopment.squashsquash;
+package com.petrovdevelopment.squashsquash.sound;
 
 import android.app.Service;
 import android.content.Context;
@@ -7,7 +7,9 @@ import android.content.SharedPreferences.Editor;
 import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.IBinder;
-import android.util.Log;
+
+import com.petrovdevelopment.squashsquash.MainApplication;
+import com.petrovdevelopment.squashsquash.R;
 
 //TODO pause the music only onPause of the game and onMute button click
 //TODO resume the music onPlay click (if it is not playing already !isPlaying) and onUnmute button click
@@ -15,7 +17,6 @@ import android.util.Log;
 //So by default it will be on for the whole game 
 
 public class MediaService extends Service {
-	public static final String SOUND = "sound";
 	public static final String MUSIC = "music";
 	public static final String THEME = "theme";
 
@@ -60,7 +61,7 @@ public class MediaService extends Service {
 	public void saveMusicPreferences() {
 		Editor editor = this.getSharedPreferences(MainApplication.PREFERENCES, Context.MODE_PRIVATE).edit();
 		editor.putBoolean(MUSIC, mIsMusicOn);
-		editor.apply(); // async unlike commit. TODO: test if it works better than commit
+		editor.apply(); // async unlike Editor.commit()
 	}
 
 	public void prepareMusic() {

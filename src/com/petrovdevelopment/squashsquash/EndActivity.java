@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.petrovdevelopment.squashsquash.game.World;
 import com.petrovdevelopment.squashsquash.game.World.GameEndReason;
+import com.petrovdevelopment.squashsquash.sound.MediaClientActivity;
 import com.petrovdevelopment.squashsquash.utils.TextManager;
 import com.petrovdevelopment.squashsquash.utils.U;
 

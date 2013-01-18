@@ -2,6 +2,7 @@ package com.petrovdevelopment.squashsquash;
 
 import android.app.Application;
 
+import com.petrovdevelopment.squashsquash.sound.SoundEffectsManager;
 import com.petrovdevelopment.squashsquash.utils.TextManager;
 
 /**
@@ -15,21 +16,21 @@ public class MainApplication extends Application{
 	public static final String PREFERENCES = "preferences";
 	
 	private TextManager mTextManager;
-	private SoundManager mSoundManager;
+	private SoundEffectsManager mSoundEffectsManager;
 	
 	@Override
 	public void onCreate() {
 		super.onCreate();		
 		mTextManager = new TextManager(this);
-		mSoundManager = new SoundManager(this);
+		mSoundEffectsManager = new SoundEffectsManager(this);
 	}
 
 	public TextManager getTextManager() {
 		return mTextManager;
 	}
 	
-	public SoundManager getSoundManager() {
-		return mSoundManager;
+	public SoundEffectsManager getSoundEffectsManager() {
+		return mSoundEffectsManager;
 	}
 
 }

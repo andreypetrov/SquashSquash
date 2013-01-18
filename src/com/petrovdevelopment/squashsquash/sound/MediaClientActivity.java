@@ -1,4 +1,4 @@
-package com.petrovdevelopment.squashsquash;
+package com.petrovdevelopment.squashsquash.sound;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -10,7 +10,8 @@ import android.os.IBinder;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.petrovdevelopment.squashsquash.MediaService.MediaBinder;
+import com.petrovdevelopment.squashsquash.R;
+import com.petrovdevelopment.squashsquash.sound.MediaService.MediaBinder;
 
 /**
  * Base activity client of the MediaService. All activities that want to bound to the media can extend this class. This should
@@ -103,9 +104,9 @@ public class MediaClientActivity extends Activity {
 	protected void toggleMusicButtonImage(ImageView musicButton) {
 		if (getMusicButton() != null &&  getMediaService()!= null) {
 			if (getMediaService().isMusicOn()) {
-				getMusicButton().setImageResource(R.drawable.sound_on);
+				getMusicButton().setImageResource(R.drawable.music_on);
 			} else {
-				getMusicButton().setImageResource(R.drawable.sound_off);
+				getMusicButton().setImageResource(R.drawable.music_off);
 			}
 		}
 	}

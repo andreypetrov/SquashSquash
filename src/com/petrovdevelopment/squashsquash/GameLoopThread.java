@@ -1,8 +1,6 @@
 package com.petrovdevelopment.squashsquash;
 
 import android.graphics.Canvas;
-import android.os.Bundle;
-import android.util.Log;
 
 import com.petrovdevelopment.squashsquash.game.World;
 import com.petrovdevelopment.squashsquash.game.World.GameState;

@@ -60,6 +60,10 @@ public class World implements GameElement {
 		EASY, MEDIUM, HARD
 	}
 
+	public enum TouchedElement {
+		DEMON, HUMAN, NONE
+	}
+	
 	private Handler mScoreHandler;
 
 	private int mScore;
@@ -129,12 +133,14 @@ public class World implements GameElement {
 	}
 
 	/**
-	 * On touch remove top touched npc and create a death effect on the touched spot. Trigger GameState.END if the last Demon or Human
-	 * was killed 
+	 * On touch remove top touched npc and create a death effect on the touched spot. 
+	 * Trigger GameState.END if the last Demon or Human was killed 
 	 * @param touchX
 	 * @param touchY
+	 * @return enum value that shows if some game element was actually touched or not
 	 */
-	public void onTouchEvent(float touchX, float touchY) {
+	public TouchedElement onTouchEvent(float touchX, float touchY) {
+		TouchedElement result = TouchedElement.NONE;
 		if (mGameState == GameState.RUNNING) {
 			Npc touchedNpc = mNpcContainer.removeTopTouchedNpc(touchX, touchY);
 			if (touchedNpc != null) {
@@ -142,18 +148,30 @@ public class World implements GameElement {
 				updateScore(isDemon);
 				// Create a new death effect at the location of the killed npc
 				mDeathEffectContainer.createDeathEffect(touchedNpc.getCenterX(), touchedNpc.getCenterY(), isDemon);
+				if(isDemon) {
+					result = TouchedElement.DEMON;
+				} else {
+					result = TouchedElement.HUMAN;
+				}
 			}
-		}
-		
-		// Check for game end condition
+			checkForGameEnd();
+		}		
+		return result;
+	}
+
+	/**
+	 * Check for game end conditions (without time) and end the game if they are satisified. 
+	 * Otherwise do nothing.
+	 */
+	private void checkForGameEnd() {
 		if (mNpcContainer.getDemonCount() <= 0) {
 			end(GameEndReason.ALL_DEMONS_DEAD);
 		} else if (mNpcContainer.getHumanCount() <= 0) {
 			end(GameEndReason.ALL_HUMANS_DEAD);
 		}
-
 	}
-
+	
+	
 	private void end(GameEndReason gameEndReason) {
 		setGameState(GameState.END);
 		setGameEndReason(gameEndReason);

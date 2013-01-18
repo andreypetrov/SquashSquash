@@ -6,9 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 import android.view.View;
@@ -18,14 +16,19 @@ import android.widget.TextView;
 
 import com.petrovdevelopment.squashsquash.fragments.ConfirmDialog;
 import com.petrovdevelopment.squashsquash.game.World;
+import com.petrovdevelopment.squashsquash.game.World.TouchedElement;
+import com.petrovdevelopment.squashsquash.sound.BasicSoundEffectsClient;
+import com.petrovdevelopment.squashsquash.sound.MediaClientActivity;
+import com.petrovdevelopment.squashsquash.sound.SoundEffectsClient;
+import com.petrovdevelopment.squashsquash.sound.SoundEffectsManager.SoundEffect;
 import com.petrovdevelopment.squashsquash.utils.TextManager;
 import com.petrovdevelopment.squashsquash.utils.U;
 
 /**
  * The game activity. It creates also the GameLoopThread and the game World. In two cases it calls the World - when the world
  * is initialized and on touch events In the first case the surface view is passed after it was created, which allows the
- * world to calculate the game element dimensions properly. In the second case any touch event is passed to be handled by the
- * world. For any other purpose the World is accessed only by the GameLoopThread
+ * world to calculate the game element dimensions. In the second case any touch event is passed to be handled by the world.
+ * For any other purpose the World is accessed only by the GameLoopThread
  * 
  * @author andrey
  * 
@@ -49,6 +52,10 @@ public class GameActivity extends MediaClientActivity implements Callback {
 	private int mCurrentTime; // in seconds
 	private int mCurrentScore;
 
+	
+	private boolean mGameOver = false;
+	private SoundEffectsClient mSoundEffectsClient;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -62,15 +69,17 @@ public class GameActivity extends MediaClientActivity implements Callback {
 		mScoreValueTextView = (TextView) findViewById(R.id.scoreValue);
 		mTimeValueTextView = (TextView) findViewById(R.id.timeValue);
 
+		ImageView soundEffectsButton = (ImageView) findViewById(R.id.sfx);
+		mSoundEffectsClient = new BasicSoundEffectsClient(((MainApplication) getApplication()).getSoundEffectsManager(), soundEffectsButton);
 		mSavedInstanceState = savedInstanceState;
-		
-		//Setting up the music button is required to be able to properly initialize it in the onStart();
+
+		// Setting up the music button is required to be able to properly initialize it in the onStart();
 		setMusicButton((ImageView) findViewById(R.id.music));
-		
+
 		// For Debugging only:
 		if (savedInstanceState == null) {
 			// we were just launched: set up a new game
-		
+
 		} else {
 			// we are being restored: resume a previous game
 		}
@@ -168,7 +177,21 @@ public class GameActivity extends MediaClientActivity implements Callback {
 	 * @param touchY
 	 */
 	public void onGameViewTouchEvent(float touchX, float touchY) {
-		mWorld.onTouchEvent(touchX, touchY);
+		TouchedElement touchedElement = mWorld.onTouchEvent(touchX, touchY);
+		switch (touchedElement) {
+		case DEMON:
+			// make demon sound
+			mSoundEffectsClient.playSound(SoundEffect.DEATH_DEMON);
+			break;
+		case HUMAN:
+			// make human sound
+			mSoundEffectsClient.playSound(SoundEffect.DEATH_HUMAN);
+			break;
+		case NONE:
+			// do nothing
+			break;
+		default: // ignore
+		}
 	}
 
 	/**
@@ -177,11 +200,14 @@ public class GameActivity extends MediaClientActivity implements Callback {
 	public void onClickPlay(View view) {
 		view.setVisibility(View.GONE);
 		getMusicButton().setVisibility(View.INVISIBLE);
+		mSoundEffectsClient.setSfxButtonInvisible();
+		
 		mExitButton.setVisibility(View.GONE);
 		mPauseButton.setVisibility(View.VISIBLE);
 		mWorld.resume();
 	}
 
+	
 	/**
 	 * Called when the Pause ImageButton is clicked
 	 */
@@ -190,6 +216,7 @@ public class GameActivity extends MediaClientActivity implements Callback {
 		view.setVisibility(View.GONE);
 		mPlayButton.setVisibility(View.VISIBLE);
 		getMusicButton().setVisibility(View.VISIBLE);
+		mSoundEffectsClient.setSfxButtonVisible();
 		mExitButton.setVisibility(View.VISIBLE);
 	}
 
@@ -200,34 +227,31 @@ public class GameActivity extends MediaClientActivity implements Callback {
 		showConfirmDialog();
 	}
 
-
-	/*@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.activity_game, menu);
-		return true;
-	}*/
-
-	@Override
-	protected void onResume() {
-		mPauseButton.setVisibility(View.GONE);
-		getMusicButton().setVisibility(View.VISIBLE);
-		mPlayButton.setVisibility(View.VISIBLE);
-		super.onResume();
-		// Do not resume immediately the game.
-		// Instead resume only explicitly with the Play button
-		// This guarantees better user experience.
-	}
+	// @Override
+	// protected void onResume() {
+	// super.onResume();
+	// // Do not resume immediately the game.
+	// // Instead resume only explicitly with the Play button
+	// // This guarantees better user experience.
+	// }
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		mWorld.pause();
+		// Simulate pause click if the game is not over.
+		// If the game is over, the activity will soon be destroyed, so no need to show pause state buttons
+		if (!mGameOver) {
+			mPauseButton.performClick();
+		} else {
+			// if this is not called there will be a memory leak. 
+			//TODO Should check my world class to figure out why?
+			mWorld.pause();
+		}
 	}
 
 	/**
-	 * Notification that something is about to happen, to give the Activity a chance to save state. 
-	 * TODO: persist score, time, music, etc on storage?
+	 * Notification that something is about to happen, to give the Activity a chance to save state. TODO: persist score, time,
+	 * music, etc on storage?
 	 * 
 	 * @param outState
 	 *            a Bundle into which this Activity should save its state
@@ -240,9 +264,10 @@ public class GameActivity extends MediaClientActivity implements Callback {
 	}
 
 	/**
-	 * Finish the current activity and start the End Game activity. This method executes on the GameLoop thread.
+	 * Finish the current activity and start the End Game activity. This method get executed on the GameLoop thread.
 	 */
 	public void onGameEnd() {
+		mGameOver = true;
 		Intent intent = new Intent(this, EndActivity.class);
 		String gameEndReason = mWorld.getGameEndReason().toString();
 		int score = mWorld.getScore();
@@ -260,7 +285,7 @@ public class GameActivity extends MediaClientActivity implements Callback {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			onClickPause(mPauseButton); // simulate pause press
+			mPauseButton.performClick(); // simulate pause press
 			showConfirmDialog();
 			return true;
 		}
