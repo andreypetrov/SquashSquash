@@ -2,25 +2,24 @@ package com.petrovdevelopment.squashsquash.sound;
 
 import java.util.HashMap;
 
-import com.petrovdevelopment.squashsquash.MainApplication;
-import com.petrovdevelopment.squashsquash.R;
-import com.petrovdevelopment.squashsquash.utils.U;
-
 import android.content.Context;
 import android.content.SharedPreferences.Editor;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.media.SoundPool.OnLoadCompleteListener;
 
+import com.petrovdevelopment.squashsquash.MainApplication;
+import com.petrovdevelopment.squashsquash.R;
+
 /**
  * A class responsible for the sound effects of the game, which are happening right now only on clicks.
- * 
+ * Can be turned on and off with its mute/unmute/toggle methods
  * @author andrey
  * 
  */
 public class SoundEffectsManager {
 	public static final String SOUND = "sound";
-	private boolean mIsSoundOn;
+	private boolean mIsOn;
 
 	public enum SoundEffect {
 		DEATH_DEMON, DEATH_HUMAN
@@ -35,7 +34,7 @@ public class SoundEffectsManager {
 	public SoundEffectsManager(Context context) {
 		// Get the sound value from the preferences file.
 		// If the value is not existing in the file yet, default is true.
-		mIsSoundOn = context.getSharedPreferences(MainApplication.PREFERENCES, Context.MODE_PRIVATE).getBoolean(SOUND, true);
+		mIsOn = context.getSharedPreferences(MainApplication.PREFERENCES, Context.MODE_PRIVATE).getBoolean(SOUND, true);
 
 		mContext = context;
 		mSoundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
@@ -45,12 +44,10 @@ public class SoundEffectsManager {
 
 		mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
 
+		//Not used for now, since we do not care when the sounds have been loaded in memory
 		mSoundPool.setOnLoadCompleteListener(new OnLoadCompleteListener() {
 			@Override
 			public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
-				// We do not really care if the sounds have been loaded or not.
-				// If they have not been yet, the attempt to play them will fail silently, without throwing an error
-				U.log(this, "Sound effect loaded");
 			}
 		});
 
@@ -73,8 +70,8 @@ public class SoundEffectsManager {
 	/**
 	 * Mute/Unmute the sound effects
 	 */
-	public void toggleMute() {
-		if (mIsSoundOn) {
+	public void toggle() {
+		if (mIsOn) {
 			mute();
 		} else {
 			unmute();
@@ -82,15 +79,12 @@ public class SoundEffectsManager {
 	}
 
 	public void mute() {
-		// the problem is that the Music is also unmuted if we mute the whole AudioManager.STREAM_MUSIC
-		// mAudioManager.setStreamMute(AudioManager.STREAM_MUSIC, true);
-		mIsSoundOn = false;
+		mIsOn = false;
 		saveMusicPreferences();
 	}
 
 	public void unmute() {
-		// mAudioManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
-		mIsSoundOn = true;
+		mIsOn = true;
 		saveMusicPreferences();
 	}
 
@@ -105,7 +99,7 @@ public class SoundEffectsManager {
 	}
 
 	/**
-	 * Play sound given number of loops.
+	 * Play sound given number of loops. Play it only if the sound is on
 	 * 
 	 * @param soundName
 	 * @param loop
@@ -113,7 +107,7 @@ public class SoundEffectsManager {
 	 * @return
 	 */
 	public void playSound(SoundEffect soundName, int loop) {
-		if (mIsSoundOn) {
+		if (mIsOn) {
 			int streamVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
 			int streamId = mSoundPool.play(mSoundPoolMap.get(soundName), streamVolume, streamVolume, 1, loop, 1f);
 			mSoundStreamMap.put(soundName, streamId);
@@ -134,7 +128,7 @@ public class SoundEffectsManager {
 	 */
 	public void saveMusicPreferences() {
 		Editor editor = mContext.getSharedPreferences(MainApplication.PREFERENCES, Context.MODE_PRIVATE).edit();
-		editor.putBoolean(SOUND, mIsSoundOn);
+		editor.putBoolean(SOUND, mIsOn);
 		editor.apply();
 	}
 
@@ -143,8 +137,8 @@ public class SoundEffectsManager {
 	 * 
 	 * @return
 	 */
-	public boolean isSoundOn() {
-		return mIsSoundOn;
+	public boolean isOn() {
+		return mIsOn;
 	}
 
 }

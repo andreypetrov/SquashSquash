@@ -17,9 +17,7 @@ import android.widget.TextView;
 import com.petrovdevelopment.squashsquash.fragments.ConfirmDialog;
 import com.petrovdevelopment.squashsquash.game.World;
 import com.petrovdevelopment.squashsquash.game.World.TouchedElement;
-import com.petrovdevelopment.squashsquash.sound.BasicSoundEffectsClient;
 import com.petrovdevelopment.squashsquash.sound.MediaClientActivity;
-import com.petrovdevelopment.squashsquash.sound.SoundEffectsClient;
 import com.petrovdevelopment.squashsquash.sound.SoundEffectsManager.SoundEffect;
 import com.petrovdevelopment.squashsquash.utils.TextManager;
 import com.petrovdevelopment.squashsquash.utils.U;
@@ -53,7 +51,6 @@ public class GameActivity extends MediaClientActivity implements Callback {
 	private int mCurrentScore;
 
 	private boolean mGameOver = false;
-	private SoundEffectsClient mSoundEffectsClient;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,14 +65,13 @@ public class GameActivity extends MediaClientActivity implements Callback {
 		mScoreValueTextView = (TextView) findViewById(R.id.scoreValue);
 		mTimeValueTextView = (TextView) findViewById(R.id.timeValue);
 
-		ImageView soundEffectsButton = (ImageView) findViewById(R.id.sfx);
-		mSoundEffectsClient = new BasicSoundEffectsClient(((MainApplication) getApplication()).getSoundEffectsManager(),
-				soundEffectsButton);
+
 		mSavedInstanceState = savedInstanceState;
 
-		// Setting up the music button is required to be able to properly initialize it in the onStart();
-		setMusicButton((ImageView) findViewById(R.id.music));
-
+		// Setting up the music and the sound button is required to be able to properly initialize it in the onStart();
+		initializeMediaButtons((ImageView) findViewById(R.id.sfx), (ImageView) findViewById(R.id.music));
+		
+		
 		// For Debugging only:
 		if (savedInstanceState == null) {
 			// we were just launched: set up a new game
@@ -85,11 +81,6 @@ public class GameActivity extends MediaClientActivity implements Callback {
 		}
 	}
 
-	@Override
-	protected void onStart() {
-		super.onStart();
-		mSoundEffectsClient.updateSfxButtonImage();
-	}
 	/**
 	 * Set the layout and its text views with the proper font
 	 * 
@@ -186,11 +177,11 @@ public class GameActivity extends MediaClientActivity implements Callback {
 		switch (touchedElement) {
 		case DEMON:
 			// make demon sound
-			mSoundEffectsClient.playSound(SoundEffect.DEATH_DEMON);
+			getMediaService().playSound(SoundEffect.DEATH_DEMON);
 			break;
 		case HUMAN:
 			// make human sound
-			mSoundEffectsClient.playSound(SoundEffect.DEATH_HUMAN);
+			getMediaService().playSound(SoundEffect.DEATH_HUMAN);
 			break;
 		case NONE:
 			// do nothing
@@ -204,8 +195,8 @@ public class GameActivity extends MediaClientActivity implements Callback {
 	 */
 	public void onClickPlay(View view) {
 		view.setVisibility(View.GONE);
-		getMusicButton().setVisibility(View.INVISIBLE);
-		mSoundEffectsClient.setSfxButtonInvisible();
+		setMusicButtonInvisible();
+		setSfxButtonInvisible();
 
 		mExitButton.setVisibility(View.GONE);
 		mPauseButton.setVisibility(View.VISIBLE);
@@ -219,8 +210,8 @@ public class GameActivity extends MediaClientActivity implements Callback {
 		mWorld.pause();
 		view.setVisibility(View.GONE);
 		mPlayButton.setVisibility(View.VISIBLE);
-		getMusicButton().setVisibility(View.VISIBLE);
-		mSoundEffectsClient.setSfxButtonVisible();
+		setMusicButtonVisible();
+		setSfxButtonVisible();
 		mExitButton.setVisibility(View.VISIBLE);
 	}
 

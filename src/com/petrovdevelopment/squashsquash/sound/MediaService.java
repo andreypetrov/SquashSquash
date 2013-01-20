@@ -1,40 +1,39 @@
 package com.petrovdevelopment.squashsquash.sound;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences.Editor;
-import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.IBinder;
 
-import com.petrovdevelopment.squashsquash.MainApplication;
-import com.petrovdevelopment.squashsquash.R;
+import com.petrovdevelopment.squashsquash.sound.SoundEffectsManager.SoundEffect;
 
 //TODO pause the music only onPause of the game and onMute button click
 //TODO resume the music onPlay click (if it is not playing already !isPlaying) and onUnmute button click
 //TODO silence the music on losing AutoFocus
 //So by default it will be on for the whole game 
 
-public class MediaService extends Service {
-	public static final String MUSIC = "music";
-	public static final String THEME = "theme";
+/**
+ * Service which is a client of both SoundEffectsManager and MusicManager
+ * @author andrey
+ *
+ */
+public class MediaService extends Service implements MusicService, SoundEffectsService {
 
-	private boolean mIsMusicOn;
-	private MediaPlayer mMediaPlayer;
 	private IBinder mBinder = new MediaBinder();
-
+	private MusicManager mMusicManager;
+	private SoundEffectsManager mSoundEffectsManager;
+	
 	public MediaService() {
 	}
 
 	@Override
 	public void onCreate() {
-		// check from the preferences file if the music should be on or not, by default true
-		mIsMusicOn = this.getSharedPreferences(MainApplication.PREFERENCES, Context.MODE_PRIVATE).getBoolean(MUSIC, true);
-		prepareMusic();
-		if (mIsMusicOn) {
+		
+		mMusicManager = new MusicManager(this);
+		if (mMusicManager.isOn()) {
 			resumeMusic();
-		}
+		}		
+		mSoundEffectsManager = new SoundEffectsManager(this);
 	}
 
 	/**
@@ -47,60 +46,63 @@ public class MediaService extends Service {
 
 	@Override
 	public void onDestroy() {
-		if (mMediaPlayer != null) {
-			stopMusic();
-		}
+		stopMusic();
 	}
 
 	public class MediaBinder extends Binder {
+		/**
+		 * This method will be used to access the current service and through it all its methods
+		 * @return
+		 */
 		MediaService getService() {
 			return MediaService.this;
 		}
 	}
 
-	public void saveMusicPreferences() {
-		Editor editor = this.getSharedPreferences(MainApplication.PREFERENCES, Context.MODE_PRIVATE).edit();
-		editor.putBoolean(MUSIC, mIsMusicOn);
-		editor.apply(); // async unlike Editor.commit()
+
+	
+	//SOUND EFFECT METHODS
+	@Override
+	public void toggleSfx() {
+		mSoundEffectsManager.toggle();
 	}
 
-	public void prepareMusic() {
-		mMediaPlayer = MediaPlayer.create(this, R.raw.theme);
-		mMediaPlayer.setLooping(true);
+	@Override
+	public void playSound(SoundEffect soundEffect) {
+		mSoundEffectsManager.playSound(soundEffect);
 	}
 
-	/**
-	 * Pause/resume the background music
-	 */
+	@Override
+	public boolean isSfxOn() {
+		return mSoundEffectsManager.isOn();
+	}
+	
+	//BACKGROUND MUSIC METHODS
+	@Override
 	public void toggleMusic() {
-		if (mIsMusicOn) {
-			pauseMusic();
-		} else {
-			resumeMusic();
-		}
+		mMusicManager.toggle();
 	}
 
+	@Override
 	public void resumeMusic() {
-		mIsMusicOn = true;
-		saveMusicPreferences();
-		mMediaPlayer.start();
+		mMusicManager.resume();
 	}
 
+	@Override
 	public void pauseMusic() {
-		if (mMediaPlayer.isPlaying()) {
-			mIsMusicOn = false;
-			saveMusicPreferences();
-			mMediaPlayer.pause();
+		mMusicManager.pause();
+	}
+
+	@Override
+	public void stopMusic() {
+		if(mMusicManager!= null) {
+			mMusicManager.stop();
 		}
 	}
 
-	public void stopMusic() {
-		mMediaPlayer.stop();
-		mMediaPlayer.release();
-		mMediaPlayer = null;
+	@Override
+	public boolean isMusicOn() {
+		return mMusicManager.isOn();
 	}
 
-	public boolean isMusicOn() {
-		return mIsMusicOn;
-	}
 }

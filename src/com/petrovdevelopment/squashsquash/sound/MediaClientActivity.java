@@ -8,6 +8,7 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
 
 import com.petrovdevelopment.squashsquash.R;
@@ -16,17 +17,18 @@ import com.petrovdevelopment.squashsquash.sound.MediaService.MediaBinder;
 /**
  * Base activity client of the MediaService. All activities that want to bound to the media can extend this class. This should
  * be usually all activities in the game.
- * TODO: rework this activity to delegate to both SoundClient and MediaClient, instead of doing all calls directly. Maybe...
  * @author andrey
  * 
  */
-public class MediaClientActivity extends Activity {
+public abstract class MediaClientActivity extends Activity {
 	private ServiceConnection mMediaConnection;
 	private MediaService mMediaService;
 	private boolean mIsBound;
 	private Intent mMediaIntent;
+
 	private ImageView mMusicButton;
-	
+	private ImageView mSfxButton;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -34,8 +36,9 @@ public class MediaClientActivity extends Activity {
 			@Override
 			public void onServiceConnected(ComponentName name, IBinder service) {
 				mMediaService = ((MediaBinder) service).getService();
-				//Try to do this twice - here and in onStart - depending which one will execute first
-				toggleMusicButtonImage(getMusicButton());
+				// Try to do this twice - here and in onStart - depending which one will execute first
+				updateMusicButtonImage();
+				updateSfxButtonImage();
 				mIsBound = true;
 			}
 
@@ -57,8 +60,9 @@ public class MediaClientActivity extends Activity {
 	protected void onStart() {
 		bindService(getMediaIntent(), getMediaConnection(), Context.BIND_AUTO_CREATE);
 
-		//Try to do this twice - here and in onServiceConnected - depending which one will execute first
-		toggleMusicButtonImage(getMusicButton());
+		// Try to do this twice - here and in onServiceConnected - depending which one will execute first
+		updateMusicButtonImage();
+		updateSfxButtonImage();
 		super.onStart();
 	}
 
@@ -86,23 +90,105 @@ public class MediaClientActivity extends Activity {
 		return mMediaIntent;
 	}
 
-	// MUSIC BUTTON METHODS
+	// //////////////////////////////////////////////////////////////////////////////////////////////
+	// BUTTONS
+	// //////////////////////////////////////////////////////////////////////////////////////////////
+
+	public void initializeMediaButtons(ImageView sfxButton, ImageView musicButton) {
+		setAndInitSfxButton(sfxButton);
+		setAndInitMusicButton(musicButton);
+	}
+
+	// //////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// SOUND EFFECTS BUTTTON METHODS
+	//
+	// //////////////////////////////////////////////////////////////////////////////////////////////
+
 	/**
-	 * Called when the Music ImageButton is clicked. Toggles sound on/off The music button in the layout of the activity
-	 * should call this method
+	 * Set the sound effects button and its onClick listener
+	 * 
+	 * @param sfxButton
 	 */
-	public void onClickMusic(View view) {
-		toggleMusic();
-		toggleMusicButtonImage((ImageView) view);
+	private void setAndInitSfxButton(ImageView sfxButton) {
+		mSfxButton = sfxButton;
+		if (mSfxButton != null) {
+			sfxButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					getMediaService().toggleSfx();
+					updateSfxButtonImage();
+				}
+			});
+		}
 	}
 
 	/**
-	 * If there is a music button present in the activity and the activity has connected to the media service, 
-	 * then change the button's animation based on the media's isSoundOn()
-	 * value
+	 * If there is a sound effects button present in the activity and the activity has connected to the media service, then
+	 * change the button's animation based on the media's isSfxOn() value
 	 */
-	protected void toggleMusicButtonImage(ImageView musicButton) {
-		if (getMusicButton() != null &&  getMediaService()!= null) {
+	private void updateSfxButtonImage() {
+		if (getSfxButton() != null && getMediaService() != null) {
+			if (getMediaService().isSfxOn()) {
+				getSfxButton().setImageResource(R.drawable.sfx_on);
+			} else {
+				getSfxButton().setImageResource(R.drawable.sfx_off);
+			}
+		}
+	}
+
+	private ImageView getSfxButton() {
+		return mSfxButton;
+	}
+
+	public void setSfxButtonInvisible() {
+		if (mSfxButton != null) {
+			mSfxButton.setVisibility(View.INVISIBLE);
+		}
+	}
+
+	public void setSfxButtonGone() {
+		if (mSfxButton != null) {
+			mSfxButton.setVisibility(View.GONE);
+		}
+	}
+
+	public void setSfxButtonVisible() {
+		if (mSfxButton != null) {
+			mSfxButton.setVisibility(View.VISIBLE);
+		}
+	}
+
+	// //////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// MUSIC BUTTTON METHODS
+	//
+	// //////////////////////////////////////////////////////////////////////////////////////////////
+
+	/**
+	 * Set the music button and its onClick listener
+	 * 
+	 * @param musicButton
+	 */
+	private void setAndInitMusicButton(ImageView musicButton) {
+		mMusicButton = musicButton;
+		if (mMusicButton != null) {
+			mMusicButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					getMediaService().toggleMusic();
+					updateMusicButtonImage();
+				}
+			});
+		}
+	}
+
+	/**
+	 * If there is a music button present in the activity and the activity has connected to the media service, then change the
+	 * button's animation based on the media's isMusicOn() value
+	 */
+	private void updateMusicButtonImage() {
+		if (getMusicButton() != null && getMediaService() != null) {
 			if (getMediaService().isMusicOn()) {
 				getMusicButton().setImageResource(R.drawable.music_on);
 			} else {
@@ -111,28 +197,26 @@ public class MediaClientActivity extends Activity {
 		}
 	}
 
-	public ImageView getMusicButton() {
+	private ImageView getMusicButton() {
 		return mMusicButton;
 	}
 
-	public void setMusicButton(ImageView musicButton) {
-		mMusicButton = musicButton;
+	public void setMusicButtonInvisible() {
+		if (mMusicButton != null) {
+			mMusicButton.setVisibility(View.INVISIBLE);
+		}
 	}
 
-	// PLAYBACK METHODS
-	/**
-	 * pause/resume the background music
-	 */
-	public void toggleMusic() {
-		getMediaService().toggleMusic();
+	public void setMusicButtonGone() {
+		if (mMusicButton != null) {
+			mMusicButton.setVisibility(View.GONE);
+		}
 	}
 
-	public void pauseMusic() {
-		getMediaService().pauseMusic();
-	}
-
-	public void resumeMusic() {
-		getMediaService().resumeMusic();
+	public void setMusicButtonVisible() {
+		if (mMusicButton != null) {
+			mMusicButton.setVisibility(View.VISIBLE);
+		}
 	}
 
 }
