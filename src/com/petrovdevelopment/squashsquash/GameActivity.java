@@ -52,7 +52,6 @@ public class GameActivity extends MediaClientActivity implements Callback {
 	private int mCurrentTime; // in seconds
 	private int mCurrentScore;
 
-	
 	private boolean mGameOver = false;
 	private SoundEffectsClient mSoundEffectsClient;
 
@@ -70,7 +69,8 @@ public class GameActivity extends MediaClientActivity implements Callback {
 		mTimeValueTextView = (TextView) findViewById(R.id.timeValue);
 
 		ImageView soundEffectsButton = (ImageView) findViewById(R.id.sfx);
-		mSoundEffectsClient = new BasicSoundEffectsClient(((MainApplication) getApplication()).getSoundEffectsManager(), soundEffectsButton);
+		mSoundEffectsClient = new BasicSoundEffectsClient(((MainApplication) getApplication()).getSoundEffectsManager(),
+				soundEffectsButton);
 		mSavedInstanceState = savedInstanceState;
 
 		// Setting up the music button is required to be able to properly initialize it in the onStart();
@@ -85,6 +85,11 @@ public class GameActivity extends MediaClientActivity implements Callback {
 		}
 	}
 
+	@Override
+	protected void onStart() {
+		super.onStart();
+		mSoundEffectsClient.updateSfxButtonImage();
+	}
 	/**
 	 * Set the layout and its text views with the proper font
 	 * 
@@ -201,13 +206,12 @@ public class GameActivity extends MediaClientActivity implements Callback {
 		view.setVisibility(View.GONE);
 		getMusicButton().setVisibility(View.INVISIBLE);
 		mSoundEffectsClient.setSfxButtonInvisible();
-		
+
 		mExitButton.setVisibility(View.GONE);
 		mPauseButton.setVisibility(View.VISIBLE);
 		mWorld.resume();
 	}
 
-	
 	/**
 	 * Called when the Pause ImageButton is clicked
 	 */
@@ -243,8 +247,8 @@ public class GameActivity extends MediaClientActivity implements Callback {
 		if (!mGameOver) {
 			mPauseButton.performClick();
 		} else {
-			// if this is not called there will be a memory leak. 
-			//TODO Should check my world class to figure out why?
+			// if this is not called there will be a memory leak.
+			// TODO Should check my world class to figure out why?
 			mWorld.pause();
 		}
 	}

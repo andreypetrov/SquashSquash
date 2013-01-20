@@ -9,7 +9,7 @@ import com.petrovdevelopment.squashsquash.sound.SoundEffectsManager.SoundEffect;
 
 /**
  * A simple client of the sound effects manager. It can optionally have a mute/unmute sound effects button assigned to it
- * 
+ * TODO refactor the music service to become a music manager and both with sound manager to be in the same service
  * @author andrey
  * 
  */
@@ -35,23 +35,24 @@ public class BasicSoundEffectsClient implements SoundEffectsClient {
 				@Override
 				public void onClick(View v) {
 					toggleMute();
-					toggleSfxButtonImage((ImageView) v);
+					//TODO: instead like that there should be maybe an event callback in the soundEffects manager, 
+					//because we have to update simultaniously different activities
+					updateSfxButtonImage();
 				}
 			});
-			// Toggle initial background image of the button
-			toggleSfxButtonImage(mSfxButton);
 		}
 	}
 
 	/**
-	 * Toggle the button's image. Requires images sfx_on and sfx_off to be in the resources
+	 * Update the button's image. Requires images sfx_on and sfx_off to be in the resources
 	 * @param sfxButton
 	 */
-	private void toggleSfxButtonImage(ImageView sfxButton) {
+	@Override
+	public void updateSfxButtonImage() {
 		if (mSoundEffectsManager.isSoundOn()) {
-			sfxButton.setImageResource(R.drawable.sfx_on);
+			mSfxButton.setImageResource(R.drawable.sfx_on);
 		} else {
-			sfxButton.setImageResource(R.drawable.sfx_off);
+			mSfxButton.setImageResource(R.drawable.sfx_off);
 		}
 	}
 

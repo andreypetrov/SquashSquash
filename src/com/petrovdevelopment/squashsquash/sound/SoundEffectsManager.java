@@ -65,7 +65,7 @@ public class SoundEffectsManager {
 		// creates and prepares the MediaPlayer
 		int soundDemonId = mSoundPool.load(mContext, R.raw.death_enemy, 1);
 		//int soundHumanId1 = mSoundPool.load(mContext, R.raw.death_ally1, 1);
-		int soundHumanId2 = mSoundPool.load(mContext, R.raw.death_ally2, 1);
+		int soundHumanId2 = mSoundPool.load(mContext, R.raw.death_ally, 1);
 		mSoundPoolMap.put(SoundEffect.DEATH_DEMON, soundDemonId);
 		mSoundPoolMap.put(SoundEffect.DEATH_HUMAN, soundHumanId2);
 	}

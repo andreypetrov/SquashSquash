@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".GameActivity" 
-    >
+    tools:context=".GameActivity" >
 
     <!-- The bar with the time, score, sound, pause -->
 
@@ -12,10 +11,10 @@
         android:id="@+id/top_panel"
         android:layout_width="match_parent"
         android:layout_height="40dip"
-        android:orientation="horizontal"
         android:background="@drawable/parch2_bg"
+        android:orientation="horizontal"
         android:paddingLeft="20dip"
-        android:paddingRight="15dip">
+        android:paddingRight="15dip" >
 
         <TextView
             android:id="@+id/timeTitle"
@@ -46,34 +45,10 @@
             android:id="@+id/scoreValue"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_gravity="center_vertical"
+            android:layout_weight="1"
             android:paddingTop="5dip" />
 
-        <ImageView
-            android:id="@+id/music"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:clickable="true"
-            android:contentDescription="@string/music"
-            android:onClick="onClickMusic"
-            android:padding="5dip"
-            android:src="@drawable/music_on"
-            android:visibility="visible" />
-
-        <ImageView
-            android:id="@+id/sfx"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:clickable="true"
-            android:contentDescription="@string/sfx"
-            android:padding="5dip"
-            android:src="@drawable/sfx_on"
-            android:visibility="visible" />
-        
-        
         <ImageButton
             android:id="@+id/exit"
             android:layout_width="wrap_content"
@@ -103,10 +78,11 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="0dip" 
-        android:layout_weight="1">
+        android:layout_height="0dip"
+        android:layout_weight="1" >
 
-       <!-- The actual game view -->
+        <!-- The actual game view -->
+
         <com.petrovdevelopment.squashsquash.GameView
             android:id="@+id/game_view"
             android:layout_width="wrap_content"
@@ -124,6 +100,13 @@
             android:onClick="onClickPlay"
             android:padding="5dip"
             android:src="@drawable/play" />
+
+        <include
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            layout="@layout/sound_bar_layout" />
     </RelativeLayout>
 
 </LinearLayout>

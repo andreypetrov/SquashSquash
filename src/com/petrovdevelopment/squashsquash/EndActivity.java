@@ -12,7 +12,8 @@ import com.petrovdevelopment.squashsquash.utils.TextManager;
 import com.petrovdevelopment.squashsquash.utils.U;
 
 /**
- * 3 different layouts for the different GameEndReasons TODO: fix colors of points and time
+ * 3 different layouts for the different GameEndReasons  TODO add end game sound effects
+ * like applauds and boo shouts
  * 
  * @author andrey
  * 

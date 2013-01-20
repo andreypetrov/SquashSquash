@@ -8,16 +8,20 @@ import android.widget.ImageView;
 
 import com.petrovdevelopment.squashsquash.fragments.ConfirmDialog;
 import com.petrovdevelopment.squashsquash.fragments.InstructionsDialog;
+import com.petrovdevelopment.squashsquash.sound.BasicSoundEffectsClient;
 import com.petrovdevelopment.squashsquash.sound.MediaClientActivity;
+import com.petrovdevelopment.squashsquash.sound.SoundEffectsClient;
 
 //TODO: pause on phone lock (onPause?) the music (check the game music blog entry)
 public class MainMenuActivity extends MediaClientActivity {
-
+	SoundEffectsClient mSoundEffectsClient;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main_menu);
 		setMusicButton((ImageView) findViewById(R.id.music));
+		ImageView sfxButton = (ImageView) findViewById(R.id.sfx);
+		mSoundEffectsClient = new BasicSoundEffectsClient(((MainApplication)getApplication()).getSoundEffectsManager(), sfxButton);
 	}
 	
 /*	@Override
@@ -27,7 +31,11 @@ public class MainMenuActivity extends MediaClientActivity {
 		return true;
 	}*/
 
-	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		mSoundEffectsClient.updateSfxButtonImage();
+	}
 	public void onClickNewGame(View view) {
 		Intent intent = new Intent(this, GameActivity.class);
 		startActivity(intent);
