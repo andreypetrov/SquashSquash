@@ -9,7 +9,8 @@ import com.petrovdevelopment.squashsquash.game.World;
 
 /**
  * Class responsible for editing the score and time text views
- * Also keeps information of the customFont used by the application
+ * Also keeps information of the customFont used by the application]
+ * Only one instance of this class is created in the MainApplcation.java
  * @author andrey
  *
  */

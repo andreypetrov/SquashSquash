@@ -1,5 +1,6 @@
 package com.petrovdevelopment.squashsquash;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import com.petrovdevelopment.squashsquash.game.NpcContainer;
@@ -14,8 +15,8 @@ public class GameRecoveryLoader extends GameLoader {
 
 	Bundle mSavedInstanceState;
 	
-	public GameRecoveryLoader(GameView gameView, Bundle savedInstanceState) {
-		super(gameView);
+	public GameRecoveryLoader(Context context, GameView gameView, Bundle savedInstanceState) {
+		super(context, gameView);
 		mSavedInstanceState = savedInstanceState;
 	}
 

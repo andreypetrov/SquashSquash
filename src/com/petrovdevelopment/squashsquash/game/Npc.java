@@ -19,31 +19,36 @@ import android.view.View;
 public class Npc implements GameElement, Touchable, Parcelable {
 	public static final int BMP_COLUMNS = 3;
 	public static final int BMP_ROWS = 4;
+	public static final int DEFAULT_SCORE = 0;
+	
 	// TODO: Refactor this to work with a new enum type
 	// direction (array index) = 0 up, 1 left, 2 down, 3 right
 	// animation (array value) = 3 back, 1 left, 0 front, 2 right
-	private static final int[] DIRECTION_TO_ANIMATION_MAP = { 3, 1, 0, 2 };
+	protected static final int[] DIRECTION_TO_ANIMATION_MAP = { 3, 1, 0, 2 };
 
-	private View mParentView;
+	protected View mParentView;
 
-	private NpcType mNpcType;
-	private Bitmap mBitmap;
+	protected NpcType mNpcType;
+	protected Bitmap mBitmap;
 
-	private int mX;
-	private int mY;
+	protected int mX;
+	protected int mY;
 
-	private int mXSpeed;
-	private int mYSpeed;
+	protected int mXSpeed;
+	protected int mYSpeed;
 
-	private int mWidth;
-	private int mHeight;
-	private int mCurrentFrame;
+	protected int mWidth;
+	protected int mHeight;
+	protected int mCurrentFrame;
 	// Recalculate the current ROW of the BMP only when the NPC changes direction.
-	private int mCurrentAnimationRow;
+	protected int mCurrentAnimationRow;
 
-	private Rect mSrc; // rectangle, part of the sprite bitmap
-	private Rect mDst; // rectangle, part of the canvas
+	protected Rect mSrc; // rectangle, part of the sprite bitmap
+	protected Rect mDst; // rectangle, part of the canvas
 
+	//Score for the npc being killed
+	protected int mScore;
+	
 	/**
 	 * Use this constructor when creating npcs for a new game.
 	 * 
@@ -51,6 +56,7 @@ public class Npc implements GameElement, Touchable, Parcelable {
 	 * @param npcType
 	 */
 	public Npc(View parentView, NpcType npcType) {
+		setScore(DEFAULT_SCORE);
 		mParentView = parentView;
 		mNpcType = npcType;
 		Random random = new Random();
@@ -73,7 +79,7 @@ public class Npc implements GameElement, Touchable, Parcelable {
 	 * 
 	 * @param source
 	 */
-	private Npc(Parcel source) {
+	protected Npc(Parcel source) {
 		// It is mandatory to read in the same order in which values were written in the parcel!
 		mNpcType = source.readParcelable(NpcType.class.getClassLoader());
 		mX = source.readInt();
@@ -84,10 +90,11 @@ public class Npc implements GameElement, Touchable, Parcelable {
 		mHeight = source.readInt();
 		mCurrentFrame = source.readInt();
 		mCurrentAnimationRow = source.readInt();
+		setScore(source.readInt());
 	}
 
 	/**
-	 * Sets up the game view the bitmap and some prerender calculations. Mandatory call this after using the private
+	 * Sets up the game view the bitmap and some prerender calculations. Mandatory call this after using the protected
 	 * constructor. The public constructor makes this call redundant.
 	 * 
 	 * @param parentView
@@ -103,7 +110,7 @@ public class Npc implements GameElement, Touchable, Parcelable {
 	 * 
 	 * @return
 	 */
-	private int getAnimationRow() {
+	protected int getAnimationRow() {
 		double dirDouble = (Math.atan2(mXSpeed, mYSpeed) / (Math.PI / 2) + 2);
 		int direction = (int) Math.round(dirDouble) % BMP_ROWS; // convert long to int
 		return DIRECTION_TO_ANIMATION_MAP[direction];
@@ -112,7 +119,7 @@ public class Npc implements GameElement, Touchable, Parcelable {
 	/**
 	 * Change direction of the npc, which affects also the sprite used
 	 */
-	private void changeDirection() {
+	protected void changeDirection() {
 		// if reached the right or left edge of the screen turn around
 		if (mX > (mParentView.getWidth() - mWidth - mXSpeed) || mX + mXSpeed < 0) {
 			mXSpeed = -mXSpeed;
@@ -128,7 +135,7 @@ public class Npc implements GameElement, Touchable, Parcelable {
 	/**
 	 * Advance the Npc with the speed it is moving
 	 */
-	private void move() {
+	protected void move() {
 		mY = mY + mYSpeed;
 		mX = mX + mXSpeed;
 	}
@@ -137,7 +144,7 @@ public class Npc implements GameElement, Touchable, Parcelable {
 	 * Advance the animation, creating illusion of walking. increment should be first so that in the onDraw() we have
 	 * mCurrentFrame = 0/1/2 Starting from the second frame.
 	 */
-	private void changeFrame() {
+	protected void changeFrame() {
 		mCurrentFrame++;
 		mCurrentFrame = mCurrentFrame % BMP_COLUMNS;
 	}
@@ -145,7 +152,7 @@ public class Npc implements GameElement, Touchable, Parcelable {
 	/**
 	 * Prepare for rendering, relatively expensive
 	 */
-	private void preRender() {
+	protected void preRender() {
 		int srcX = mCurrentFrame * mWidth;
 		int srcY = mCurrentAnimationRow * mHeight;
 
@@ -202,6 +209,7 @@ public class Npc implements GameElement, Touchable, Parcelable {
 		dest.writeInt(mHeight);
 		dest.writeInt(mCurrentFrame);
 		dest.writeInt(mCurrentAnimationRow);
+		dest.writeInt(getScore());
 	}
 
 	/**
@@ -256,4 +264,13 @@ public class Npc implements GameElement, Touchable, Parcelable {
 	public float getCenterY() {
 		return mY + (mHeight / 2);
 	}
+
+	public int getScore() {
+		return mScore;
+	}
+	
+	protected void setScore(int score){
+		mScore = score;
+	}
+
 }

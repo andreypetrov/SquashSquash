@@ -101,7 +101,7 @@ public class GameActivity extends MediaClientActivity implements Callback {
 	public void surfaceCreated(SurfaceHolder holder) {
 
 		initializeHandler();
-		mWorld = World.createWorld(mGameView, mSavedInstanceState, mScoreHandler);
+		mWorld = World.createWorld(this, mGameView, mSavedInstanceState, mScoreHandler);
 
 		// initialize time and score
 		mCurrentTime = mWorld.getTime();

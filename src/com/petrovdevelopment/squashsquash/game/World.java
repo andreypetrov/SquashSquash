@@ -2,6 +2,7 @@ package com.petrovdevelopment.squashsquash.game;
 
 import java.util.concurrent.TimeUnit;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,10 +36,6 @@ public class World implements GameElement {
 	public static final Long GAME_DURATION_MILISECONDS = 15000l;
 	public static final int GAME_DURATION_SECONDS = 15;
 	public static final int INITIAL_SCORE = 0;
-
-	private static final int DEMON_KILL_POINTS = 10; // plus 10 points for killing an demon
-	private static final int HUMAN_KILL_POINTS = -5; // minus 5 points for killing a human
-	
 
 	// TODO check if those initializations are ok, since they are not resetting on a new game
 	private GameState mGameState = GameState.PAUSED;
@@ -84,23 +81,23 @@ public class World implements GameElement {
 	 * @param scoreHandler
 	 * @return
 	 */
-	public static World createWorld(GameView gameView, Bundle savedInstanceState, Handler scoreHandler) {
-		return new World(gameView, savedInstanceState, scoreHandler);
+	public static World createWorld(Context context, GameView gameView, Bundle savedInstanceState, Handler scoreHandler) {
+		return new World(context, gameView, savedInstanceState, scoreHandler);
 	}
 	
-	private World(GameView gameView, Bundle savedInstanceState, Handler scoreHandler) {
+	private World(Context context, GameView gameView, Bundle savedInstanceState, Handler scoreHandler) {
 		mScoreHandler = scoreHandler;
 		GameLoader gameLoader;
 		if (savedInstanceState == null) {
 			mScore = INITIAL_SCORE;
 			mTimeLeftInSeconds = GAME_DURATION_SECONDS;
 			mTimeLeftInMilliseconds = GAME_DURATION_MILISECONDS;
-			gameLoader = new GameLoader(gameView);
+			gameLoader = new GameLoader(context, gameView);
 		} else {
 			mScore = savedInstanceState.getInt(SCORE);
 			mTimeLeftInSeconds = savedInstanceState.getInt(TIME);
 			mTimeLeftInMilliseconds = savedInstanceState.getLong(TIME_MILLIS);
-			gameLoader = new GameRecoveryLoader(gameView, savedInstanceState);
+			gameLoader = new GameRecoveryLoader(context, gameView, savedInstanceState);
 		}
 		mBackground = gameLoader.loadBackground();
 		mNpcContainer = gameLoader.loadNpcContainer();
@@ -144,8 +141,8 @@ public class World implements GameElement {
 		if (mGameState == GameState.RUNNING) {
 			Npc touchedNpc = mNpcContainer.removeTopTouchedNpc(touchX, touchY);
 			if (touchedNpc != null) {
-				boolean isDemon = touchedNpc.getNpcType().isDemon();
-				updateScore(isDemon);
+				boolean isDemon = touchedNpc.getNpcType().isEnemy();
+				updateScore(touchedNpc);
 				// Create a new death effect at the location of the killed npc
 				mDeathEffectContainer.createDeathEffect(touchedNpc.getCenterX(), touchedNpc.getCenterY(), isDemon);
 				if(isDemon) {
@@ -209,13 +206,8 @@ public class World implements GameElement {
 	 * 
 	 * @param isDemon
 	 */
-	private void updateScore(boolean isDemon) {
-		// Update the score
-		if (isDemon) {
-			mScore += DEMON_KILL_POINTS;
-		} else {
-			mScore += HUMAN_KILL_POINTS; 
-		}
+	private void updateScore(Npc touchedNpc) {
+		mScore += touchedNpc.getScore();
 		updateScoreView();
 	}
 

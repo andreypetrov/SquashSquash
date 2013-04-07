@@ -17,6 +17,7 @@ import com.petrovdevelopment.squashsquash.sound.MediaService.MediaBinder;
 /**
  * Base activity client of the MediaService. All activities that want to bound to the media can extend this class. This should
  * be usually all activities in the game.
+ * It has the responsibility for mapping the music/sfx buttons to the Media service.
  * @author andrey
  * 
  */

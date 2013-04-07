@@ -35,7 +35,12 @@ public class NpcContainer implements GameElement {
 	}
 
 	public void createNpc(NpcType npcType) {
-		Npc npc = new Npc(mGameView, npcType);
+		Npc npc;
+		if (npcType.isEnemy()) {
+			npc = new EnemyNpc(mGameView, npcType);
+		} else {
+			npc = new FriendNpc(mGameView, npcType);
+		}
 		add(npc);
 	}
 
@@ -92,7 +97,7 @@ public class NpcContainer implements GameElement {
 			// verify if actually an npc was removed
 			if (npcWasRemoved) {
 				// adjust counters
-				if (npc.getNpcType().isDemon()) {
+				if (npc.getNpcType().isEnemy()) {
 					mDemonCount--;
 				} else {
 					mHumanCount--;
@@ -105,7 +110,7 @@ public class NpcContainer implements GameElement {
 	private boolean add(Npc npc) {
 		synchronized (mNpcs) {
 			mNpcs.add(npc);
-			if (npc.getNpcType().isDemon()) {
+			if (npc.getNpcType().isEnemy()) {
 				mDemonCount++;
 			} else {
 				mHumanCount++;
